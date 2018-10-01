@@ -1,0 +1,12 @@
+<mat-sidenav-container class="main-container">
+  <mat-sidenav
+    #sidenav
+    mode="over"
+    [opened]="xLargeQuery.matches"
+    [disableClose]="xLargeQuery.matches">
+    <app-sidebar [activePage]="activePage"></app-sidebar>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <ng-content></ng-content>
+  </mat-sidenav-content>
+</mat-sidenav-container>

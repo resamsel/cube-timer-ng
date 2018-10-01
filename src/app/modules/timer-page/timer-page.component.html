@@ -1,0 +1,8 @@
+<app-navbar [sidenav]="sidenav"></app-navbar>
+
+<app-sidenav #sidenav [activePage]="timer">
+  <div class="container">
+    <app-timer></app-timer>
+    <app-timer-stats></app-timer-stats>
+  </div>
+</app-sidenav>

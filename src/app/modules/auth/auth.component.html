@@ -1,0 +1,15 @@
+<button
+  mat-icon-button
+  *ngIf="!userService.loggedIn"
+  matTooltip="Login"
+  (click)="userService.signIn()"
+  >
+  <mat-icon>account_circle</mat-icon>
+</button>
+<button
+  mat-icon-button
+  *ngIf="userService.loggedIn"
+  matTooltip="Logout {{userService.user.displayName}}"
+  (click)="userService.signOut()">
+  <img class="icon" src="{{userService.user.photoURL}}">
+</button>

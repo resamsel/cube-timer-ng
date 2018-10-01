@@ -1,0 +1,8 @@
+mat-toolbar-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.flex-spacer {
+  flex-grow: 1;
+}

@@ -1,0 +1,28 @@
+/*
+ * Media query for large screens
+ */
+@media screen and (min-width: 992px) {
+  .container {
+    max-width: 640px;
+    padding: 0;
+  }
+}
+
+/*
+ * Media query for extra large screens
+ */
+@media screen and (min-width: 1200px) {
+  .container {
+    margin: 0 260px;
+    max-width: none;
+  }
+  .mat-drawer {
+    background-color: transparent;
+  }
+  .mat-drawer.mat-sidenav:not(.mat-drawer-side) {
+    box-shadow: none;
+  }
+  .mat-drawer-backdrop.mat-drawer-shown {
+    display: none;
+  }
+}
