@@ -44,6 +44,14 @@
                   "with": "src/environments/environment.prod.ts"
                 }
               ]
+            },
+            "dev": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/.env"
+                }
+              ]
             }
           }
         },
@@ -55,6 +63,9 @@
           "configurations": {
             "production": {
               "browserTarget": "cube-timer-ng:build:production"
+            },
+            "dev": {
+              "browserTarget": "cube-timer-ng:build:dev"
             }
           }
         },

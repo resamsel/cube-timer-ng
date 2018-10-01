@@ -12,7 +12,7 @@ import {NotFoundPageComponent} from "./pages/not-found-page/not-found-page.compo
 import {AngularFirestoreModule} from "@angular/fire/firestore";
 import {AngularFireModule} from "@angular/fire";
 import {SidenavModule} from "./modules/nav/sidenav/sidenav.module";
-import {ResultsPageModule} from "./modules/results-page/results-page.module";
+import {ScoresPageModule} from "./modules/scores-page/scores-page.module";
 import {AngularFireAuthModule} from "@angular/fire/auth";
 import {MainPageModule} from "./modules/main-page/main-page.module";
 
@@ -26,7 +26,7 @@ import {MainPageModule} from "./modules/main-page/main-page.module";
     FormsModule,
     SidenavModule,
     MainPageModule,
-    ResultsPageModule,
+    ScoresPageModule,
     PuzzlesPageModule,
     AppRoutingModule,
     BrowserAnimationsModule,

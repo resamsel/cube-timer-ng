@@ -1,0 +1,8 @@
+<app-navbar [sidenav]="sidenav"></app-navbar>
+
+<app-sidenav #sidenav activePage="scores">
+  <div class="container" *ngIf="scores$ | async as scores">
+    <app-scores-stats [scores]="scores"></app-scores-stats>
+    <app-scores [scores]="scores"></app-scores>
+  </div>
+</app-sidenav>

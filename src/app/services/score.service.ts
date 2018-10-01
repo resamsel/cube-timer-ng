@@ -1,7 +1,8 @@
-import {Injectable} from "@angular/core";
-import {AngularFirestore} from "@angular/fire/firestore";
-import {Observable} from "rxjs";
-import {UserService} from "./user.service";
+import { query } from '@angular/animations';
+import { Injectable } from '@angular/core';
+import { AngularFirestore } from '@angular/fire/firestore';
+import { Observable } from 'rxjs';
+import { UserService } from './user.service';
 
 export interface Score {
   uid: string;
@@ -14,6 +15,10 @@ export interface Score {
   when_created_text: string;
 }
 
+export interface ScoreRetrievalOptions {
+  limit?: number;
+}
+
 @Injectable({providedIn: 'root'})
 export class ScoreService {
   constructor(
@@ -22,11 +27,12 @@ export class ScoreService {
   ) {
   }
 
-  public scores(): Observable<Score[]> {
+  public scores(options: ScoreRetrievalOptions): Observable<Score[]> {
     return this.database
       .collection<Score>(
         `users/${this.userService.user.uid}/puzzles/3x3x3/scores`,
         ref => ref.orderBy('timestamp', 'desc')
+            .limit(options.limit || 0)
       )
       .valueChanges();
   }

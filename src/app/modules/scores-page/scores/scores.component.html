@@ -1,10 +1,11 @@
 <mat-card>
   <mat-card-content>
     <mat-list>
+      <h3 matSubheader>Scores</h3>
       <mat-list-item *ngFor="let score of scores">
         <mat-icon mat-list-icon>folder</mat-icon>
-        <h4 mat-line>{{score.value}}</h4>
-        <p mat-line>{{score.timestamp | date}}</p>
+        <h4 mat-line>{{score.value / 1000}}s</h4>
+        <p mat-line>{{score.timestamp | amTimeAgo}}</p>
       </mat-list-item>
     </mat-list>
   </mat-card-content>

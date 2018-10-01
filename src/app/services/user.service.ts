@@ -3,6 +3,7 @@ import {AngularFireAuth} from "@angular/fire/auth";
 import * as firebase from "firebase";
 import {User} from "firebase";
 import {Router} from "@angular/router";
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -24,6 +25,10 @@ export class UserService {
       this._user = user;
       this._loggedIn = user !== null;
     });
+  }
+
+  public authState(): Observable<firebase.User> {
+    return this.afAuth.authState;
   }
 
   public signIn(): void {

@@ -1,6 +1,8 @@
-import {Component, OnInit} from '@angular/core';
-import {Observable} from "rxjs";
-import {Puzzle, PuzzleService} from "../../services/puzzle.service";
+import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
+import { take } from 'rxjs/operators';
+import { Puzzle, PuzzleService } from '../../services/puzzle.service';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-puzzles-page',
@@ -14,10 +16,17 @@ export class PuzzlesPageComponent implements OnInit {
     return this._puzzles$;
   }
 
-  constructor(private puzzleService: PuzzleService) {
+  constructor(
+    private puzzleService: PuzzleService,
+    private userService: UserService
+  ) {
   }
 
   ngOnInit() {
-    this._puzzles$ = this.puzzleService.puzzles();
+    this.userService.authState()
+      .pipe(take(1))
+      .subscribe(user => {
+        this._puzzles$ = this.puzzleService.puzzles();
+      });
   }
 }
