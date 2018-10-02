@@ -1,6 +1,6 @@
-import {PuzzlesPageComponent} from "./puzzles-page.component";
-import {NgModule} from "@angular/core";
-import {RouterModule} from "@angular/router";
+import { NgModule } from '@angular/core';
+import { RouterModule } from '@angular/router';
+import { PuzzlesPageComponent } from './puzzles-page.component';
 
 const puzzlesRoutes = [
   {path: 'puzzles', component: PuzzlesPageComponent}

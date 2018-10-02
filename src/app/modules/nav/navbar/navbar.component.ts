@@ -1,5 +1,5 @@
-import {Component, ElementRef, Input, OnInit} from '@angular/core';
-import {SidenavComponent} from "../sidenav/sidenav.component";
+import { Component, Input, OnInit } from '@angular/core';
+import { SidenavComponent } from '../sidenav/sidenav.component';
 
 @Component({
   selector: 'app-navbar',

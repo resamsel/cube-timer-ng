@@ -1,6 +1,6 @@
-import {Component, Input, OnInit, ViewChild} from '@angular/core';
-import {MatSidenav} from "@angular/material";
-import {MediaMatcher} from "@angular/cdk/layout";
+import { MediaMatcher } from '@angular/cdk/layout';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { MatSidenav } from '@angular/material';
 
 @Component({
   selector: 'app-sidenav',

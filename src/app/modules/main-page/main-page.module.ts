@@ -1,18 +1,21 @@
-import {NgModule} from "@angular/core";
-import {NavbarModule} from "../nav/navbar/navbar.module";
-import {SidenavModule} from "../nav/sidenav/sidenav.module";
-import {MainRoutingModule} from "./main-routing.module";
-import {CommonModule} from "@angular/common";
-import {MainPageComponent} from "./main-page.component";
+import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
+import { MatButtonModule, MatIconModule } from '@angular/material';
+import { NavbarModule } from '../nav/navbar/navbar.module';
+import { FooterComponent } from './footer/footer.component';
+import { MainPageComponent } from './main-page.component';
+import { MainRoutingModule } from './main-routing.module';
 
 @NgModule({
   declarations: [
-    MainPageComponent
+    MainPageComponent,
+    FooterComponent
   ],
   imports: [
     CommonModule,
-    SidenavModule,
     NavbarModule,
+    MatIconModule,
+    MatButtonModule,
     MainRoutingModule
   ]
 })

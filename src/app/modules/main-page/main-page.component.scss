@@ -1,0 +1,68 @@
+@import '../../../theme.scss';
+@import '../../../styles.scss';
+
+:host {
+  @include full-height();
+}
+
+.container {
+  flex-grow: 1;
+}
+
+header {
+  background-color: mat-color($app-primary);
+  text-align: center;
+  padding: 60px 0;
+}
+
+header h1 {
+  color: $light-primary-text;
+  font: 400 24px/32px Roboto, Helvetica Neue, sans-serif;
+  font-size: 56px;
+  font-weight: 300;
+  line-height: 56px;
+  margin: 15px 5px;
+}
+
+header h2 {
+  color: $light-primary-text;
+  font-size: 18px;
+  font-weight: 300;
+  line-height: 28px;
+  margin: 15px 0 25px 0;
+}
+
+section {
+  padding: 1rem 0;
+}
+
+.teaser-list {
+  display: flex;
+  flex-flow: row wrap;
+}
+
+.teaser-list-item {
+  flex: 1 100%;
+  text-align: center;
+  margin: 12px;
+}
+
+.teaser-list-item h3,
+.teaser-list-item p {
+  text-align: center;
+}
+
+.teaser-list-item .mat-icon {
+  font-size: 8rem;
+  color: mat-color($app-primary, 800);
+  width: auto;
+  height: auto;
+  margin: 40px 0;
+}
+
+@media all and (min-width: 800px) {
+  .teaser-list-item {
+    flex: 1 auto;
+    max-width: calc((100% - 72px) / 3);
+  }
+}

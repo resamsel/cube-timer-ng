@@ -2,10 +2,11 @@
   <mat-toolbar-row class="mat-elevation-z5" style="z-index: 2">
     <button
       mat-icon-button
+      *ngIf="sidenav"
       (click)="sidenav.toggle()">
       <mat-icon>menu</mat-icon>
     </button>
-    <span>Cube Timer</span>
+    <a routerLink="/">Cube Timer</a>
     <div class="flex-spacer"></div>
     <app-auth></app-auth>
     <mat-menu>

@@ -1,5 +1,5 @@
-import {Component, OnInit} from '@angular/core';
-import {Page} from "../../shared/page.interface";
+import { Component, OnInit } from '@angular/core';
+import { Page } from '../../shared/page.interface';
 
 export interface TimerPage extends Page {
   reverseRoute: (puzzle: string) => string;

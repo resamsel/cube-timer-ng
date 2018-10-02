@@ -6,7 +6,7 @@ import {Component, OnInit} from '@angular/core';
   styleUrls: ['./timer.component.scss']
 })
 export class TimerComponent implements OnInit {
-  public puzzle: string = '3x3x3';
+  public puzzle = '3x3x3';
 
   constructor() {
   }

@@ -1,10 +1,10 @@
-import {Injectable} from "@angular/core";
-import {Observable} from "rxjs";
-import {AngularFirestore} from "@angular/fire/firestore";
-import {UserService} from "./user.service";
+import { Injectable } from '@angular/core';
+import { AngularFirestore } from '@angular/fire/firestore';
+import { Observable } from 'rxjs';
+import { UserService } from './user.service';
 
 export interface Puzzle {
-  id: string,
+  id: string;
   name: string;
 }
 

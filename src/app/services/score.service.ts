@@ -1,4 +1,3 @@
-import { query } from '@angular/animations';
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
@@ -32,8 +31,15 @@ export class ScoreService {
       .collection<Score>(
         `users/${this.userService.user.uid}/puzzles/3x3x3/scores`,
         ref => ref.orderBy('timestamp', 'desc')
-            .limit(options.limit || 0)
+          .limit(options.limit || 0)
       )
       .valueChanges();
+  }
+
+  delete(score: Score): Promise<void> {
+    return this.database
+      .collection(`users/${this.userService.user.uid}/puzzles/3x3x3/scores`)
+      .doc(`${score.timestamp}-${score.value}`)
+      .delete();
   }
 }

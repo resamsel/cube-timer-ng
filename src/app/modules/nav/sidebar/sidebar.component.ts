@@ -1,5 +1,15 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {Page} from "../../../shared/page.interface";
+import { Component, Input, OnInit } from '@angular/core';
+import { Page } from '../../../shared/page.interface';
+
+const LINKS: {
+  page: Page;
+  link: string;
+}[] = [
+  {page: {id: 'timer', name: 'Timer', icon: 'timer'}, link: '/timer'},
+  {page: {id: 'scores', name: 'Scores', icon: 'assessment'}, link: '/scores'},
+  {page: {id: 'puzzles', name: 'Puzzles', icon: 'games'}, link: '/puzzles'},
+  {page: {id: 'settings', name: 'Settings', icon: 'settings'}, link: '/settings'}
+];
 
 @Component({
   selector: 'app-sidebar',
@@ -7,15 +17,9 @@ import {Page} from "../../../shared/page.interface";
   styleUrls: ['./sidebar.component.css']
 })
 export class SidebarComponent implements OnInit {
-  public links: { page: Page, link: string }[] = [
-    // {page: TimerPageComponent.page, link: TimerPageComponent.page.reverseRoute('3x3x3')},
-    {page: {id: 'scores', name: 'Scores', icon: 'assessment', route: undefined}, link: '/scores'},
-    {page: {id: 'puzzles', name: 'Puzzles', icon: 'games', route: undefined}, link: '/puzzles'},
-    // {page: SettingsPageComponent.page, link: SettingsPageComponent.page.reverseRoute()}
-  ];
+  public links: { page: Page, link: string }[] = LINKS;
 
   @Input() activePage: string;
-  public puzzle: string = '3x3x3';
 
   constructor() {
   }

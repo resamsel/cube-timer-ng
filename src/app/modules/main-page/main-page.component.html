@@ -1,9 +1,31 @@
-<app-navbar [sidenav]="sidenav"></app-navbar>
+<header>
+  <h1>Cube Timer</h1>
+  <h2>Make timing fun</h2>
+  <a mat-raised-button routerLink="/timer">Get started</a>
+</header>
 
-<app-sidenav #sidenav activePage="main">
-  <div class="container">
-    <p>
-      main-page works!
-    </p>
-  </div>
-</app-sidenav>
+<div class="container">
+  <section class="mat-typography">
+    <h1 class="mat-display-1">Focus on cubing, not timing</h1>
+
+    <div class="teaser-list">
+      <div class="teaser-list-item">
+        <mat-icon>flash_on</mat-icon>
+        <h3>Speeds up speed cubing</h3>
+        <p>Scrambles are being provided, timing can be done with your favorite key -- the space bar.</p>
+      </div>
+      <div class="teaser-list-item">
+        <mat-icon>group</mat-icon>
+        <h3>User experience focused</h3>
+        <p>Using the application is made as comfortable as possible.</p>
+      </div>
+      <div class="teaser-list-item">
+        <mat-icon>settings</mat-icon>
+        <h3>Easy to work with</h3>
+        <p>All elements follow the concepts of Material Design to allow the easiest and most intuitive use possible.</p>
+      </div>
+    </div>
+  </section>
+</div>
+
+<app-footer></app-footer>

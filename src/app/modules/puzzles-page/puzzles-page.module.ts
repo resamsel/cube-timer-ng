@@ -1,10 +1,10 @@
-import {NgModule} from "@angular/core";
-import {PuzzlesPageComponent} from "./puzzles-page.component";
-import {NavbarModule} from "../nav/navbar/navbar.module";
-import {SidenavModule} from "../nav/sidenav/sidenav.module";
-import {PuzzlesRoutingModule} from "./puzzles-routing.module";
-import {MatCardModule, MatListModule} from "@angular/material";
-import {CommonModule} from "@angular/common";
+import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
+import { MatCardModule, MatListModule } from '@angular/material';
+import { NavbarModule } from '../nav/navbar/navbar.module';
+import { SidenavModule } from '../nav/sidenav/sidenav.module';
+import { PuzzlesPageComponent } from './puzzles-page.component';
+import { PuzzlesRoutingModule } from './puzzles-routing.module';
 
 @NgModule({
   declarations: [

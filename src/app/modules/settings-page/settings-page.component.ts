@@ -1,6 +1,6 @@
 import {Component, OnInit, Type} from '@angular/core';
-import {Page} from "../../shared/page.interface";
-import {Route} from "@angular/router";
+import {Page} from '../../shared/page.interface';
+import {Route} from '@angular/router';
 
 export class SettingsPage implements Page {
   constructor(private component: Type<any>,
@@ -11,10 +11,6 @@ export class SettingsPage implements Page {
                 path: 'settings'
               }) {
     this.route.component = this.component;
-  }
-
-  public reverseRoute(): string {
-    return '/' + this.route.path;
   }
 }
 

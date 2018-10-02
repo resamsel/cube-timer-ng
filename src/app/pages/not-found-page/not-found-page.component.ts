@@ -1,6 +1,4 @@
-import {Component, OnInit, Type} from '@angular/core';
-import {Route} from "@angular/router";
-import {Page} from "../../shared/page.interface";
+import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-not-found-page',
@@ -8,16 +6,6 @@ import {Page} from "../../shared/page.interface";
   styleUrls: ['./not-found-page.component.css']
 })
 export class NotFoundPageComponent implements OnInit {
-  public static page: Page = {
-    id: 'not-found',
-    name: 'Not Found',
-    icon: '',
-    route: {
-      path: '**',
-      component: NotFoundPageComponent
-    }
-  };
-
   constructor() {
   }
 

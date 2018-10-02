@@ -5,6 +5,11 @@ body {
   margin: 0;
 }
 
+a {
+  text-decoration: none;
+  color: currentColor;
+}
+
 .container {
   padding: 0 16px;
   margin: 0 auto;
@@ -34,6 +39,10 @@ body {
   padding: 24px 24px 0 24px;
 }
 
+.card-accented .mat-card-title {
+  font-size: 24px;
+}
+
 .card-accented .mat-card-title,
 .card-accented .mat-card-subtitle {
   color: $light-primary-text;
@@ -45,4 +54,21 @@ app-timer .mat-form-field-infix {
 app-timer .mat-form-field-label-wrapper,
 app-timer .mat-input-element {
   text-align: center;
+}
+
+.mat-list.hoverable .mat-list-item:hover {
+  background: mat-color($app-theme-background, hover);
+}
+
+.mat-typography .mat-display-1 {
+  color: mat-color($app-primary, 800);
+  text-align: center;
+  margin: 2rem 0 1rem 0;
+  font-size: 2.92rem;
+}
+
+@mixin full-height() {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
 }

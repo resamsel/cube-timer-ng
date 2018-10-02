@@ -1,12 +1,15 @@
-<mat-card>
-  <mat-card-content>
-    <mat-list>
-      <h3 matSubheader>Scores</h3>
-      <mat-list-item *ngFor="let score of scores">
-        <mat-icon mat-list-icon>folder</mat-icon>
-        <h4 mat-line>{{score.value / 1000}}s</h4>
-        <p mat-line>{{score.timestamp | amTimeAgo}}</p>
-      </mat-list-item>
-    </mat-list>
-  </mat-card-content>
-</mat-card>
+<mat-list class="hoverable">
+  <h3 matSubheader>Scores</h3>
+  <div class="mat-elevation-z2">
+    <mat-list-item *ngFor="let score of scores">
+      <mat-icon mat-list-icon>assessment</mat-icon>
+      <h4 mat-line>{{score.value | date: 'mm:ss.S'}}s</h4>
+      <p mat-line title="{{score.timestamp | date:'full'}}">{{score.timestamp | amTimeAgo}}</p>
+      <div class="actions">
+        <button mat-icon-button (click)="onDelete(score)">
+          <mat-icon color="warn">delete</mat-icon>
+        </button>
+      </div>
+    </mat-list-item>
+  </div>
+</mat-list>

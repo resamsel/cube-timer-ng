@@ -2,10 +2,12 @@
 
 <app-sidenav #sidenav activePage="puzzles">
   <div class="container">
-    <mat-card class="">
-      <mat-card-title>Puzzles</mat-card-title>
+    <mat-card class="card-accented">
+      <mat-card-header>
+        <mat-card-title>Puzzles</mat-card-title>
+      </mat-card-header>
       <mat-card-content>
-        <mat-list>
+        <mat-list class="hoverable">
           <mat-list-item *ngFor="let puzzle of puzzles$ | async">
             {{puzzle.name}}
           </mat-list-item>

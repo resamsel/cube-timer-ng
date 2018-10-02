@@ -1,13 +1,13 @@
-import {NgModule} from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
+import { MatButtonModule, MatCardModule, MatIconModule, MatListModule, MatSnackBarModule } from '@angular/material';
 import { MomentModule } from 'ngx-moment';
-import {NavbarModule} from '../nav/navbar/navbar.module';
-import {SidenavModule} from '../nav/sidenav/sidenav.module';
-import {ScoresRoutingModule} from './scores-routing.module';
-import {MatCardModule, MatIconModule, MatListModule} from '@angular/material';
-import {CommonModule} from '@angular/common';
-import {ScoresComponent} from './scores/scores.component';
-import {ScoresPageComponent} from './scores-page.component';
-import {ScoresStatsComponent} from './scores-stats/scores-stats.component';
+import { NavbarModule } from '../nav/navbar/navbar.module';
+import { SidenavModule } from '../nav/sidenav/sidenav.module';
+import { ScoresPageComponent } from './scores-page.component';
+import { ScoresRoutingModule } from './scores-routing.module';
+import { ScoresStatsComponent } from './scores-stats/scores-stats.component';
+import { ScoresComponent } from './scores/scores.component';
 
 @NgModule({
   declarations: [
@@ -22,6 +22,8 @@ import {ScoresStatsComponent} from './scores-stats/scores-stats.component';
     MatCardModule,
     MatListModule,
     MatIconModule,
+    MatButtonModule,
+    MatSnackBarModule,
     ScoresRoutingModule,
     MomentModule
   ]

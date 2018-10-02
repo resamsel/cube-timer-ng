@@ -1,0 +1,15 @@
+@import "../../../../theme";
+
+.mat-list-item:hover {
+  background: mat-color($app-theme-background, hover);
+}
+
+@media only screen and (min-width: 601px) {
+  .actions {
+    display: none;
+  }
+
+  .mat-list-item:hover .actions {
+    display: block;
+  }
+}

@@ -1,0 +1,13 @@
+@import '../../../../theme';
+
+footer {
+  color: mat-color($app-theme-foreground, text);
+  background-color: mat-color($app-theme-background, hover);
+  text-align: center;
+  margin-top: 40px;
+  padding: 12px;
+}
+
+.footer-item {
+  padding: 12px;
+}

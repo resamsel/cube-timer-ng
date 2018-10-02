@@ -1,5 +1,5 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {Score} from "../../../services/score.service";
+import { Component, Input, OnInit } from '@angular/core';
+import { Score } from '../../../services/score.service';
 
 @Component({
   selector: 'app-scores-stats',
@@ -10,7 +10,8 @@ export class ScoresStatsComponent implements OnInit {
 
   @Input() scores: Score[];
 
-  constructor() { }
+  constructor() {
+  }
 
   ngOnInit() {
   }
