@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material';
-import { Score, ScoreService } from '../../../services/score.service';
+import { Score, ScoreService } from '../../../../services/score.service';
 import * as moment from 'moment';
 
 @Component({

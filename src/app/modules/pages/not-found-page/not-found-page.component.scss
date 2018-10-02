@@ -1,0 +1,40 @@
+@import "../../../../mixins";
+@import url('https://fonts.googleapis.com/css?family=Rubik');
+
+.content {
+  text-align: center;
+  justify-content: center;
+  @include full-height();
+  height: 62vh;
+}
+
+.error-code {
+  background: mat-color($app-primary);
+  font-family: 'Rubik', sans-serif;
+  font-size: 128px;
+  font-weight: 700;
+  flex-grow: 2;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  padding-top: 60px;
+}
+
+.error-text {
+  padding-top: 16px;
+  flex-grow: 3;
+}
+
+.error-text h1 {
+  color: mat-color($app-primary);
+}
+
+.c4 {
+  color: white;
+  align-self: flex-end;
+}
+
+.c0 {
+  color: mat-color($app-accent);
+  align-self: flex-end;
+}

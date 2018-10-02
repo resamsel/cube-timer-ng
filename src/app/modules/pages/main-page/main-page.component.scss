@@ -1,5 +1,5 @@
-@import '../../../theme.scss';
-@import '../../../styles.scss';
+@import '../../../../theme';
+@import '../../../../styles';
 
 :host {
   @include full-height();

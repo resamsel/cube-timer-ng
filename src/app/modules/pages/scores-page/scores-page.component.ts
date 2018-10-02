@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
-import { Score, ScoreService } from '../../services/score.service';
-import { UserService } from '../../services/user.service';
+import { Score, ScoreService } from '../../../services/score.service';
+import { UserService } from '../../../services/user.service';
 
 @Component({
   selector: 'app-scores-page',
@@ -25,7 +25,7 @@ export class ScoresPageComponent implements OnInit {
   ngOnInit() {
     this.userService.authState()
       .pipe(take(1))
-      .subscribe(user => {
+      .subscribe(() => {
         this._scores$ = this.scoreService.scores({limit: 20});
       });
   }

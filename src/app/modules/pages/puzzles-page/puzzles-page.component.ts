@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material';
 import { Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
-import { Puzzle, PuzzleService } from '../../services/puzzle.service';
-import { UserService } from '../../services/user.service';
+import { Puzzle, PuzzleService } from '../../../services/puzzle.service';
+import { UserService } from '../../../services/user.service';
 
 @Component({
   selector: 'app-puzzles-page',
@@ -27,7 +27,7 @@ export class PuzzlesPageComponent implements OnInit {
   ngOnInit() {
     this.userService.authState()
       .pipe(take(1))
-      .subscribe(user => {
+      .subscribe(() => {
         this._puzzles$ = this.puzzleService.puzzles();
       });
   }

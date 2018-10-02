@@ -10,8 +10,8 @@ import {
   MatInputModule,
   MatSnackBarModule
 } from '@angular/material';
-import { NavbarModule } from '../nav/navbar/navbar.module';
-import { SidenavModule } from '../nav/sidenav/sidenav.module';
+import { NavbarModule } from '../../nav/navbar/navbar.module';
+import { SidenavModule } from '../../nav/sidenav/sidenav.module';
 import { TimerPageComponent } from './timer-page.component';
 import { TimerRoutingModule } from './timer-routing.module';
 import { TimerStatsComponent } from './timer-stats/timer-stats.component';

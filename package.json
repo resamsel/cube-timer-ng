@@ -11,7 +11,9 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "deploy": "ng build --prod && firebase deploy",
-    "postinstall": "node src/build-info.js"
+    "buildinfo": "node src/build-info.js",
+    "postpull": "npm install && npm run buildinfo",
+    "precommit": "ng lint && ng test"
   },
   "private": true,
   "dependencies": {

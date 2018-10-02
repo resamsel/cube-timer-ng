@@ -9,8 +9,8 @@ import {
   MatSelectModule,
   MatSnackBarModule
 } from '@angular/material';
-import { NavbarModule } from '../nav/navbar/navbar.module';
-import { SidenavModule } from '../nav/sidenav/sidenav.module';
+import { NavbarModule } from '../../nav/navbar/navbar.module';
+import { SidenavModule } from '../../nav/sidenav/sidenav.module';
 import { SettingsPageComponent } from './settings-page.component';
 import { SettingsRoutingModule } from './settings-routing.module';
 
