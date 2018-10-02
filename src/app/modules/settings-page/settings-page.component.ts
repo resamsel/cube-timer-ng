@@ -1,17 +1,8 @@
-import {Component, OnInit, Type} from '@angular/core';
-import {Page} from '../../shared/page.interface';
-import {Route} from '@angular/router';
+import { Component, OnInit } from '@angular/core';
 
-export class SettingsPage implements Page {
-  constructor(private component: Type<any>,
-              public id: string = 'settings',
-              public name: string = 'Settings',
-              public icon: string = 'settings',
-              public route: Route = {
-                path: 'settings'
-              }) {
-    this.route.component = this.component;
-  }
+export interface Language {
+  name: string;
+  value: string;
 }
 
 @Component({
@@ -20,9 +11,16 @@ export class SettingsPage implements Page {
   styleUrls: ['./settings-page.component.css']
 })
 export class SettingsPageComponent implements OnInit {
-  public static page: SettingsPage = new SettingsPage(SettingsPageComponent);
+  public languages: Language[] = [
+    {name: 'English', value: 'en'},
+    {name: 'German', value: 'de'},
+  ];
+  public inspectionTimes: number[] = [
+    0, 3, 5, 10, 15
+  ];
 
-  constructor() { }
+  constructor() {
+  }
 
   ngOnInit() {
   }

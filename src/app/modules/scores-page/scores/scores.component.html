@@ -1,6 +1,5 @@
 <mat-list class="hoverable">
-  <h3 matSubheader>Scores</h3>
-  <div class="mat-elevation-z2">
+  <div class="elevation">
     <mat-list-item *ngFor="let score of scores">
       <mat-icon mat-list-icon>assessment</mat-icon>
       <h4 mat-line>{{score.value | date: 'mm:ss.S'}}s</h4>

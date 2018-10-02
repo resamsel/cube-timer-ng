@@ -1,4 +1,5 @@
 @import 'theme';
+@import 'mixins';
 
 body {
   font-family: Roboto, Arial, sans-serif;
@@ -33,7 +34,7 @@ a {
 }
 
 .card-accented .mat-card-header {
-  background-color: mat-color($app-primary, 900);
+  background-color: mat-color($app-primary, 700);
   border-radius: 2px 2px 0 0;
   margin: -24px -24px 0 -24px !important;
   padding: 24px 24px 0 24px;
@@ -67,8 +68,6 @@ app-timer .mat-input-element {
   font-size: 2.92rem;
 }
 
-@mixin full-height() {
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
+.elevation {
+  @include elevation-2();
 }

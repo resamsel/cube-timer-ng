@@ -8,6 +8,7 @@ import { SidenavComponent } from '../sidenav/sidenav.component';
 })
 export class NavbarComponent implements OnInit {
   @Input() public sidenav: SidenavComponent;
+  @Input() public page: string;
 
   constructor() {
   }

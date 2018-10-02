@@ -36,7 +36,7 @@ export class ScoreService {
       .valueChanges();
   }
 
-  delete(score: Score): Promise<void> {
+  public delete(score: Score): Promise<void> {
     return this.database
       .collection(`users/${this.userService.user.uid}/puzzles/3x3x3/scores`)
       .doc(`${score.timestamp}-${score.value}`)

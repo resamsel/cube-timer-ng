@@ -3,6 +3,24 @@ mat-toolbar-row {
   flex-wrap: wrap;
   align-items: center;
 }
+
 .flex-spacer {
   flex-grow: 1;
+}
+
+.burger {
+  margin: 0 12px;
+}
+
+a,
+.page {
+  font-weight: 400;
+}
+
+.page {
+  margin-left: 12px;
+  padding: 0 12px;
+  border-left: 1px solid rgba(255, 255, 255, 0.2);
+  font-size: 18px;
+  line-height: 24px;
 }

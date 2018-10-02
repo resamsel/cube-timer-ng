@@ -1,0 +1,12 @@
+@import 'theme';
+
+@mixin elevation-2() {
+  @include mat-elevation(2);
+  background: white;
+}
+
+@mixin full-height() {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}

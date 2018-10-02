@@ -1,18 +1,24 @@
-<app-navbar [sidenav]="sidenav"></app-navbar>
+<app-navbar [sidenav]="sidenav" page="Puzzles"></app-navbar>
 
 <app-sidenav #sidenav activePage="puzzles">
   <div class="container">
-    <mat-card class="card-accented">
-      <mat-card-header>
-        <mat-card-title>Puzzles</mat-card-title>
-      </mat-card-header>
+    <mat-card>
       <mat-card-content>
-        <mat-list class="hoverable">
-          <mat-list-item *ngFor="let puzzle of puzzles$ | async">
-            {{puzzle.name}}
-          </mat-list-item>
-        </mat-list>
+        Bar Chart
       </mat-card-content>
     </mat-card>
+    <mat-list class="hoverable">
+      <div class="elevation">
+        <mat-list-item *ngFor="let puzzle of puzzles$ | async">
+          <mat-icon mat-list-icon>games</mat-icon>
+          <h4 mat-line>{{puzzle.name}}</h4>
+          <div class="actions">
+            <button mat-icon-button (click)="onDelete(puzzle)">
+              <mat-icon color="warn">delete</mat-icon>
+            </button>
+          </div>
+        </mat-list-item>
+      </div>
+    </mat-list>
   </div>
 </app-sidenav>

@@ -1,4 +1,4 @@
-<app-navbar [sidenav]="sidenav"></app-navbar>
+<app-navbar [sidenav]="sidenav" page="Scores"></app-navbar>
 
 <app-sidenav #sidenav activePage="scores">
   <div class="container" *ngIf="scores$ | async as scores">

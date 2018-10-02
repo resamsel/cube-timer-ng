@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { MatSnackBar } from '@angular/material';
 import { Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { Puzzle, PuzzleService } from '../../services/puzzle.service';
@@ -18,7 +19,8 @@ export class PuzzlesPageComponent implements OnInit {
 
   constructor(
     private puzzleService: PuzzleService,
-    private userService: UserService
+    private userService: UserService,
+    private snackBar: MatSnackBar
   ) {
   }
 
@@ -28,5 +30,19 @@ export class PuzzlesPageComponent implements OnInit {
       .subscribe(user => {
         this._puzzles$ = this.puzzleService.puzzles();
       });
+  }
+
+  public onDelete(puzzle: Puzzle): void {
+    this.puzzleService
+      .delete(puzzle)
+      .then(() => this.onDeleted(puzzle));
+  }
+
+  private onDeleted(puzzle: Puzzle): void {
+    this.snackBar.open(
+      `Puzzle ${puzzle.name} has been deleted`,
+      'Dismiss',
+      {duration: 3000}
+    );
   }
 }

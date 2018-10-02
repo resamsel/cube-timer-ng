@@ -23,4 +23,11 @@ export class PuzzleService {
         ref => ref.orderBy('name', 'asc'))
       .valueChanges();
   }
+
+  public delete(puzzle: Puzzle): Promise<void> {
+    return this.database
+      .collection(`users/${this.userService.user.uid}/puzzles`)
+      .doc(puzzle.name)
+      .delete();
+  }
 }
