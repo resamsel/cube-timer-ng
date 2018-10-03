@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
   MatCardModule,
   MatCheckboxModule,
@@ -20,6 +21,8 @@ import { SettingsRoutingModule } from './settings-routing.module';
   ],
   imports: [
     CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
     SidenavModule,
     NavbarModule,
     MatCardModule,

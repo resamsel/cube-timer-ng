@@ -2,15 +2,27 @@ import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { Router } from '@angular/router';
 import * as firebase from 'firebase';
-import { User } from 'firebase';
 import { Observable } from 'rxjs';
+
+export interface User {
+  deleted: boolean;
+  email: string;
+  hintVisible: boolean;
+  inspectionTime: number;
+  soundAfterInspection: boolean;
+  language: string;
+  name: string;
+  photoUrl: string;
+  uid: string;
+  windowSize: number;
+}
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
   private _loggedIn: boolean;
-  private _user: User;
+  private _user: firebase.User;
 
   get user(): firebase.User {
     return this._user;
@@ -21,7 +33,7 @@ export class UserService {
   }
 
   constructor(private afAuth: AngularFireAuth, private router: Router) {
-    afAuth.authState.subscribe((user: User | null) => {
+    afAuth.authState.subscribe((user: firebase.User | null) => {
       this._user = user;
       this._loggedIn = user !== null;
     });

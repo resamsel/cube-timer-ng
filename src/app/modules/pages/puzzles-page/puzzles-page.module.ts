@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { MatButtonModule, MatCardModule, MatIconModule, MatListModule, MatSnackBarModule } from '@angular/material';
+import { MomentModule } from 'ngx-moment';
 import { NavbarModule } from '../../nav/navbar/navbar.module';
 import { SidenavModule } from '../../nav/sidenav/sidenav.module';
 import { PuzzlesPageComponent } from './puzzles-page.component';
@@ -19,7 +20,8 @@ import { PuzzlesRoutingModule } from './puzzles-routing.module';
     MatIconModule,
     MatButtonModule,
     MatSnackBarModule,
-    PuzzlesRoutingModule
+    PuzzlesRoutingModule,
+    MomentModule
   ]
 })
 export class PuzzlesPageModule {

@@ -61,13 +61,6 @@ app-timer .mat-input-element {
   background: mat-color($app-theme-background, hover);
 }
 
-.mat-typography .mat-display-1 {
-  color: mat-color($app-primary, 800);
-  text-align: center;
-  margin: 2rem 0 1rem 0;
-  font-size: 2.92rem;
-}
-
 .elevation {
   @include elevation-2();
 }

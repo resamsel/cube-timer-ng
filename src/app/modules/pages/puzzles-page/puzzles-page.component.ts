@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material';
+import { select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
-import { Puzzle, PuzzleService } from '../../../services/puzzle.service';
+import { Puzzle, PuzzleListState, PuzzleService } from '../../../services/puzzle.service';
 import { UserService } from '../../../services/user.service';
+import { AppState } from '../../../shared/app.state';
 
 @Component({
   selector: 'app-puzzles-page',
@@ -11,16 +13,17 @@ import { UserService } from '../../../services/user.service';
   styleUrls: ['./puzzles-page.component.css']
 })
 export class PuzzlesPageComponent implements OnInit {
-  private _puzzles$: Observable<Puzzle[]>;
+  private _puzzles$: Observable<PuzzleListState>;
 
-  get puzzles$(): Observable<Puzzle[]> {
+  get puzzles$(): Observable<PuzzleListState> {
     return this._puzzles$;
   }
 
   constructor(
     private puzzleService: PuzzleService,
     private userService: UserService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private store: Store<AppState>
   ) {
   }
 
@@ -28,7 +31,8 @@ export class PuzzlesPageComponent implements OnInit {
     this.userService.authState()
       .pipe(take(1))
       .subscribe(() => {
-        this._puzzles$ = this.puzzleService.puzzles();
+        this._puzzles$ = this.store.pipe(select('puzzles'));
+        this.puzzleService.puzzles();
       });
   }
 

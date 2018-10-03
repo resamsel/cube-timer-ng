@@ -36,6 +36,13 @@ section {
   padding: 1rem 0;
 }
 
+.mat-typography .mat-display-2 {
+  color: mat-color($app-primary, 800);
+  text-align: center;
+  margin: 2rem 0 1rem 0;
+  font-size: 2.92rem;
+}
+
 .teaser-list {
   display: flex;
   flex-flow: row wrap;
@@ -53,7 +60,7 @@ section {
 }
 
 .teaser-list-item .mat-icon {
-  font-size: 8rem;
+  font-size: 48px;
   color: mat-color($app-primary, 800);
   width: auto;
   height: auto;
