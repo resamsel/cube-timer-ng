@@ -5,7 +5,7 @@ import { SettingsState } from '../services/settings.service';
 export interface AppState {
   settings: SettingsState;
   puzzles: PuzzleListState;
-  score: ScoreListState;
+  scores: ScoreListState;
   puzzle: string;
 }
 
@@ -14,13 +14,15 @@ export const initialState: AppState = {
   puzzles: {
     list: []
   },
-  score: {
+  scores: {
     list: []
   },
   settings: {
+    uid: undefined,
     language: 'en',
     inspectionTime: 0,
     soundAfterInspection: false,
-    windowSize: 100
+    windowSize: 100,
+    pageSize: 50
   }
 };

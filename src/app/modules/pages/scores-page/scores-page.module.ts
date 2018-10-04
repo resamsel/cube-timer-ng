@@ -4,6 +4,7 @@ import { MatButtonModule, MatCardModule, MatIconModule, MatListModule, MatSnackB
 import { MomentModule } from 'ngx-moment';
 import { NavbarModule } from '../../nav/navbar/navbar.module';
 import { SidenavModule } from '../../nav/sidenav/sidenav.module';
+import { PuzzleSelectorModule } from '../../puzzles/puzzle-selector/puzzle-selector.module';
 import { ScoresPageComponent } from './scores-page.component';
 import { ScoresRoutingModule } from './scores-routing.module';
 import { ScoresStatsComponent } from './scores-stats/scores-stats.component';
@@ -25,6 +26,7 @@ import { ScoresComponent } from './scores/scores.component';
     MatButtonModule,
     MatSnackBarModule,
     ScoresRoutingModule,
+    PuzzleSelectorModule,
     MomentModule
   ]
 })

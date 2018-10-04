@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { Action, Store } from '@ngrx/store';
+import { Action, select, Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
 import { AppState, initialState } from '../shared/app.state';
-import { UserService } from './user.service';
 
 export interface Puzzle {
   id: string;
@@ -36,7 +36,6 @@ export interface PuzzleListState {
 export class PuzzleService {
   constructor(
     private database: AngularFirestore,
-    private userService: UserService,
     private store: Store<AppState>
   ) {
   }
@@ -66,18 +65,26 @@ export class PuzzleService {
     this.store.dispatch(new PuzzleUpdateAction(puzzle));
   }
 
-  public puzzles(): void {
+  public puzzle(): Observable<string> {
+    return this.store.pipe(select(state => state.puzzle));
+  }
+
+  public puzzles(): Observable<PuzzleListState> {
+    return this.store.pipe(select(state => state.puzzles));
+  }
+
+  public retrievePuzzles(uid: string): void {
     this.database
       .collection<Puzzle>(
-        `users/${this.userService.user.uid}/puzzles`,
+        `users/${uid}/puzzles`,
         ref => ref.orderBy('name', 'asc'))
       .valueChanges()
       .subscribe(puzzles => this.store.dispatch(new PuzzleListAction(puzzles)));
   }
 
-  public delete(puzzle: Puzzle): Promise<void> {
+  public delete(uid: string, puzzle: Puzzle): Promise<void> {
     return this.database
-      .collection(`users/${this.userService.user.uid}/puzzles`)
+      .collection(`users/${uid}/puzzles`)
       .doc(puzzle.name)
       .delete();
   }

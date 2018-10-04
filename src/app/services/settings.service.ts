@@ -1,14 +1,17 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { Action, Store } from '@ngrx/store';
+import { Action, select, Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
 import { AppState, initialState } from '../shared/app.state';
 import { User } from './user.service';
 
 export interface SettingsState {
+  uid: string;
   language: string;
   inspectionTime: number;
   soundAfterInspection: boolean;
   windowSize: number;
+  pageSize: number;
 }
 
 interface SettingsAction extends Action {
@@ -24,6 +27,15 @@ class SettingsReadAction implements SettingsAction {
   }
 }
 
+const SETTINGS_WRITE_ACTION = '[Settings] Write';
+
+export class SettingsWriteAction implements SettingsAction {
+  readonly type = SETTINGS_WRITE_ACTION;
+
+  constructor(public readonly settings: SettingsState) {
+  }
+}
+
 @Injectable({providedIn: 'root'})
 export class SettingsService {
 
@@ -32,9 +44,14 @@ export class SettingsService {
     private readonly store: Store<AppState>) {
   }
 
-  public static settingsReducer(state: SettingsState = initialState.settings, action: SettingsReadAction) {
+  public static settingsReducer(state: SettingsState = initialState.settings, action: SettingsAction) {
     switch (action.type) {
       case SETTINGS_READ_ACTION:
+        return {
+          ...state,
+          ...action.settings
+        };
+      case SETTINGS_WRITE_ACTION:
         return {
           ...state,
           ...action.settings
@@ -44,7 +61,11 @@ export class SettingsService {
     }
   }
 
-  public settings(uid: string): void {
+  public settings(): Observable<SettingsState> {
+    return this.store.pipe(select(state => state.settings));
+  }
+
+  public retrieveSettings(uid: string): void {
     this.database
       .doc<User>(`/users/${uid}`)
       .valueChanges()

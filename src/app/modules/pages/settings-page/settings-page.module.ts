@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
+  MatButtonModule,
   MatCardModule,
   MatCheckboxModule,
   MatFormFieldModule,
@@ -14,10 +15,14 @@ import { NavbarModule } from '../../nav/navbar/navbar.module';
 import { SidenavModule } from '../../nav/sidenav/sidenav.module';
 import { SettingsPageComponent } from './settings-page.component';
 import { SettingsRoutingModule } from './settings-routing.module';
+import { SettingsFormComponent } from './settings-form/settings-form.component';
+import { ConnectFormDirective } from './connect-form.directive';
 
 @NgModule({
   declarations: [
-    SettingsPageComponent
+    SettingsPageComponent,
+    SettingsFormComponent,
+    ConnectFormDirective
   ],
   imports: [
     CommonModule,
@@ -33,6 +38,7 @@ import { SettingsRoutingModule } from './settings-routing.module';
     MatOptionModule,
     MatCheckboxModule,
     MatInputModule,
+    MatButtonModule,
     SettingsRoutingModule
   ]
 })

@@ -2,19 +2,16 @@ import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { Router } from '@angular/router';
 import * as firebase from 'firebase';
+import { User } from 'firebase';
 import { Observable } from 'rxjs';
+import { SettingsState } from './settings.service';
 
-export interface User {
+export interface User extends SettingsState {
   deleted: boolean;
   email: string;
-  hintVisible: boolean;
-  inspectionTime: number;
-  soundAfterInspection: boolean;
-  language: string;
   name: string;
   photoUrl: string;
   uid: string;
-  windowSize: number;
 }
 
 @Injectable({
@@ -22,9 +19,9 @@ export interface User {
 })
 export class UserService {
   private _loggedIn: boolean;
-  private _user: firebase.User;
+  private _user: User;
 
-  get user(): firebase.User {
+  get user(): User {
     return this._user;
   }
 
@@ -39,7 +36,7 @@ export class UserService {
     });
   }
 
-  public authState(): Observable<firebase.User> {
+  public authState(): Observable<User> {
     return this.afAuth.authState;
   }
 
@@ -54,8 +51,9 @@ export class UserService {
   }
 
   public signOut(): void {
-    this.afAuth.auth.signOut();
-    this.router.navigate(['/']);
+    this.afAuth.auth
+      .signOut()
+      .then(() => this.router.navigate(['/']));
   }
 
   private _updateUserData() {

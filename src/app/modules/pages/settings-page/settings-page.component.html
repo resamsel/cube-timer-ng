@@ -1,46 +1,10 @@
 <app-navbar [sidenav]="sidenav" page="Settings"></app-navbar>
 
 <app-sidenav #sidenav activePage="settings">
-  <div class="container" *ngIf="settings$ | async as settings">
+  <div class="container">
     <mat-card>
       <mat-card-content>
-        <form>
-          <mat-form-field floatLabel="never">
-            <mat-select placeholder="Language" [value]="settings.language" [formControl]="languageFormControl">
-              <mat-option *ngFor="let language of languages" [value]="language.value">
-                {{language.name}}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-
-          <mat-form-field floatLabel="never">
-            <mat-select
-              placeholder="Inspection Time"
-              [value]="settings.inspectionTime"
-              [formControl]="inspectionTimeFormControl">
-              <mat-option *ngFor="let inspectionTime of inspectionTimes" [value]="inspectionTime">
-                {inspectionTime, plural, =0 {None} other {{{inspectionTime}} seconds}}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-
-          <div>
-            <mat-checkbox
-              [checked]="settings.soundAfterInspection"
-              (change)="onSoundAfterInspectionChange($event, settings)"
-            >Play sound after inspection
-            </mat-checkbox>
-          </div>
-
-          <mat-form-field floatLabel="never">
-            <input
-              matInput
-              placeholder="Chart entries"
-              [value]="settings.windowSize"
-              type="number"
-              [formControl]="windowSizeFormControl">
-          </mat-form-field>
-        </form>
+        <app-settings-form [settings]="settings$ | async" (save)="onSave($event)"></app-settings-form>
       </mat-card-content>
     </mat-card>
   </div>

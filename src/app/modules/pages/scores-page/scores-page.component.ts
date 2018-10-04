@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { select, Store } from '@ngrx/store';
+import { User } from 'firebase';
 import { Observable } from 'rxjs';
-import { take } from 'rxjs/operators';
-import { Score, ScoreService, ScoreListState } from '../../../services/score.service';
+import { PuzzleListState, PuzzleService } from '../../../services/puzzle.service';
+import { ScoreListState, ScoreService } from '../../../services/score.service';
+import { SettingsService } from '../../../services/settings.service';
 import { UserService } from '../../../services/user.service';
-import { AppState } from '../../../shared/app.state';
 
 @Component({
   selector: 'app-scores-page',
@@ -12,7 +12,13 @@ import { AppState } from '../../../shared/app.state';
   styleUrls: ['./scores-page.component.css']
 })
 export class ScoresPageComponent implements OnInit {
+  private _puzzles$: Observable<PuzzleListState>;
   private _scores$: Observable<ScoreListState>;
+  private _user: User;
+
+  get puzzles$(): Observable<PuzzleListState> {
+    return this._puzzles$;
+  }
 
   get scores$(): Observable<ScoreListState> {
     return this._scores$;
@@ -21,18 +27,26 @@ export class ScoresPageComponent implements OnInit {
   constructor(
     private scoreService: ScoreService,
     private userService: UserService,
-    private store: Store<AppState>
+    private puzzleService: PuzzleService,
+    private settingsService: SettingsService
   ) {
   }
 
   ngOnInit() {
-    this._scores$ = this.store.pipe(select('scores'));
+    this._puzzles$ = this.puzzleService.puzzles();
+    this._scores$ = this.scoreService.scores();
+    this.settingsService.settings().subscribe(settings => {
+      this.puzzleService.puzzle()
+        .subscribe((puzzle: string) => this.scoreService.retrieveScores(settings.uid, puzzle, {limit: settings.pageSize}));
+      this.puzzleService.retrievePuzzles(settings.uid);
+    })
+
     this.userService.authState()
-      .pipe(take(1))
-      .subscribe(() => {
-        this.store
-          .pipe(select('puzzle'))
-          .subscribe(puzzle => this.scoreService.scores(puzzle, {limit: 20}));
+      .subscribe((user: User) => {
+        this._user = user;
+        if (user !== null) {
+          this.settingsService.retrieveSettings(user.uid);
+        }
       });
   }
 }

@@ -1,4 +1,8 @@
-<app-navbar [sidenav]="sidenav" page="Scores"></app-navbar>
+<app-navbar [sidenav]="sidenav" page="Scores">
+  <app-puzzle-selector
+    *ngIf="puzzles$ | async as puzzles"
+    [puzzles]="puzzles.list"></app-puzzle-selector>
+</app-navbar>
 
 <app-sidenav #sidenav activePage="scores">
   <div class="container" *ngIf="scores$ | async as scores">

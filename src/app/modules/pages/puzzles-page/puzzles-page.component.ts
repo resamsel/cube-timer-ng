@@ -1,11 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material';
-import { select, Store } from '@ngrx/store';
+import * as firebase from 'firebase';
 import { Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { Puzzle, PuzzleListState, PuzzleService } from '../../../services/puzzle.service';
 import { UserService } from '../../../services/user.service';
-import { AppState } from '../../../shared/app.state';
 
 @Component({
   selector: 'app-puzzles-page',
@@ -14,6 +13,7 @@ import { AppState } from '../../../shared/app.state';
 })
 export class PuzzlesPageComponent implements OnInit {
   private _puzzles$: Observable<PuzzleListState>;
+  private _user: firebase.User;
 
   get puzzles$(): Observable<PuzzleListState> {
     return this._puzzles$;
@@ -22,23 +22,23 @@ export class PuzzlesPageComponent implements OnInit {
   constructor(
     private puzzleService: PuzzleService,
     private userService: UserService,
-    private snackBar: MatSnackBar,
-    private store: Store<AppState>
+    private snackBar: MatSnackBar
   ) {
   }
 
   ngOnInit() {
     this.userService.authState()
       .pipe(take(1))
-      .subscribe(() => {
-        this._puzzles$ = this.store.pipe(select('puzzles'));
-        this.puzzleService.puzzles();
+      .subscribe((user: firebase.User) => {
+        this._user = user;
+        this._puzzles$ = this.puzzleService.puzzles();
+        this.puzzleService.retrievePuzzles(user.uid);
       });
   }
 
   public onDelete(puzzle: Puzzle): void {
     this.puzzleService
-      .delete(puzzle)
+      .delete(this._user.uid, puzzle)
       .then(() => this.onDeleted(puzzle));
   }
 

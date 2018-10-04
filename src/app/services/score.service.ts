@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { Action, Store } from '@ngrx/store';
+import { Action, select, Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
 import { AppState, initialState } from '../shared/app.state';
 import { UserService } from './user.service';
 
@@ -41,7 +42,7 @@ export class ScoreService {
   ) {
   }
 
-  public static scoresReducer(state: ScoreListState = initialState.score, action: ScoreListAction): ScoreListState {
+  public static scoresReducer(state: ScoreListState = initialState.scores, action: ScoreListAction): ScoreListState {
     switch (action.type) {
       case SCORE_LIST:
         return {
@@ -53,10 +54,14 @@ export class ScoreService {
     }
   }
 
-  public scores(puzzle: string, options: ScoreRetrievalOptions): void {
+  public scores(): Observable<ScoreListState> {
+    return this.store.pipe(select(state => state.scores));
+  }
+
+  public retrieveScores(uid: string, puzzle: string, options: ScoreRetrievalOptions): void {
     this.database
       .collection<Score>(
-        `users/${this.userService.user.uid}/puzzles/${puzzle}/scores`,
+        `users/${uid}/puzzles/${puzzle}/scores`,
         ref => ref.orderBy('timestamp', 'desc')
           .limit(options.limit || 0)
       )

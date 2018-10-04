@@ -1,11 +1,8 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormControl } from '@angular/forms';
-import { MatCheckboxChange, MatFormField, MatSelect } from '@angular/material';
-import { select, Store } from '@ngrx/store';
+import { Component, OnInit } from '@angular/core';
+import { User } from 'firebase';
 import { Observable } from 'rxjs';
 import { SettingsService, SettingsState } from '../../../services/settings.service';
 import { UserService } from '../../../services/user.service';
-import { AppState } from '../../../shared/app.state';
 
 export interface Language {
   name: string;
@@ -18,20 +15,8 @@ export interface Language {
   styleUrls: ['./settings-page.component.css']
 })
 export class SettingsPageComponent implements OnInit {
-  public languages: Language[] = [
-    {name: 'English', value: 'en'},
-    {name: 'German', value: 'de'},
-  ];
-  public inspectionTimes: number[] = [
-    0, 3, 5, 10, 15
-  ];
-
-  public languageFormControl: FormControl = new FormControl('language');
-  public inspectionTimeFormControl: FormControl = new FormControl('inspectionTime');
-  public windowSizeFormControl: FormControl = new FormControl('windowSize');
-
   private _settings$: Observable<SettingsState>;
-  private _user: firebase.User;
+  private _user: User;
 
   get settings$(): Observable<SettingsState> {
     return this._settings$;
@@ -39,31 +24,19 @@ export class SettingsPageComponent implements OnInit {
 
   constructor(
     private readonly userService: UserService,
-    private readonly settingsService: SettingsService,
-    private readonly store: Store<AppState>
+    private readonly settingsService: SettingsService
   ) {
   }
 
   ngOnInit() {
-    this._settings$ = this.store.pipe(select('settings'));
-    this.userService.authState().subscribe(user => {
+    this._settings$ = this.settingsService.settings();
+    this.userService.authState().subscribe((user: User) => {
       this._user = user;
-      this.settingsService.settings(user.uid);
+      this.settingsService.retrieveSettings(user.uid);
     });
-
-    this.languageFormControl.valueChanges
-      .subscribe((value: string) => this.update({language: value}));
-    this.inspectionTimeFormControl.valueChanges
-      .subscribe((value: number) => this.update({inspectionTime: value}));
-    this.windowSizeFormControl.valueChanges
-      .subscribe((value: number) => this.update({windowSize: value}));
   }
 
-  public onSoundAfterInspectionChange(event: MatCheckboxChange): void {
-    this.update({soundAfterInspection: event.checked});
-  }
-
-  private update(settings: Partial<SettingsState>): void {
+  onSave(settings: SettingsState): void {
     this.settingsService.update(this._user.uid, settings);
   }
 }
