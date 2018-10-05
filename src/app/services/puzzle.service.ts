@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
+import { createEntityAdapter, EntityState } from '@ngrx/entity';
 import { Action, select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { AppState, initialState } from '../shared/app.state';
+import { AppState } from '../shared/app.state';
+import { UserService, UserState } from './user.service';
 
 export interface Puzzle {
   id: string;
@@ -10,17 +12,15 @@ export interface Puzzle {
   lastActive: number;
 }
 
-export const SET_PUZZLE = '[Puzzle] Update';
-
-export class PuzzleUpdateAction implements Action {
-  readonly type = SET_PUZZLE;
+export const PUZZLE_ACTIVATE = '[Puzzle] Update';
+export class PuzzleActivateAction implements Action {
+  readonly type = PUZZLE_ACTIVATE;
 
   constructor(public puzzle: string) {
   }
 }
 
 export const PUZZLE_LIST = '[Puzzle] List';
-
 export class PuzzleListAction implements Action {
   readonly type = PUZZLE_LIST;
 
@@ -28,52 +28,76 @@ export class PuzzleListAction implements Action {
   }
 }
 
-export interface PuzzleListState {
-  list: Puzzle[];
+export const PUZZLE_DELETE = '[Puzzle] Delete';
+export class PuzzleDeleteAction implements Action {
+  readonly type = PUZZLE_DELETE;
+
+  constructor(public name: string) {
+  }
+}
+
+export interface PuzzleState extends EntityState<Puzzle> {
+  active: string;
+}
+
+const adapter = createEntityAdapter<Puzzle>({
+  selectId: model => model.name
+});
+
+export const initialPuzzleState: PuzzleState = adapter.getInitialState({
+  active: '3x3x3'
+});
+
+export type PuzzleActions = PuzzleListAction | PuzzleDeleteAction | PuzzleActivateAction;
+
+export const {
+  selectAll
+} = adapter.getSelectors();
+
+export function puzzleReducer(state: PuzzleState = initialPuzzleState, action: PuzzleActions): PuzzleState {
+  console.log('puzzleReducer', state, action);
+  switch (action.type) {
+    case PUZZLE_LIST:
+      return adapter.addAll(action.puzzles, state);
+    case PUZZLE_DELETE:
+      return adapter.removeOne(action.name, state);
+    case PUZZLE_ACTIVATE:
+      return {
+        ...state,
+        active: action.puzzle
+      };
+    default:
+      return state;
+  }
 }
 
 @Injectable({providedIn: 'root'})
 export class PuzzleService {
   constructor(
+    private readonly userService: UserService,
     private database: AngularFirestore,
     private store: Store<AppState>
   ) {
+    userService.user$().subscribe((state: UserState) => {
+      if (state.user !== null) {
+        this.retrievePuzzles(state.user.uid);
+      }
+    });
   }
 
-  public static activePuzzle(state: string = initialState.puzzle, action: PuzzleUpdateAction): string {
-    switch (action.type) {
-      case SET_PUZZLE:
-        return action.puzzle;
-      default:
-        return state;
-    }
+  // public setActivePuzzle(puzzle: string) {
+  //   this.store.dispatch(new PuzzleActivateAction(puzzle));
+  // }
+
+  public puzzle$(): Observable<string> {
+    return this.store.pipe(select(state => state.puzzles.active));
   }
 
-  public static puzzlesReducer(state: PuzzleListState = initialState.puzzles, action: PuzzleListAction): PuzzleListState {
-    switch (action.type) {
-      case PUZZLE_LIST:
-        return {
-          ...state,
-          list: action.puzzles
-        };
-      default:
-        return state;
-    }
+  public puzzles$(): Observable<Puzzle[]> {
+    return this.store.pipe(select(state => selectAll(state.puzzles)));
   }
 
-  public setActivePuzzle(puzzle: string) {
-    this.store.dispatch(new PuzzleUpdateAction(puzzle));
-  }
-
-  public puzzle(): Observable<string> {
-    return this.store.pipe(select(state => state.puzzle));
-  }
-
-  public puzzles(): Observable<PuzzleListState> {
-    return this.store.pipe(select(state => state.puzzles));
-  }
-
-  public retrievePuzzles(uid: string): void {
+  private retrievePuzzles(uid: string): void {
     this.database
       .collection<Puzzle>(
         `users/${uid}/puzzles`,
@@ -85,7 +109,8 @@ export class PuzzleService {
   public delete(uid: string, puzzle: Puzzle): Promise<void> {
     return this.database
       .collection(`users/${uid}/puzzles`)
-      .doc(puzzle.name)
-      .delete();
+      .doc(encodeURI(puzzle.name))
+      .delete()
+      .then(() => this.store.dispatch(new PuzzleDeleteAction(puzzle.name)));
   }
 }

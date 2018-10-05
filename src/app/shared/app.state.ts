@@ -1,28 +1,11 @@
-import { PuzzleListState } from '../services/puzzle.service';
-import { ScoreListState } from '../services/score.service';
+import { PuzzleState } from '../services/puzzle.service';
+import { ScoreState } from '../services/score.service';
 import { SettingsState } from '../services/settings.service';
+import { UserState } from '../services/user.service';
 
 export interface AppState {
+  users: UserState;
   settings: SettingsState;
-  puzzles: PuzzleListState;
-  scores: ScoreListState;
-  puzzle: string;
+  puzzles: PuzzleState;
+  scores: ScoreState;
 }
-
-export const initialState: AppState = {
-  puzzle: '3x3x3',
-  puzzles: {
-    list: []
-  },
-  scores: {
-    list: []
-  },
-  settings: {
-    uid: undefined,
-    language: 'en',
-    inspectionTime: 0,
-    soundAfterInspection: false,
-    windowSize: 100,
-    pageSize: 50
-  }
-};
