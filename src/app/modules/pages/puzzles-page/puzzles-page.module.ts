@@ -6,6 +6,7 @@ import { NavbarModule } from '../../nav/navbar/navbar.module';
 import { SidenavModule } from '../../nav/sidenav/sidenav.module';
 import { PuzzlesPageComponent } from './puzzles-page.component';
 import { PuzzlesRoutingModule } from './puzzles-routing.module';
+import { PuzzleSelectorModule } from "../../puzzles/puzzle-selector/puzzle-selector.module";
 
 @NgModule({
   declarations: [
@@ -14,6 +15,7 @@ import { PuzzlesRoutingModule } from './puzzles-routing.module';
   imports: [
     CommonModule,
     SidenavModule,
+    PuzzleSelectorModule,
     NavbarModule,
     MatCardModule,
     MatListModule,

@@ -1,4 +1,6 @@
-import {Component, OnInit} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { PuzzleService } from "../../../../services/puzzle.service";
+import { Observable } from "rxjs";
 
 @Component({
   selector: 'app-timer',
@@ -6,12 +8,16 @@ import {Component, OnInit} from '@angular/core';
   styleUrls: ['./timer.component.scss']
 })
 export class TimerComponent implements OnInit {
-  public puzzle = '3x3x3';
+  private _activePuzzle$: Observable<string>;
 
-  constructor() {
+  get activePuzzle$(): Observable<string> {
+    return this._activePuzzle$;
+  }
+
+  constructor(private readonly puzzleService: PuzzleService) {
   }
 
   ngOnInit() {
+    this._activePuzzle$ = this.puzzleService.puzzle$();
   }
-
 }

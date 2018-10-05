@@ -1,9 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Page } from '../../../shared/page.interface';
-
-export interface TimerPage extends Page {
-  reverseRoute: (puzzle: string) => string;
-}
+import { Puzzle, PuzzleService } from "../../../services/puzzle.service";
+import { Observable } from "rxjs";
 
 @Component({
   selector: 'app-timer-page',
@@ -11,11 +8,16 @@ export interface TimerPage extends Page {
   styleUrls: ['./timer-page.component.css']
 })
 export class TimerPageComponent implements OnInit {
+  private _puzzles$: Observable<Puzzle[]>;
 
-  constructor() {
+  get puzzles$(): Observable<Puzzle[]> {
+    return this._puzzles$;
+  }
+
+  constructor(private readonly puzzleService: PuzzleService) {
   }
 
   ngOnInit() {
+    this._puzzles$ = this.puzzleService.puzzles$();
   }
-
 }

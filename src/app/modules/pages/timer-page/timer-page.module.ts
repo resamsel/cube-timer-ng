@@ -16,6 +16,7 @@ import { TimerPageComponent } from './timer-page.component';
 import { TimerRoutingModule } from './timer-routing.module';
 import { TimerStatsComponent } from './timer-stats/timer-stats.component';
 import { TimerComponent } from './timer/timer.component';
+import { PuzzleSelectorModule } from "../../puzzles/puzzle-selector/puzzle-selector.module";
 
 @NgModule({
   declarations: [
@@ -27,6 +28,7 @@ import { TimerComponent } from './timer/timer.component';
     CommonModule,
     FormsModule,
     SidenavModule,
+    PuzzleSelectorModule,
     NavbarModule,
     MatCardModule,
     MatIconModule,

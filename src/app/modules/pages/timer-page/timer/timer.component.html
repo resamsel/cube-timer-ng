@@ -1,6 +1,6 @@
 <mat-card class="card-accented">
   <mat-card-header>
-    <mat-card-title>{{puzzle}}</mat-card-title>
+    <mat-card-title>{{activePuzzle$ | async}}</mat-card-title>
     <mat-card-subtitle>Scramble: R D2 R L' D2 L' B2 R2 U D L F' B' D L2 B U D' L' F2 B' U2 D2 B' L</mat-card-subtitle>
   </mat-card-header>
   <mat-divider></mat-divider>

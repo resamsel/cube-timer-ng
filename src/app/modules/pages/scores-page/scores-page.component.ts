@@ -14,7 +14,6 @@ import { UserService } from '../../../services/user.service';
 export class ScoresPageComponent implements OnInit {
   private _puzzles$: Observable<Puzzle[]>;
   private _scores$: Observable<Score[]>;
-  private _user: User;
 
   get puzzles$(): Observable<Puzzle[]> {
     return this._puzzles$;
@@ -26,7 +25,6 @@ export class ScoresPageComponent implements OnInit {
 
   constructor(
     private scoreService: ScoreService,
-    private userService: UserService,
     private puzzleService: PuzzleService
   ) {
   }

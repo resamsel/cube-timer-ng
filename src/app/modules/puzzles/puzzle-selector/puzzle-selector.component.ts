@@ -19,11 +19,11 @@ export class PuzzleSelectorComponent implements OnInit {
   constructor(private readonly puzzleService: PuzzleService) {
   }
 
-  onActivate(puzzle: Puzzle): void {
-    this.puzzleService.activatePuzzle(puzzle.name);
-  }
-
   ngOnInit() {
     this._activePuzzle$ = this.puzzleService.puzzle$();
+  }
+
+  onActivate(puzzle: Puzzle): void {
+    this.puzzleService.activatePuzzle(puzzle.name);
   }
 }
