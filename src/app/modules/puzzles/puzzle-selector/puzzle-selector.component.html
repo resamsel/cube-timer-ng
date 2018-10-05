@@ -1,3 +1,15 @@
-<p>
-  {{puzzles.length}} puzzles
-</p>
+<button mat-button [matMenuTriggerFor]="menu">
+  {{activePuzzle$ | async}}
+  <mat-icon>arrow_drop_down</mat-icon>
+</button>
+<mat-menu
+  #menu="matMenu"
+  overlapTrigger="false">
+  <button
+    mat-menu-item
+    *ngFor="let puzzle of puzzles"
+    (click)="onActivate(puzzle)">
+    <mat-icon color="primary">games</mat-icon>
+    {{puzzle.name}}
+  </button>
+</mat-menu>

@@ -85,9 +85,9 @@ export class PuzzleService {
     }
   }
 
-  // public setActivePuzzle(puzzle: string) {
-  //   this.store.dispatch(new PuzzleActivateAction(puzzle));
-  // }
+  public activatePuzzle(puzzle: string) {
+    this.store.dispatch(new PuzzleActivateAction(puzzle));
+  }
 
   public puzzle$(): Observable<string> {
     return this.store.pipe(select(state => state.puzzles.active));
