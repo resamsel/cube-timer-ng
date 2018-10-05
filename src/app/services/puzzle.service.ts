@@ -54,23 +54,6 @@ export const {
   selectAll
 } = adapter.getSelectors();
 
-export function puzzleReducer(state: PuzzleState = initialPuzzleState, action: PuzzleActions): PuzzleState {
-  console.log('puzzleReducer', state, action);
-  switch (action.type) {
-    case PUZZLE_LIST:
-      return adapter.addAll(action.puzzles, state);
-    case PUZZLE_DELETE:
-      return adapter.removeOne(action.name, state);
-    case PUZZLE_ACTIVATE:
-      return {
-        ...state,
-        active: action.puzzle
-      };
-    default:
-      return state;
-  }
-}
-
 @Injectable({providedIn: 'root'})
 export class PuzzleService {
   constructor(
@@ -83,6 +66,23 @@ export class PuzzleService {
         this.retrievePuzzles(state.user.uid);
       }
     });
+  }
+
+  public static puzzleReducer(state: PuzzleState = initialPuzzleState, action: PuzzleActions): PuzzleState {
+    console.log('puzzleReducer', state, action);
+    switch (action.type) {
+      case PUZZLE_LIST:
+        return adapter.addAll(action.puzzles, state);
+      case PUZZLE_DELETE:
+        return adapter.removeOne(action.name, state);
+      case PUZZLE_ACTIVATE:
+        return {
+          ...state,
+          active: action.puzzle
+        };
+      default:
+        return state;
+    }
   }
 
   // public setActivePuzzle(puzzle: string) {
