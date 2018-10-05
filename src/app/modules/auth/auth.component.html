@@ -3,13 +3,24 @@
   *ngIf="!userService.loggedIn"
   matTooltip="Login"
   (click)="userService.signIn()"
-  >
+>
   <mat-icon>account_circle</mat-icon>
 </button>
-<button
-  mat-icon-button
-  *ngIf="userService.loggedIn"
-  matTooltip="Logout {{userService.user.displayName}}"
-  (click)="userService.signOut()">
-  <img class="icon" src="{{userService.user.photoURL}}">
-</button>
+<ng-container *ngIf="userService.loggedIn">
+  <button
+    mat-icon-button
+    [matMenuTriggerFor]="userMenu"
+    class="user-menu-trigger">
+    <img class="icon" [src]="userService.user.photoURL">
+  </button>
+  <mat-menu
+    #userMenu="matMenu"
+    xPosition="before"
+    overlapTrigger="false">
+    <button
+      mat-button
+      (click)="userService.signOut()">
+      Logout {{userService.user.displayName}}
+    </button>
+  </mat-menu>
+</ng-container>
