@@ -109,4 +109,10 @@ export class ScoreService {
       .doc(`${score.timestamp}-${score.value}`)
       .delete();
   }
+
+  public create(score: Score): Promise<void> {
+    return this.database
+      .doc(`users/${score.uid}/puzzles/${score.puzzle}/scores/${score.timestamp}-${score.value}`)
+      .set(score);
+  }
 }
