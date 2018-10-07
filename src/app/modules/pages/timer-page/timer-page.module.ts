@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
   MatButtonModule,
   MatCardModule,
@@ -27,6 +27,7 @@ import { PuzzleSelectorModule } from "../../puzzles/puzzle-selector/puzzle-selec
   imports: [
     CommonModule,
     FormsModule,
+    ReactiveFormsModule,
     SidenavModule,
     PuzzleSelectorModule,
     NavbarModule,

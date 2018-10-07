@@ -12,7 +12,6 @@ import { AppState } from '../../../shared/app.state';
 export class ConnectFormDirective {
   @Input('appConnectForm')
   set data(value: any) {
-    console.log('ConnectFormDirective', value);
     if (value) {
       this.formGroupDirective.form.patchValue(value);
       this.formGroupDirective.form.markAsPristine();

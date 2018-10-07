@@ -1,56 +1,210 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { PuzzleService } from "../../../../services/puzzle.service";
-import { combineLatest, Observable } from "rxjs";
-import { DatePipe } from "@angular/common";
-import { Score, ScoreService } from "../../../../services/score.service";
+import { combineLatest, Observable, Subscription } from "rxjs";
+import { ScoreService } from "../../../../services/score.service";
 import { UserService } from "../../../../services/user.service";
-import { take } from "rxjs/operators";
+import { filter, take } from "rxjs/operators";
+import { TimerService } from "../../../../services/timer.service";
+import { States, TimerState } from "../../../../models/timer/timer.reducer";
+import { MatSnackBar } from "@angular/material";
 import * as moment from "moment";
+import { AbstractControl, FormControl, FormGroup, Validators } from "@angular/forms";
+
+export function formatDuration(duration: number): string {
+  return moment(duration).format('mm:ss.SS');
+}
+
+export function parseDuration(duration: string): number {
+  return moment(duration, 'mm:ss.SS').valueOf();
+}
+
 
 @Component({
   selector: 'app-timer',
   templateUrl: './timer.component.html',
   styleUrls: ['./timer.component.scss']
 })
-export class TimerComponent implements OnInit {
+export class TimerComponent implements OnInit, OnDestroy {
   private _activePuzzle$: Observable<string>;
+  private _state$: Observable<TimerState>;
 
-  private _duration: number = 0;
+  private _model: { duration: number } = {
+    duration: 0
+  };
 
-  get duration(): string {
-    return new DatePipe('en').transform(this._duration, 'mm:ss.SS');
-  }
+  private _subscription: Subscription = Subscription.EMPTY;
+  private _interval: number;
+  private _whenStarted: Date;
+  private _whenStopped: Date;
 
-  set duration(duration: string) {
-    this._duration = moment(duration, 'mm:ss.SS').valueOf();
-  }
+  public States = States;
+
+  public formGroup = new FormGroup({
+    'duration': new FormControl(formatDuration(0), [
+      Validators.pattern(/\d+:\d\d?(\.\d\d?\d?)/)
+    ])
+  });
 
   get activePuzzle$(): Observable<string> {
     return this._activePuzzle$;
   }
 
+  get state$(): Observable<TimerState> {
+    return this._state$;
+  }
+
+  get duration(): AbstractControl {
+    return this.formGroup.get('duration');
+  }
+
   constructor(
     private readonly userService: UserService,
     private readonly puzzleService: PuzzleService,
-    private readonly scoreService: ScoreService) {
+    private readonly scoreService: ScoreService,
+    private readonly timerService: TimerService,
+    private readonly snackBar: MatSnackBar) {
   }
 
   ngOnInit() {
     this._activePuzzle$ = this.puzzleService.puzzle$();
+    this._state$ = this.timerService.state$();
+    this._subscription = this._state$.subscribe(state => this.onStateChange(state));
+
+    this._subscription.add(
+      this.formGroup.get('duration').valueChanges
+        .subscribe((value: string) => this._model.duration = parseDuration(value))
+    );
   }
 
-  public onSave() {
+  ngOnDestroy() {
+    this._subscription.unsubscribe();
+    clearInterval(this._interval);
+  }
+
+  private async onStateChange(state: TimerState) {
+    switch (state.state) {
+      case States.INITIAL: {
+        this._model.duration = 0;
+        this.duration.reset(formatDuration(0));
+        this._whenStarted = undefined;
+        this._whenStopped = undefined;
+        break;
+      }
+      case States.STARTED: {
+        this._whenStarted = state.whenStarted;
+        this._model.duration = new Date().getTime() - state.whenStarted.getTime();
+
+        clearInterval(this._interval);
+        this._interval = setInterval(
+          () => this._model.duration = new Date().getTime() - state.whenStarted.getTime(),
+          31
+        );
+
+        this.snackBar.open(
+          `Timer started`,
+          'Dismiss',
+          {
+            duration: 1000
+          });
+
+        break;
+      }
+      case States.STOPPED: {
+        this._whenStarted = state.whenStarted;
+        this._whenStopped = state.whenStopped;
+        this._model.duration = state.whenStopped.getTime() - state.whenStarted.getTime();
+
+        clearInterval(this._interval);
+
+        this.snackBar.open(
+          `Stopped at ${formatDuration(this._model.duration)}`,
+          'Dismiss',
+          {
+            duration: 3000
+          });
+
+        break;
+      }
+      case States.MANUAL: {
+        this._model.duration = state.duration;
+        this._whenStarted = state.whenStarted;
+        this._whenStopped = state.whenStopped;
+        break;
+      }
+    }
+  }
+
+  public async onStart() {
+    this._whenStarted = new Date();
     combineLatest(this.userService.user$(), this.puzzleService.puzzle$())
       .pipe(take(1))
       .subscribe(([state, puzzle]) => {
-        const score: Score = {
-          value: this._duration,
-          uid: state.user.uid,
-          timestamp: new Date().getTime(),
-          puzzle: puzzle
-        }
-        this.scoreService.create(score)
-          .then(() => console.log('Score created'));
+        this.timerService.start(state.user.uid, puzzle, this._whenStarted);
       });
+  }
+
+  public async onStop() {
+    this._whenStopped = new Date();
+    if (this._whenStarted) {
+      this._model.duration = this._whenStopped.getTime() - this._whenStarted.getTime();
+    }
+
+    this.timerService.stop(this._whenStopped);
+  }
+
+  public async onManual() {
+    combineLatest(
+      this.userService.user$(),
+      this.puzzleService.puzzle$(),
+      this.timerService.state$())
+      .pipe(
+        take(1),
+        filter(([userState, puzzle, state]) => {
+          switch (state.state) {
+            case States.STARTED:
+            case States.STOPPED:
+              return false;
+            default:
+              return true;
+          }
+        })
+      )
+      .subscribe(([userState, puzzle, state]) => {
+        this.timerService.manual(userState.user.uid, puzzle, new Date());
+      });
+  }
+
+  public async onBlur() {
+    if (this._model.duration === 0) {
+      this.onClear();
+    }
+  }
+
+  public async onSave() {
+    this._model.duration = parseDuration(this.duration.value);
+
+    combineLatest(this.userService.user$(), this.puzzleService.puzzle$())
+      .pipe(take(1))
+      .subscribe(([state, puzzle]) => {
+        this.scoreService
+          .create({
+            value: this._model.duration,
+            uid: state.user.uid,
+            timestamp: new Date().getTime(),
+            puzzle: puzzle
+          })
+          .then(() => {
+            this.snackBar.open(
+              `Saved ${formatDuration(this._model.duration)}`,
+              'Dismiss',
+              {
+                duration: 3000
+              });
+          });
+      });
+  }
+
+  public async onClear() {
+    this.timerService.clear();
   }
 }

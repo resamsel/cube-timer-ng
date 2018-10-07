@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Puzzle, PuzzleService } from "../../../services/puzzle.service";
+import { PuzzleService } from "../../../services/puzzle.service";
 import { Observable } from "rxjs";
+import { Puzzle } from "../../../models/puzzle/puzzle.model";
 
 @Component({
   selector: 'app-timer-page',

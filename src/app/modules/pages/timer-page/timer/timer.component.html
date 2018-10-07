@@ -1,16 +1,63 @@
-<mat-card class="card-accented">
-  <mat-card-header>
-    <mat-card-title>{{activePuzzle$ | async}}</mat-card-title>
-    <mat-card-subtitle>Scramble: R D2 R L' D2 L' B2 R2 U D L F' B' D L2 B U D' L' F2 B' U2 D2 B' L</mat-card-subtitle>
-  </mat-card-header>
-  <mat-divider></mat-divider>
-  <mat-card-content>
-    <mat-form-field floatLabel="never">
-      <input type="text" matInput placeholder="00:00.00" [(ngModel)]="duration">
-    </mat-form-field>
-  </mat-card-content>
-  <mat-divider></mat-divider>
-  <mat-card-actions>
-    <button mat-button (click)="onSave()">Start</button>
-  </mat-card-actions>
-</mat-card>
+<form [formGroup]="formGroup" *ngIf="state$ | async as state">
+  <mat-card class="card-accented">
+    <mat-card-header>
+      <mat-card-title>{{activePuzzle$ | async}}</mat-card-title>
+      <mat-card-subtitle>Scramble: R D2 R L' D2 L' B2 R2 U D L F' B' D L2 B U D' L' F2 B' U2 D2 B' L</mat-card-subtitle>
+    </mat-card-header>
+    <mat-divider></mat-divider>
+    <mat-card-content>
+      <mat-form-field floatLabel="never">
+        <input
+          matInput
+          id="duration"
+          type="text"
+          formControlName="duration"
+          [readonly]="state.state === States.STOPPED || state.state === States.STARTED"
+          (focus)="onManual()"
+          (blur)="onBlur()">
+        <mat-error *ngIf="duration.invalid">Invalid</mat-error>
+      </mat-form-field>
+    </mat-card-content>
+    <mat-divider></mat-divider>
+    <mat-card-actions [ngClass]="{'state-manual': state.state === States.MANUAL}">
+      <button
+        mat-button
+        *ngIf="state.state === States.INITIAL"
+        color="primary"
+        (click)="onStart()">
+        Start
+      </button>
+
+      <button
+        mat-button
+        *ngIf="state.state === States.STARTED"
+        color="primary"
+        (click)="onStop()">
+        Stop
+      </button>
+
+      <button
+        mat-button
+        *ngIf="state.state === States.STOPPED"
+        color="primary"
+        (click)="onClear()">
+        Clear
+      </button>
+
+      <button
+        mat-button
+        *ngIf="state.state === States.MANUAL"
+        [disabled]="duration.invalid"
+        color="primary"
+        (click)="onSave()">
+        Save
+      </button>
+      <button
+        mat-button
+        *ngIf="state.state === States.MANUAL"
+        (click)="onClear()">
+        Clear
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</form>

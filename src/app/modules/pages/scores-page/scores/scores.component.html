@@ -2,7 +2,7 @@
   <div class="elevation">
     <mat-list-item *ngFor="let score of scores">
       <mat-icon mat-list-icon>assessment</mat-icon>
-      <h4 mat-line>{{score.value | date: 'mm:ss.S'}}s</h4>
+      <h4 mat-line>{{score.value | date: 'mm:ss.SS'}}s</h4>
       <p mat-line title="{{score.timestamp | date:'full'}}">{{score.timestamp | amTimeAgo}}</p>
       <div class="actions">
         <button mat-icon-button (click)="onDelete(score)">

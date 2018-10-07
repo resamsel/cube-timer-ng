@@ -2,6 +2,12 @@
   width: 100%;
 }
 
-.mat-card-actions > button {
-  width: 100%;
+.mat-card-actions {
+  > button {
+    width: 100%;
+  }
+
+  &.state-manual > button {
+    width: calc(50% - 8px);
+  }
 }

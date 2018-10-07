@@ -59,8 +59,7 @@ export class SettingsService {
     });
   }
 
-  public static settingsReducer(state: SettingsState = initialSettingsState, action: SettingsAction) {
-    console.log('settingsReducer', state, action);
+  public static reducer(state: SettingsState = initialSettingsState, action: SettingsAction) {
     switch (action.type) {
       case SETTINGS_READ_ACTION:
         return {

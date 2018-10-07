@@ -1,62 +1,22 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { createEntityAdapter, EntityAdapter, EntityState } from '@ngrx/entity';
-import { Action, select, Store } from '@ngrx/store';
+import { select, Store } from '@ngrx/store';
 import { combineLatest, Observable } from 'rxjs';
-import { AppState } from '../shared/app.state';
 import { PuzzleService } from './puzzle.service';
 import { UserService } from './user.service';
-
-export interface Score {
-  uid: string;
-  value: number;
-  name?: string;
-  photo_url?: string;
-  puzzle: string;
-  timestamp: number;
-  when_created?: number;
-  when_created_text?: string;
-}
+import { Score } from "../models/score/score.model";
+import { reducer, selectAll } from 'app/models/score/score.reducer';
+import { AddScore, DeleteScore, LoadScores } from "../models/score/score.actions";
+import { AppState } from "../shared/app.state";
 
 export interface ScoreRetrievalOptions {
   limit?: number;
 }
 
-export const SCORE_LIST = '[Score] List';
-
-export class ScoreListAction implements Action {
-  readonly type = SCORE_LIST;
-
-  constructor(public scores: Score[]) {
-  }
-}
-
-export const SCORE_ADD = '[Score] Add';
-
-export class ScoreAddAction implements Action {
-  readonly type = SCORE_ADD;
-
-  constructor(public score: Score) {
-  }
-}
-
-export type ScoreActions = ScoreListAction | ScoreAddAction;
-
-export interface ScoreState extends EntityState<Score> {
-}
-
-export const adapter: EntityAdapter<Score> = createEntityAdapter<Score>({
-  selectId: model => `${model.timestamp}-${model.value}`
-});
-
-export const initialScoreState = adapter.getInitialState();
-
-export const {
-  selectAll
-} = adapter.getSelectors();
-
 @Injectable({providedIn: 'root'})
 export class ScoreService {
+  public static reducer = reducer;
+
   constructor(
     private readonly userService: UserService,
     private readonly puzzleService: PuzzleService,
@@ -69,18 +29,6 @@ export class ScoreService {
           this.retrieveScores(state.user.uid, puzzle);
         }
       });
-  }
-
-  public static scoreReducer(state: ScoreState = initialScoreState, action: ScoreActions): ScoreState {
-    console.log('scoreReducer', state, action);
-    switch (action.type) {
-      case SCORE_LIST:
-        return adapter.addAll(action.scores, state);
-      case SCORE_ADD:
-        return adapter.addOne(action.score, state);
-      default:
-        return state;
-    }
   }
 
   public scores$(): Observable<Score[]> {
@@ -100,17 +48,20 @@ export class ScoreService {
         }
       )
       .valueChanges()
-      .subscribe(scores => this.store.dispatch(new ScoreListAction(scores)));
+      .subscribe(scores => this.store.dispatch(new LoadScores({scores})));
   }
 
   public delete(score: Score): Promise<void> {
+    const id = `${score.timestamp}-${score.value}`;
+    this.store.dispatch(new DeleteScore({id}))
     return this.database
       .collection(`users/${score.uid}/puzzles/${score.puzzle}/scores`)
-      .doc(`${score.timestamp}-${score.value}`)
+      .doc(id)
       .delete();
   }
 
   public create(score: Score): Promise<void> {
+    this.store.dispatch(new AddScore({score}));
     return this.database
       .doc(`users/${score.uid}/puzzles/${score.puzzle}/scores/${score.timestamp}-${score.value}`)
       .set(score);

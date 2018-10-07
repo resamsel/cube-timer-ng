@@ -40,8 +40,7 @@ export type UserActions = UserGetAction;
 export class UserService {
   private _user: firebase.User = null;
 
-  public static userReducer(state: UserState = initialUserState, action: UserActions): UserState {
-    console.log('userReducer', state, action);
+  public static reducer(state: UserState = initialUserState, action: UserActions): UserState {
     switch (action.type) {
       case USER_GET:
         return {
@@ -80,7 +79,6 @@ export class UserService {
     this.afAuth.auth
       .signInWithPopup(new firebase.auth.GoogleAuthProvider())
       .then(credential => {
-        console.log('credential', credential);
         this.store.dispatch(new UserGetAction(credential.user));
       })
       .catch(reason => console.error(reason));

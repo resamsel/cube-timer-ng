@@ -2,8 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material';
 import * as firebase from 'firebase';
 import { Observable } from 'rxjs';
-import { Puzzle, PuzzleService } from '../../../services/puzzle.service';
+import { PuzzleService } from '../../../services/puzzle.service';
 import { UserService, UserState } from '../../../services/user.service';
+import { Puzzle } from "../../../models/puzzle/puzzle.model";
 
 @Component({
   selector: 'app-puzzles-page',

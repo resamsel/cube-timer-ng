@@ -1,7 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material';
-import { Score, ScoreService } from '../../../../services/score.service';
+import { ScoreService } from '../../../../services/score.service';
 import * as moment from 'moment';
+import { Score } from "../../../../models/score/score.model";
 
 @Component({
   selector: 'app-scores',
@@ -20,7 +21,7 @@ export class ScoresComponent implements OnInit {
   ngOnInit() {
   }
 
-  public onDelete(score: Score): void {
+  public async onDelete(score: Score) {
     this.scoreService
       .delete(score)
       .then(() => this.onDeleted(score));
