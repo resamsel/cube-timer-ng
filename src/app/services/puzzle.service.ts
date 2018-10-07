@@ -6,7 +6,7 @@ import { AppState } from '../shared/app.state';
 import { UserService, UserState } from './user.service';
 import { Puzzle } from "../models/puzzle/puzzle.model";
 import { reducer, selectAll } from "../models/puzzle/puzzle.reducer";
-import { ActivatePuzzle, DeletePuzzle, LoadPuzzles } from "../models/puzzle/puzzle.actions";
+import { ActivatePuzzle, AddPuzzle, DeletePuzzle, LoadPuzzles } from "../models/puzzle/puzzle.actions";
 
 @Injectable({providedIn: 'root'})
 export class PuzzleService {
@@ -45,11 +45,28 @@ export class PuzzleService {
       .subscribe(puzzles => this.store.dispatch(new LoadPuzzles({puzzles})));
   }
 
+  public create(uid: string, puzzle: Puzzle): Promise<void> {
+    this.store.dispatch(new AddPuzzle({puzzle}));
+
+    return this.database
+      .doc(`users/${uid}/puzzles`)
+      .set(puzzle)
+      .catch((reason: any) => {
+        console.error('Error while creating Firestore puzzle', reason);
+        this.store.dispatch(new DeletePuzzle({id: puzzle.name}));
+      });
+  }
+
   public delete(uid: string, puzzle: Puzzle): Promise<void> {
+    this.store.dispatch(new DeletePuzzle({id: puzzle.name}));
+
     return this.database
       .collection(`users/${uid}/puzzles`)
       .doc(encodeURI(puzzle.name))
       .delete()
-      .then(() => this.store.dispatch(new DeletePuzzle({id: puzzle.name})));
+      .catch((reason: any) => {
+        console.error('Error while deleting Firestore puzzle', reason);
+        this.store.dispatch(new AddPuzzle({puzzle}));
+      });
   }
 }

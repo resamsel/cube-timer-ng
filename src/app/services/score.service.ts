@@ -5,7 +5,7 @@ import { combineLatest, Observable } from 'rxjs';
 import { PuzzleService } from './puzzle.service';
 import { UserService } from './user.service';
 import { Score } from "../models/score/score.model";
-import { reducer, selectAll } from 'app/models/score/score.reducer';
+import { reducer, selectAll, selectTotal } from 'app/models/score/score.reducer';
 import { AddScore, DeleteScore, LoadScores } from "../models/score/score.actions";
 import { AppState } from "../shared/app.state";
 
@@ -53,17 +53,32 @@ export class ScoreService {
 
   public delete(score: Score): Promise<void> {
     const id = `${score.timestamp}-${score.value}`;
+
     this.store.dispatch(new DeleteScore({id}))
+
     return this.database
       .collection(`users/${score.uid}/puzzles/${score.puzzle}/scores`)
       .doc(id)
-      .delete();
+      .delete()
+      .catch((reason: any) => {
+        console.error('Error while deleting Firestore score', reason);
+        this.store.dispatch(new AddScore({score}));
+      });
   }
 
   public create(score: Score): Promise<void> {
     this.store.dispatch(new AddScore({score}));
+
     return this.database
       .doc(`users/${score.uid}/puzzles/${score.puzzle}/scores/${score.timestamp}-${score.value}`)
-      .set(score);
+      .set(score)
+      .catch((reason: any) => {
+        console.error('Error while creating Firestore score', reason);
+        this.store.dispatch(new DeleteScore({id: `${score.timestamp}-${score.value}`}));
+      });
+  }
+
+  count$(): Observable<number> {
+    return this.store.pipe(select(state => selectTotal(state.scores)));
   }
 }

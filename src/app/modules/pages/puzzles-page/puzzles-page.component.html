@@ -11,12 +11,15 @@
     </mat-card>
     <mat-list class="hoverable" *ngIf="puzzles$ | async as puzzles">
       <div class="elevation">
-        <mat-list-item *ngFor="let puzzle of puzzles">
+        <mat-list-item *ngFor="let puzzle of puzzles" [class.active]="(puzzle$ | async) === puzzle.name">
           <mat-icon mat-list-icon>games</mat-icon>
           <h4 mat-line>{{puzzle.name}}</h4>
           <p mat-line>
-            <span *ngIf="puzzle.lastActive" title="{{puzzle.lastActive | date:'full'}}">{{puzzle.lastActive | amTimeAgo}}</span>
+            <span *ngIf="puzzle.lastActive" title="{{puzzle.lastActive | date:'full'}}">
+              {{puzzle.lastActive | amTimeAgo}}
+            </span>
             <span *ngIf="!puzzle.lastActive">Unchallenged</span>
+            <span *ngIf="(puzzle$ | async) === puzzle.name">, {{scoreCount$ | async}} scores</span>
           </p>
           <div class="actions">
             <button mat-icon-button (click)="onDelete(puzzle)">
