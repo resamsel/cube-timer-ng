@@ -12,11 +12,11 @@ import {
 } from '@angular/material';
 import { NavbarModule } from '../../nav/navbar/navbar.module';
 import { SidenavModule } from '../../nav/sidenav/sidenav.module';
+import { PuzzleSelectorModule } from '../../puzzles/puzzle-selector/puzzle-selector.module';
 import { TimerPageComponent } from './timer-page.component';
 import { TimerRoutingModule } from './timer-routing.module';
 import { TimerStatsComponent } from './timer-stats/timer-stats.component';
 import { TimerComponent } from './timer/timer.component';
-import { PuzzleSelectorModule } from "../../puzzles/puzzle-selector/puzzle-selector.module";
 
 @NgModule({
   declarations: [
@@ -42,5 +42,4 @@ import { PuzzleSelectorModule } from "../../puzzles/puzzle-selector/puzzle-selec
   ]
 })
 export class TimerPageModule {
-
 }

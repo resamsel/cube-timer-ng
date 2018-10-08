@@ -1,6 +1,17 @@
+import { Component, Input } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatSidenavModule } from '@angular/material';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { SidenavComponent } from './sidenav.component';
+
+@Component({
+  selector: 'app-sidebar',
+  template: ''
+})
+class SidebarStubComponent {
+  @Input() activePage: string;
+}
 
 describe('SidenavComponent', () => {
   let component: SidenavComponent;
@@ -8,9 +19,10 @@ describe('SidenavComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ SidenavComponent ]
+      declarations: [SidenavComponent, SidebarStubComponent],
+      imports: [BrowserAnimationsModule, MatSidenavModule]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

@@ -1,14 +1,15 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { PuzzleService } from "../../../../services/puzzle.service";
-import { combineLatest, Observable, Subscription } from "rxjs";
-import { ScoreService } from "../../../../services/score.service";
-import { UserService } from "../../../../services/user.service";
-import { filter, take } from "rxjs/operators";
-import { TimerService } from "../../../../services/timer.service";
-import { States, TimerState } from "../../../../models/timer/timer.reducer";
-import { MatSnackBar } from "@angular/material";
-import * as moment from "moment";
-import { AbstractControl, FormControl, FormGroup, Validators } from "@angular/forms";
+import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
+import { MatSnackBar } from '@angular/material';
+import * as moment from 'moment';
+import { combineLatest, Observable, Subscription } from 'rxjs';
+import { filter, take } from 'rxjs/operators';
+import { States, TimerState } from '../../../../models/timer/timer.reducer';
+import { PuzzleService } from '../../../../services/puzzle.service';
+import { ScoreService } from '../../../../services/score.service';
+import { TimerService } from '../../../../services/timer.service';
+import { UserService } from '../../../../services/user.service';
+import Timer = NodeJS.Timer;
 
 export function formatDuration(duration: number): string {
   return moment(duration).format('mm:ss.SS');
@@ -33,7 +34,7 @@ export class TimerComponent implements OnInit, OnDestroy {
   };
 
   private _subscription: Subscription = Subscription.EMPTY;
-  private _interval: number;
+  private _interval: Timer;
   private _whenStarted: Date;
   private _whenStopped: Date;
 
@@ -186,8 +187,7 @@ export class TimerComponent implements OnInit, OnDestroy {
     combineLatest(this.userService.user$(), this.puzzleService.puzzle$())
       .pipe(take(1))
       .subscribe(([state, puzzle]) => {
-        this.scoreService
-          .create({
+        this.timerService.add({
             value: this._model.duration,
             uid: state.user.uid,
             timestamp: new Date().getTime(),

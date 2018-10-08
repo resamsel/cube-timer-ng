@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { select, Store } from '@ngrx/store';
+import { reducer, selectAll, selectTotal } from 'app/models/score/score.reducer';
 import { combineLatest, Observable } from 'rxjs';
+import { AddScore, DeleteScore, LoadScores } from '../models/score/score.actions';
+import { Score } from '../models/score/score.model';
+import { AppState } from '../shared/app.state';
 import { PuzzleService } from './puzzle.service';
 import { UserService } from './user.service';
-import { Score } from "../models/score/score.model";
-import { reducer, selectAll, selectTotal } from 'app/models/score/score.reducer';
-import { AddScore, DeleteScore, LoadScores } from "../models/score/score.actions";
-import { AppState } from "../shared/app.state";
 
 export interface ScoreRetrievalOptions {
   limit?: number;
@@ -54,7 +54,7 @@ export class ScoreService {
   public delete(score: Score): Promise<void> {
     const id = `${score.timestamp}-${score.value}`;
 
-    this.store.dispatch(new DeleteScore({id}))
+    this.store.dispatch(new DeleteScore({id}));
 
     return this.database
       .collection(`users/${score.uid}/puzzles/${score.puzzle}/scores`)

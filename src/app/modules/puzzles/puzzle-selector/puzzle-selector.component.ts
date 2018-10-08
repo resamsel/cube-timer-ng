@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
+import { Puzzle } from '../../../models/puzzle/puzzle.model';
 import { PuzzleService } from '../../../services/puzzle.service';
-import { Observable } from "rxjs";
-import { Puzzle } from "../../../models/puzzle/puzzle.model";
 
 @Component({
   selector: 'app-puzzle-selector',

@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material';
 import { Observable } from 'rxjs';
+import { take } from 'rxjs/operators';
+import { Puzzle } from '../../../models/puzzle/puzzle.model';
 import { PuzzleService } from '../../../services/puzzle.service';
+import { ScoreService } from '../../../services/score.service';
 import { UserService, UserState } from '../../../services/user.service';
-import { Puzzle } from "../../../models/puzzle/puzzle.model";
-import { take } from "rxjs/operators";
-import { ScoreService } from "../../../services/score.service";
 
 @Component({
   selector: 'app-puzzles-page',

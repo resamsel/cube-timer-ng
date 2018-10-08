@@ -1,6 +1,12 @@
+import { Component } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatIconModule } from '@angular/material';
 
 import { MainPageComponent } from './main-page.component';
+
+@Component({selector: 'app-footer', template: ''})
+class FooterStubComponent {
+}
 
 describe('MainPageComponent', () => {
   let component: MainPageComponent;
@@ -8,9 +14,10 @@ describe('MainPageComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ MainPageComponent ]
+      declarations: [MainPageComponent, FooterStubComponent],
+      imports: [MatIconModule]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

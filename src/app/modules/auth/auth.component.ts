@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { UserService } from '../../services/user.service';
+import { Observable } from 'rxjs';
+import { UserService, UserState } from '../../services/user.service';
 
 @Component({
   selector: 'app-auth',
@@ -7,13 +8,17 @@ import { UserService } from '../../services/user.service';
   styleUrls: ['./auth.component.scss']
 })
 export class AuthComponent implements OnInit {
-  constructor(public userService: UserService) {
+  constructor(private readonly userService: UserService) {
   }
 
   ngOnInit() {
   }
 
-  signInWithGoogle(): void {
+  public user$(): Observable<UserState> {
+    return this.userService.user$();
+  }
+
+  signIn(): void {
     this.userService.signIn();
   }
 

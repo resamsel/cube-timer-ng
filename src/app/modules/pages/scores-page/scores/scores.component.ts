@@ -1,8 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material';
-import { ScoreService } from '../../../../services/score.service';
 import * as moment from 'moment';
-import { Score } from "../../../../models/score/score.model";
+import { Score } from '../../../../models/score/score.model';
+import { ScoreService } from '../../../../services/score.service';
 
 @Component({
   selector: 'app-scores',

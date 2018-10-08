@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
+import { Puzzle } from '../../../models/puzzle/puzzle.model';
+import { Score } from '../../../models/score/score.model';
 import { PuzzleService } from '../../../services/puzzle.service';
 import { ScoreService } from '../../../services/score.service';
-import { Score } from "../../../models/score/score.model";
-import { Puzzle } from "../../../models/puzzle/puzzle.model";
 
 @Component({
   selector: 'app-scores-page',

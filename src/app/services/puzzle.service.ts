@@ -2,11 +2,11 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
+import { ActivatePuzzle, AddPuzzle, DeletePuzzle, LoadPuzzles } from '../models/puzzle/puzzle.actions';
+import { Puzzle } from '../models/puzzle/puzzle.model';
+import { reducer, selectAll } from '../models/puzzle/puzzle.reducer';
 import { AppState } from '../shared/app.state';
 import { UserService, UserState } from './user.service';
-import { Puzzle } from "../models/puzzle/puzzle.model";
-import { reducer, selectAll } from "../models/puzzle/puzzle.reducer";
-import { ActivatePuzzle, AddPuzzle, DeletePuzzle, LoadPuzzles } from "../models/puzzle/puzzle.actions";
 
 @Injectable({providedIn: 'root'})
 export class PuzzleService {

@@ -1,4 +1,5 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatCardModule } from '@angular/material';
 
 import { ScoresStatsComponent } from './scores-stats.component';
 
@@ -8,9 +9,10 @@ describe('ScoresStatsComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ScoresStatsComponent ]
+      declarations: [ScoresStatsComponent],
+      imports: [MatCardModule]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

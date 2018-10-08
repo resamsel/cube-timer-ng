@@ -1,16 +1,16 @@
 <button
   mat-icon-button
-  *ngIf="!userService.loggedIn"
+  *ngIf="(user$() | async).user !== null"
   matTooltip="Login"
-  (click)="userService.signIn()"
+  (click)="signIn()"
 >
   <mat-icon>account_circle</mat-icon>
 </button>
-<ng-container *ngIf="userService.loggedIn">
+<ng-container *ngIf="(user$() | async).user !== null as state">
   <button
     mat-icon-button
     [matMenuTriggerFor]="userMenu">
-    <img class="icon" [src]="userService.user.photoURL">
+    <img class="icon" [src]="state.user.photoURL">
   </button>
   <mat-menu
     #userMenu="matMenu"
@@ -18,16 +18,16 @@
     xPosition="before"
     overlapTrigger="false">
     <div class="info">
-      <img class="user-image" [src]="userService.user.photoURL">
+      <img class="user-image" [src]="state.user.photoURL">
       <div class="user">
-        <h6 class="name">{{userService.user.displayName}}</h6>
-        <div class="email">{{userService.user.email}}</div>
+        <h6 class="name">{{state.user.displayName}}</h6>
+        <div class="email">{{state.user.email}}</div>
       </div>
     </div>
     <button
       mat-button
       class="sign-out"
-      (click)="userService.signOut()">
+      (click)="signOut()">
       Sign out
     </button>
   </mat-menu>

@@ -38,8 +38,6 @@ export type UserActions = UserGetAction;
   providedIn: 'root'
 })
 export class UserService {
-  private _user: firebase.User = null;
-
   public static reducer(state: UserState = initialUserState, action: UserActions): UserState {
     switch (action.type) {
       case USER_GET:
@@ -52,20 +50,11 @@ export class UserService {
     }
   }
 
-  get user(): firebase.User {
-    return this._user;
-  }
-
-  get loggedIn(): boolean {
-    return this._user !== null;
-  }
-
   constructor(
     private readonly afAuth: AngularFireAuth,
     private readonly router: Router,
     private readonly store: Store<AppState>
   ) {
-    this.user$().subscribe((state: UserState) => this._user = state.user);
     afAuth.authState.subscribe((user: firebase.User | null) => {
       this.store.dispatch(new UserGetAction(user));
     });

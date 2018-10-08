@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Score } from "../../../../models/score/score.model";
+import { Score } from 'app/models/score/score.model';
 
 @Component({
   selector: 'app-scores-stats',

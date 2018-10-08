@@ -1,6 +1,12 @@
+import { Component } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatIconModule, MatMenuModule, MatToolbarModule } from '@angular/material';
 
 import { NavbarComponent } from './navbar.component';
+
+@Component({selector: 'app-auth', template: ''})
+export class AuthStubComponent {
+}
 
 describe('NavbarComponent', () => {
   let component: NavbarComponent;
@@ -8,9 +14,17 @@ describe('NavbarComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ NavbarComponent ]
+      declarations: [
+        NavbarComponent,
+        AuthStubComponent
+      ],
+      imports: [
+        MatIconModule,
+        MatMenuModule,
+        MatToolbarModule
+      ]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {
