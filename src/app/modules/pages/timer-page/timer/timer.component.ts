@@ -9,7 +9,6 @@ import { PuzzleService } from '../../../../services/puzzle.service';
 import { ScoreService } from '../../../../services/score.service';
 import { TimerService } from '../../../../services/timer.service';
 import { UserService } from '../../../../services/user.service';
-import Timer = NodeJS.Timer;
 
 export function formatDuration(duration: number): string {
   return moment(duration).format('mm:ss.SS');
@@ -34,7 +33,7 @@ export class TimerComponent implements OnInit, OnDestroy {
   };
 
   private _subscription: Subscription = Subscription.EMPTY;
-  private _interval: Timer;
+  private _interval: number;
   private _whenStarted: Date;
   private _whenStopped: Date;
 

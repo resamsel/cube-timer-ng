@@ -1,34 +1,36 @@
-<button
-  mat-icon-button
-  *ngIf="(user$() | async).user !== null"
-  matTooltip="Login"
-  (click)="signIn()"
->
-  <mat-icon>account_circle</mat-icon>
-</button>
-<ng-container *ngIf="(user$() | async).user !== null as state">
+<ng-container *ngIf="user$() | async as state">
   <button
     mat-icon-button
-    [matMenuTriggerFor]="userMenu">
-    <img class="icon" [src]="state.user.photoURL">
+    *ngIf="state.user === null"
+    matTooltip="Login"
+    (click)="signIn()"
+  >
+    <mat-icon>account_circle</mat-icon>
   </button>
-  <mat-menu
-    #userMenu="matMenu"
-    class="auth"
-    xPosition="before"
-    overlapTrigger="false">
-    <div class="info">
-      <img class="user-image" [src]="state.user.photoURL">
-      <div class="user">
-        <h6 class="name">{{state.user.displayName}}</h6>
-        <div class="email">{{state.user.email}}</div>
-      </div>
-    </div>
+  <ng-container *ngIf="state.user !== null">
     <button
-      mat-button
-      class="sign-out"
-      (click)="signOut()">
-      Sign out
+      mat-icon-button
+      [matMenuTriggerFor]="userMenu">
+      <img class="icon" [src]="state.user.photoURL">
     </button>
-  </mat-menu>
+    <mat-menu
+      #userMenu="matMenu"
+      class="auth"
+      xPosition="before"
+      overlapTrigger="false">
+      <div class="info">
+        <img class="user-image" [src]="state.user.photoURL">
+        <div class="user">
+          <h6 class="name">{{state.user.displayName}}</h6>
+          <div class="email">{{state.user.email}}</div>
+        </div>
+      </div>
+      <button
+        mat-button
+        class="sign-out"
+        (click)="signOut()">
+        Sign out
+      </button>
+    </mat-menu>
+  </ng-container>
 </ng-container>
