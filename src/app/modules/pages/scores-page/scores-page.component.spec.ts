@@ -58,7 +58,6 @@ describe('ScoresPageComponent', () => {
         RouterTestingModule
       ],
       providers: [
-        {provide: AngularFireAuth, useValue: instance(mock(AngularFireAuth))},
         {provide: AngularFirestore, useValue: instance(mock(AngularFirestore))},
         {provide: Store, useValue: instance(mock(Store))},
         {provide: UserService, useValue: instance(mock(UserService))},

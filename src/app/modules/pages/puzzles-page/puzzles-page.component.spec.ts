@@ -1,12 +1,10 @@
 import { Component, Input } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { MatCardModule, MatIconModule, MatListModule, MatSnackBarModule } from '@angular/material';
 import { RouterTestingModule } from '@angular/router/testing';
 import { Store } from '@ngrx/store';
 import { MomentModule } from 'ngx-moment';
-import { Observable } from 'rxjs';
 import { instance, mock } from 'ts-mockito';
 import { Puzzle } from '../../../models/puzzle/puzzle.model';
 import { PuzzleService } from '../../../services/puzzle.service';
@@ -31,10 +29,6 @@ class SidenavStubComponent {
   @Input() activePage: string;
 }
 
-class AngularFireAuthStub extends AngularFireAuth {
-  readonly authState = Observable.create();
-}
-
 describe('PuzzlesPageComponent', () => {
   let component: PuzzlesPageComponent;
   let fixture: ComponentFixture<PuzzlesPageComponent>;
@@ -56,7 +50,6 @@ describe('PuzzlesPageComponent', () => {
         MatSnackBarModule
       ],
       providers: [
-        {provide: AngularFireAuth, useValue: instance(mock(AngularFireAuth))},
         {provide: AngularFirestore, useValue: instance(mock(AngularFirestore))},
         {provide: Store, useValue: instance(mock(Store))},
         {provide: UserService, useValue: instance(mock(UserService))},

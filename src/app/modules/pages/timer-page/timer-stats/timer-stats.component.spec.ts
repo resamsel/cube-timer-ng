@@ -1,4 +1,5 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatCardModule } from '@angular/material';
 
 import { TimerStatsComponent } from './timer-stats.component';
 
@@ -8,7 +9,10 @@ describe('TimerStatsComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ TimerStatsComponent ]
+      declarations: [ TimerStatsComponent ],
+      imports: [
+        MatCardModule
+      ]
     })
     .compileComponents();
   }));
