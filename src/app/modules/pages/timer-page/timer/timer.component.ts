@@ -95,7 +95,7 @@ export class TimerComponent implements OnInit, OnDestroy {
         this._model.duration = new Date().getTime() - state.whenStarted.getTime();
 
         clearInterval(this._interval);
-        this._interval = setInterval(
+        this._interval = window.setInterval(
           () => this._model.duration = new Date().getTime() - state.whenStarted.getTime(),
           31
         );
