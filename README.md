@@ -1,4 +1,8 @@
-# CubeTimerNg
+# Cube Timer
+
+[![Build Status](https://travis-ci.org/resamsel/cube-timer-ng.svg?branch=master)](https://travis-ci.org/resamsel/cube-timer-ng)
+[![dependencies Status](https://david-dm.org/resamsel/cube-timer-ng/status.svg)](https://david-dm.org/resamsel/cube-timer-ng)
+[![devDependencies Status](https://david-dm.org/resamsel/cube-timer-ng/dev-status.svg)](https://david-dm.org/resamsel/cube-timer-ng?type=dev)
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.7.0.
 
