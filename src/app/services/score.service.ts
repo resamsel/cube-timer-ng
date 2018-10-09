@@ -23,8 +23,6 @@ export class ScoreService {
     private readonly database: AngularFirestore,
     private readonly store: Store<AppState>
   ) {
-    let e = new Error();
-    console.log(e.stack);
     combineLatest(userService.user$(), puzzleService.puzzle$())
       .subscribe(([state, puzzle]) => {
         if (state.user !== null) {
