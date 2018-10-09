@@ -1,7 +1,7 @@
 export const environment = {
   production: true,
   firebase: {
-    apiKey: '',
+    apiKey: '<%= FIREBASE_API_KEY %>',
     authDomain: 'resamsel-cube-timer.firebaseapp.com',
     databaseURL: 'https://resamsel-cube-timer.firebaseio.com',
     projectId: 'resamsel-cube-timer',

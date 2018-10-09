@@ -2,7 +2,7 @@ language: node_js
 node_js:
 - '8'
 dist: trusty
-sudo: false
+sudo: required
 
 cache:
   directories:
@@ -12,7 +12,8 @@ addons:
   chrome: stable
 
 before_script:
-- npm run buildinfo
+- sudo chown root /opt/google/chrome/chrome-sandbox
+- sudo chmod 4755 /opt/google/chrome/chrome-sandbox
 script:
 - npm run lint
 - npm run test:headless
@@ -23,7 +24,7 @@ deploy:
   provider: firebase
   token:
     secure: U71E3u2N7EaubzC1rndIkfE1ZNo8AErUV5chDwS0UI4ZuqYtAoFAKHObeQRx8b8xV51hQuLLE+sxqhcXjyFVeOHbLOsdpnGA7rPVy0PtK4nLx6tBdEV9SRKSLGuxD3i7SXkn6Cp1VqWY/ucbOJq92yGC+J+pxUMoOAB039hCjOoVFgsBFRrNhndtrSPVYinvBFn/WQbJYZ7PWF0UPsvnZS7gDZwTCdIGUmEyFprOs6me9I/puGQD4Tof8W0DhVZxDf5rKWVEq8ucm+B3XxsGXzwB7BF3UrDdusIAfSpjrYLVmDv5fhPWyihXiYHaKUZtEJsznmYN7qwk8tlfJ6pnSwxQWd15W0thp6eXeIrUL7F7b1r3C/R9GRwb9IaRoztOmJD6RyjUM5B8JhczcjyLAO+N/3vBHlEgjRYvNbeJwqG6yWeJ1Iwo3nnEw2WkUlENg9YSBzElbK8vSHFOmqYexuAvLRd1V0BgmJpFbfqF6mf8yPDBf516g0+VjKSP7BQvJIlagsNMBokImSbYZlaB2ybCDFXLAp+SPa8sOaLBGDfBs2IDlWPR27ZfRg5Rkovxo6xfiJ+zpdTkY/3XKEgAF8BRnbt9K+pp/hJoY0fqzOI1LOIlihPDtyoc1SOzbKebcZJIEpBpLUH9Sol4yKjAohU0TgQsaENcgE8Qn80wfbM=
-  project: "resamsel-cube-timer-dev"
+  project: resamsel-cube-timer-dev
   on:
     branch: all_branches
     condition: $TRAVIS_BRANCH =~ ^release/v.*$

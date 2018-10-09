@@ -45,3 +45,4 @@ Thumbs.db
 # Custom
 .env
 build-info.ts
+environment.prod.ts
