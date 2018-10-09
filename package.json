@@ -37,13 +37,11 @@
     "@ngrx/entity": "^6.1.0",
     "@ngrx/store": "^6.1.0",
     "@ngrx/store-devtools": "^6.1.0",
-    "angularfire2": "^5.0.2",
     "core-js": "^2.4.1",
     "firebase": "^5.5.2",
     "moment": "^2.22.2",
     "ngx-moment": "^3.1.0",
     "rxjs": "^6.3.3",
-    "tslint": "^5.11.0",
     "zone.js": "^0.8.26"
   },
   "devDependencies": {
@@ -70,7 +68,7 @@
     "protractor": "~5.1.2",
     "ts-mockito": "^2.3.1",
     "ts-node": "~4.1.0",
-    "tslint": "~5.9.1",
+    "tslint": "^5.11.0",
     "typescript": "2.9.2"
   }
 }
