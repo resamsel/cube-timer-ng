@@ -11,6 +11,7 @@
     "build": "ng build --prod",
     "pretest": "npm run buildinfo",
     "test": "ng test",
+    "pretest:headless": "npm run buildinfo",
     "test:headless": "ng test --watch false --progress false",
     "lint": "ng lint",
     "e2e": "ng e2e",
