@@ -8,7 +8,7 @@
     "start:dev": "ng serve --port 4201 --configuration dev",
     "build": "ng build --prod",
     "test": "ng test",
-    "test:headless": "ng test --single-run --progress false --browser ChromeHeadless",
+    "test:headless": "ng test --watch false --progress false --browser ChromeHeadless",
     "lint": "ng lint",
     "e2e": "ng e2e",
     "deploy": "npm run build && firebase deploy",
