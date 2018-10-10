@@ -2,7 +2,7 @@ import { Component, Input } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { MatCardModule } from '@angular/material';
+import { MatCardModule, MatProgressSpinnerModule } from '@angular/material';
 import { RouterTestingModule } from '@angular/router/testing';
 import { Store } from '@ngrx/store';
 import { instance, mock } from 'ts-mockito';
@@ -55,7 +55,8 @@ describe('ScoresPageComponent', () => {
         SidenavStubComponent
       ],
       imports: [
-        RouterTestingModule
+        RouterTestingModule,
+        MatProgressSpinnerModule
       ],
       providers: [
         {provide: AngularFirestore, useValue: instance(mock(AngularFirestore))},

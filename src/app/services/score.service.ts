@@ -3,7 +3,7 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { select, Store } from '@ngrx/store';
 import { reducer, selectAll, selectTotal } from 'app/models/score/score.reducer';
 import { combineLatest, Observable } from 'rxjs';
-import { AddScore, DeleteScore, LoadScores } from '../models/score/score.actions';
+import { AddScore, DeleteScore, LoadScores, StartLoading, StopLoading } from '../models/score/score.actions';
 import { Score } from '../models/score/score.model';
 import { AppState } from '../shared/app.state';
 import { PuzzleService } from './puzzle.service';
@@ -35,7 +35,12 @@ export class ScoreService {
     return this.store.pipe(select(state => selectAll(state.scores)));
   }
 
+  public loading$(): Observable<boolean> {
+    return this.store.pipe(select(state => state.scores.loading));
+  }
+
   private retrieveScores(uid: string, puzzle: string, options: ScoreRetrievalOptions = {}): void {
+    this.store.dispatch(new StartLoading());
     this.database
       .collection<Score>(
         `users/${uid}/puzzles/${puzzle}/scores`,
@@ -48,7 +53,10 @@ export class ScoreService {
         }
       )
       .valueChanges()
-      .subscribe(scores => this.store.dispatch(new LoadScores({scores})));
+      .subscribe(scores => {
+        this.store.dispatch(new StopLoading());
+        this.store.dispatch(new LoadScores({scores}));
+      });
   }
 
   public delete(score: Score): Promise<void> {

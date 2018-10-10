@@ -1,6 +1,13 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { MatButtonModule, MatCardModule, MatIconModule, MatListModule, MatSnackBarModule } from '@angular/material';
+import {
+  MatButtonModule,
+  MatCardModule,
+  MatIconModule,
+  MatListModule,
+  MatProgressSpinnerModule,
+  MatSnackBarModule
+} from '@angular/material';
 import { MomentModule } from 'ngx-moment';
 import { NavbarModule } from '../../nav/navbar/navbar.module';
 import { SidenavModule } from '../../nav/sidenav/sidenav.module';
@@ -27,6 +34,7 @@ import { ScoresComponent } from './scores/scores.component';
     MatSnackBarModule,
     ScoresRoutingModule,
     PuzzleSelectorModule,
+    MatProgressSpinnerModule,
     MomentModule
   ]
 })

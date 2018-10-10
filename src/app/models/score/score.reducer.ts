@@ -3,7 +3,7 @@ import { Score } from './score.model';
 import { ScoreActions, ScoreActionTypes } from './score.actions';
 
 export interface ScoreState extends EntityState<Score> {
-  // additional entities state properties
+  loading: boolean;
 }
 
 export const adapter: EntityAdapter<Score> = createEntityAdapter<Score>({
@@ -11,7 +11,7 @@ export const adapter: EntityAdapter<Score> = createEntityAdapter<Score>({
 });
 
 export const initialState: ScoreState = adapter.getInitialState({
-  // additional entity state properties
+  loading: true
 });
 
 export function reducer(
@@ -57,6 +57,14 @@ export function reducer(
 
     case ScoreActionTypes.ClearScores: {
       return adapter.removeAll(state);
+    }
+
+    case ScoreActionTypes.StartLoading: {
+      return {...state, loading: true};
+    }
+
+    case ScoreActionTypes.StopLoading: {
+      return {...state, loading: false};
     }
 
     default: {

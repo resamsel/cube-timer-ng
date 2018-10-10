@@ -13,6 +13,11 @@ import { ScoreService } from '../../../services/score.service';
 export class ScoresPageComponent implements OnInit {
   private _puzzles$: Observable<Puzzle[]>;
   private _scores$: Observable<Score[]>;
+  private _loading$: Observable<boolean>;
+
+  get loading$(): Observable<boolean> {
+    return this._loading$;
+  }
 
   get puzzles$(): Observable<Puzzle[]> {
     return this._puzzles$;
@@ -29,6 +34,7 @@ export class ScoresPageComponent implements OnInit {
   }
 
   ngOnInit() {
+    this._loading$ = this.scoreService.loading$();
     this._puzzles$ = this.puzzleService.puzzles$();
     this._scores$ = this.scoreService.scores$();
   }
