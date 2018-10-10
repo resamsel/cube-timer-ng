@@ -17,7 +17,7 @@ before_script:
 script:
 - npm run lint
 - npm run test:headless
-- cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js --verbose
+- cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js
 - npm run build
 - echo xvfb-run npm run e2e
 
