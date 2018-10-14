@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { select, Store } from '@ngrx/store';
 import { reducer, selectAll, selectTotal } from 'app/models/score/score.reducer';
-import { combineLatest, Observable } from 'rxjs';
+import { combineLatest, Observable, Subscription } from 'rxjs';
 import { AddScore, DeleteScore, LoadScores, StartLoading, StopLoading } from '../models/score/score.actions';
 import { Score } from '../models/score/score.model';
 import { AppState } from '../shared/app.state';
@@ -17,6 +17,8 @@ export interface ScoreRetrievalOptions {
 export class ScoreService {
   public static reducer = reducer;
 
+  private _subscription: Subscription = Subscription.EMPTY;
+
   constructor(
     private readonly userService: UserService,
     private readonly puzzleService: PuzzleService,
@@ -26,6 +28,7 @@ export class ScoreService {
     combineLatest(userService.user$(), puzzleService.puzzle$())
       .subscribe(([state, puzzle]) => {
         if (state.user !== null) {
+          this._subscription.unsubscribe();
           this.retrieveScores(state.user.uid, puzzle);
         }
       });
@@ -41,7 +44,7 @@ export class ScoreService {
 
   private retrieveScores(uid: string, puzzle: string, options: ScoreRetrievalOptions = {}): void {
     this.store.dispatch(new StartLoading());
-    this.database
+    this._subscription = this.database
       .collection<Score>(
         `users/${uid}/puzzles/${puzzle}/scores`,
         ref => {

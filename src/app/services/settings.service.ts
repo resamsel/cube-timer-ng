@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Action, select, Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { AppState } from '../shared/app.state';
 import { User, UserService, UserState } from './user.service';
 
@@ -47,6 +47,7 @@ export const initialSettingsState = {
 
 @Injectable({providedIn: 'root'})
 export class SettingsService {
+  private _subscription: Subscription = Subscription.EMPTY;
 
   constructor(
     private readonly userService: UserService,
@@ -54,6 +55,7 @@ export class SettingsService {
     private readonly store: Store<AppState>) {
     userService.user$().subscribe((state: UserState) => {
       if (state.user !== null) {
+        this._subscription.unsubscribe();
         this.retrieveSettings(state.user.uid);
       }
     });
@@ -81,7 +83,7 @@ export class SettingsService {
   }
 
   private retrieveSettings(uid: string): void {
-    this.database
+    this._subscription = this.database
       .doc<User>(`/users/${uid}`)
       .valueChanges()
       .subscribe(user => this.store.dispatch(new SettingsReadAction(user)));

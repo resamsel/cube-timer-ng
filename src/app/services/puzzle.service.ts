@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { select, Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { ActivatePuzzle, AddPuzzle, DeletePuzzle, LoadPuzzles } from '../models/puzzle/puzzle.actions';
 import { Puzzle } from '../models/puzzle/puzzle.model';
 import { reducer, selectAll } from '../models/puzzle/puzzle.reducer';
@@ -12,6 +12,8 @@ import { UserService, UserState } from './user.service';
 export class PuzzleService {
   public static reducer = reducer;
 
+  private _subscription: Subscription = Subscription.EMPTY;
+
   constructor(
     private readonly userService: UserService,
     private database: AngularFirestore,
@@ -19,6 +21,7 @@ export class PuzzleService {
   ) {
     userService.user$().subscribe((state: UserState) => {
       if (state.user !== null) {
+        this._subscription.unsubscribe();
         this.retrievePuzzles(state.user.uid);
       }
     });
@@ -37,7 +40,7 @@ export class PuzzleService {
   }
 
   private retrievePuzzles(uid: string): void {
-    this.database
+    this._subscription = this.database
       .collection<Puzzle>(
         `users/${uid}/puzzles`,
         ref => ref.orderBy('name', 'asc'))
