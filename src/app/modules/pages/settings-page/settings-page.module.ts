@@ -6,23 +6,23 @@ import {
   MatCardModule,
   MatCheckboxModule,
   MatFormFieldModule,
-  MatIconModule, MatInputModule,
+  MatIconModule,
+  MatInputModule,
   MatOptionModule,
   MatSelectModule,
   MatSnackBarModule
 } from '@angular/material';
+import { ConnectFormModule } from '../../connect-form/connect-form.module';
 import { NavbarModule } from '../../nav/navbar/navbar.module';
 import { SidenavModule } from '../../nav/sidenav/sidenav.module';
+import { SettingsFormComponent } from './settings-form/settings-form.component';
 import { SettingsPageComponent } from './settings-page.component';
 import { SettingsRoutingModule } from './settings-routing.module';
-import { SettingsFormComponent } from './settings-form/settings-form.component';
-import { ConnectFormDirective } from './connect-form.directive';
 
 @NgModule({
   declarations: [
     SettingsPageComponent,
-    SettingsFormComponent,
-    ConnectFormDirective
+    SettingsFormComponent
   ],
   imports: [
     CommonModule,
@@ -39,7 +39,8 @@ import { ConnectFormDirective } from './connect-form.directive';
     MatCheckboxModule,
     MatInputModule,
     MatButtonModule,
-    SettingsRoutingModule
+    SettingsRoutingModule,
+    ConnectFormModule
   ]
 })
 export class SettingsPageModule {

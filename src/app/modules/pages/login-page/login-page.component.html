@@ -1,0 +1,46 @@
+<app-navbar [auth]="false"></app-navbar>
+
+<div class="container narrow">
+  <mat-card>
+    <mat-card-title>Login</mat-card-title>
+    <mat-card-content>
+      <form [formGroup]="formGroup">
+        <mat-error *ngIf="formGroup.hasError('provider')">
+          {{formGroup.getError('provider')}}
+        </mat-error>
+        <mat-form-field>
+          <input matInput formControlName="email" type="email" placeholder="Email address">
+          <mat-error *ngIf="email.hasError('email')">The email is badly formatted.</mat-error>
+          <mat-error *ngIf="email.hasError('provider')">{{email.getError('provider')}}</mat-error>
+        </mat-form-field>
+        <mat-form-field>
+          <input matInput formControlName="password" type="password" placeholder="Password">
+          <mat-error *ngIf="password.hasError('provider')">{{password.getError('provider')}}</mat-error>
+        </mat-form-field>
+
+        <div class="actions">
+          <button
+            mat-raised-button
+            color="primary"
+            class="sign-in"
+            [disabled]="formGroup.invalid"
+            (click)="signInWithEmailAndPassword()">Sign in
+          </button>
+
+          <button
+            mat-button
+            color="secondary"
+            class="sign-up"
+            routerLink="/register">Sign up
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+    <mat-card-actions class="actions">
+      <button mat-button (click)="signInWithGoogle()">
+        <mat-icon>account_circle</mat-icon>
+        Sign in with Google
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</div>

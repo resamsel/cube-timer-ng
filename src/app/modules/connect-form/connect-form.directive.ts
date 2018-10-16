@@ -1,10 +1,5 @@
-import { Directive, Input, OnDestroy, OnInit } from '@angular/core';
+import { Directive, Input } from '@angular/core';
 import { FormGroupDirective } from '@angular/forms';
-import { select, Store } from '@ngrx/store';
-import { Subscription } from 'rxjs';
-import { take } from 'rxjs/operators';
-import { SettingsWriteAction } from '../../../services/settings.service';
-import { AppState } from '../../../shared/app.state';
 
 @Directive({
   selector: '[appConnectForm]'

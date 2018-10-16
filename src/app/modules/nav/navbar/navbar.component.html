@@ -11,10 +11,6 @@
     <span *ngIf="page" class="page">{{page}}</span>
     <ng-content></ng-content>
     <div class="flex-spacer"></div>
-    <app-auth></app-auth>
-    <mat-menu>
-      <button mat-menu-item>Settings</button>
-      <button mat-menu-item>Help</button>
-    </mat-menu>
+    <app-auth *ngIf="auth"></app-auth>
   </mat-toolbar-row>
 </mat-toolbar>

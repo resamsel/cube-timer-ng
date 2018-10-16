@@ -64,13 +64,31 @@ export class UserService {
     return this.store.pipe(select(state => state.users));
   }
 
-  public signIn(): void {
+  register(email: string, password: string): Promise<firebase.auth.UserCredential> {
+    return this.afAuth.auth
+      .createUserWithEmailAndPassword(email, password)
+      .then(credential => {
+        this.store.dispatch(new UserGetAction(credential.user));
+        return credential;
+      });
+  }
+
+  public signInWithGoogle(): void {
     this.afAuth.auth
       .signInWithPopup(new firebase.auth.GoogleAuthProvider())
       .then(credential => {
         this.store.dispatch(new UserGetAction(credential.user));
       })
-      .catch(reason => console.error(reason));
+      .catch((reason => console.error('Error while signing in with Google', reason)));
+  }
+
+  public signInWithEmailAndPassword(email: string, password: string): Promise<firebase.auth.UserCredential> {
+    return this.afAuth.auth
+      .signInWithEmailAndPassword(email, password)
+      .then(credential => {
+        this.store.dispatch(new UserGetAction(credential.user));
+        return credential;
+      });
   }
 
   public signOut(): void {

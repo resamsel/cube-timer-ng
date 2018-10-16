@@ -1,0 +1,19 @@
+.sign-in,
+.mat-form-field,
+.actions {
+  margin-top: 8px;
+}
+
+.sign-up,
+.mat-form-field {
+  display: block;
+  width: 100%;
+}
+
+.sign-in {
+  margin-top: 8px;
+}
+
+.actions {
+  text-align: center;
+}

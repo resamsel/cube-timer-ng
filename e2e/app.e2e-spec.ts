@@ -1,14 +1,17 @@
-import { AppPage } from './app.po';
+import { MainPage } from './pages/main.page';
 
-describe('cube-timer-ng App', () => {
-  let page: AppPage;
+describe('Cube Timer App', () => {
+  const page = new MainPage();
 
-  beforeEach(() => {
-    page = new AppPage();
-  });
+  describe('should display welcome message', () => {
+    beforeAll(() => page.navigateTo());
 
-  it('should display welcome message', () => {
-    page.navigateTo();
-    expect(page.getParagraphText()).toEqual('Welcome to app!');
+    it('should display welcome message', () => {
+      // when
+      const actual = page.getPageTitle();
+
+      // then
+      actual.then((title: string) => expect(title).toEqual('Cube Timer'));
+    });
   });
 });

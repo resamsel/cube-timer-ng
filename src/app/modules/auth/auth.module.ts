@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { MatButtonModule, MatIconModule, MatMenuModule, MatTooltipModule } from '@angular/material';
+import { RouterModule } from '@angular/router';
 import { AuthComponent } from './auth.component';
 
 @NgModule({
@@ -12,7 +13,8 @@ import { AuthComponent } from './auth.component';
     MatButtonModule,
     MatIconModule,
     MatTooltipModule,
-    MatMenuModule
+    MatMenuModule,
+    RouterModule
   ],
   exports: [
     AuthComponent

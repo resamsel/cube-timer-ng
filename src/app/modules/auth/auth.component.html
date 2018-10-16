@@ -1,17 +1,21 @@
 <ng-container *ngIf="user$() | async as state">
-  <button
+  <a
     mat-icon-button
     *ngIf="state.user === null"
     matTooltip="Login"
-    (click)="signIn()"
+    routerLink="/login"
   >
     <mat-icon>account_circle</mat-icon>
-  </button>
+  </a>
   <ng-container *ngIf="state.user !== null">
     <button
       mat-icon-button
       [matMenuTriggerFor]="userMenu">
-      <img class="icon" [src]="state.user.photoURL">
+      <img
+        *ngIf="state.user.photoURL"
+        class="icon"
+        [src]="state.user.photoURL">
+      <mat-icon *ngIf="!state.user.photoURL">account_circle</mat-icon>
     </button>
     <mat-menu
       #userMenu="matMenu"
@@ -19,7 +23,13 @@
       xPosition="before"
       overlapTrigger="false">
       <div class="info">
-        <img class="user-image" [src]="state.user.photoURL">
+        <img
+          *ngIf="state.user.photoURL"
+          class="user-image"
+          [src]="state.user.photoURL">
+        <mat-icon
+          *ngIf="!state.user.photoURL"
+          class="user-image">account_circle</mat-icon>
         <div class="user">
           <h6 class="name">{{state.user.displayName}}</h6>
           <div class="email">{{state.user.email}}</div>
