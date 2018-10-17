@@ -8,6 +8,7 @@
 
   .container.narrow {
     width: 65%;
+    max-width: 480px;
   }
 
   .mat-list.hoverable .actions {
@@ -30,7 +31,7 @@
   }
 
   .container.narrow {
-    width: 85%;
+    width: 70%;
   }
 }
 

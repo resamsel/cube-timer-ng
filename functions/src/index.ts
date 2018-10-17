@@ -1,8 +1,12 @@
-import * as functions from 'firebase-functions';
 import * as admin from 'firebase-admin';
-import * as firebaseKeyEncode from 'firebase-key-encode';
+import * as functions from 'firebase-functions';
+import * as keyEncode from 'firebase-key-encode';
 import UserRecord = admin.auth.UserRecord;
+import DocumentReference = admin.firestore.DocumentReference;
 import DocumentSnapshot = admin.firestore.DocumentSnapshot;
+import Firestore = admin.firestore.Firestore;
+import QuerySnapshot = admin.firestore.QuerySnapshot;
+import EventContext = functions.EventContext;
 
 // // Start writing Firebase Functions
 // // https://firebase.google.com/docs/functions/typescript
@@ -17,35 +21,39 @@ admin.initializeApp(functions.config().firebase);
 
 const firestore = admin.firestore();
 
-function deleteQueryBatch(db, query, batchSize, resolve, reject) {
+function deleteQueryBatch(
+  db: Firestore,
+  query: {get: () => Promise<QuerySnapshot>},
+  batchSize: number,
+  resolve: () => void,
+  reject: () => void) {
   query.get()
-    .then((snapshot) => {
+    .then((snapshot: QuerySnapshot) => {
       // When there are no documents left, we are done
-      if (snapshot.size == 0) {
+      if (snapshot.size === 0) {
         return 0;
       }
 
       // Delete documents in a batch
-      var batch = db.batch();
-      snapshot.docs.forEach(function (doc) {
+      const batch = db.batch();
+      snapshot.docs.forEach((doc: {ref: DocumentReference}) => {
         batch.delete(doc.ref);
       });
 
-      return batch.commit().then(function () {
-        return snapshot.size;
-      });
-    }).then(function (numDeleted) {
-    if (numDeleted <= batchSize) {
-      resolve();
-      return;
-    }
+      return batch.commit().then(() => snapshot.size);
+    })
+    .then((numDeleted: number) => {
+      if (numDeleted <= batchSize) {
+        resolve();
+        return;
+      }
 
-    // Recurse on the next process tick, to avoid
-    // exploding the stack.
-    process.nextTick(function () {
-      deleteQueryBatch(db, query, batchSize, resolve, reject);
-    });
-  })
+      // Recurse on the next process tick, to avoid
+      // exploding the stack.
+      process.nextTick(() => {
+        deleteQueryBatch(db, query, batchSize, resolve, reject);
+      });
+    })
     .catch(reject);
 }
 
@@ -78,12 +86,11 @@ export const onCreateUser = functions.auth.user().onCreate((event: UserRecord) =
       .catch(error => {
         console.error('Error while creating user', error);
       }),
-    firestore.doc(`users/${{uid}}/puzzles/3x3x3`).set({name: '3x3x3'}, MERGE)
+    firestore.doc(`users/${uid}/puzzles/3x3x3`).set({name: '3x3x3'}, MERGE)
   ]);
 });
 
-export const onDeleteUser = functions.auth
-  .user()
+export const onDeleteUser = functions.auth.user()
   .onDelete((event: UserRecord) => {
     return firestore.doc(`users/${event.uid}`).set({deleted: true}, MERGE);
   });
@@ -91,10 +98,16 @@ export const onDeleteUser = functions.auth
 // On store score
 export const onCreateScore = functions.firestore
   .document('users/{uid}/puzzles/{puzzle}/scores/{key}')
-  .onCreate((snapshot: DocumentSnapshot) => {
-    const uid = snapshot.data().uid;
-    const puzzle = snapshot.data().puzzle;
-    const key = snapshot.data().key;
+  .onCreate((snapshot: DocumentSnapshot, context: EventContext) => {
+    const document = snapshot.data();
+    if (!document) {
+      return Promise.resolve();
+    }
+
+    const params = context.params;
+    const uid = params.uid;
+    const puzzle = params.puzzle;
+    const key = params.key;
     const now = new Date();
     const lastActive = now.getTime();
     const lastActiveText = now.toString();
@@ -104,7 +117,7 @@ export const onCreateScore = functions.firestore
       lastActiveText: lastActiveText
     };
     const puzzleData = {
-      name: firebaseKeyEncode.decode(puzzle),
+      name: keyEncode.decode(puzzle),
       latest: firestore.doc(`users/${uid}/puzzles/${puzzle}/scores/${key}`),
       lastActive: lastActive,
       lastActiveText: lastActiveText
@@ -113,7 +126,7 @@ export const onCreateScore = functions.firestore
     return Promise.all([
       // Add score to the global puzzle scores
       firestore.doc(`puzzles/${puzzle}/scores/${key}-${uid}`)
-        .set(snapshot.data()),
+        .set(document),
       // Add puzzle to the global puzzles
       firestore.doc(`puzzles/${puzzle}`).set(puzzleData, MERGE),
       // Add puzzle to the user puzzles
@@ -125,11 +138,13 @@ export const onCreateScore = functions.firestore
   });
 
 // On remove score
-exports.onDeleteScore = functions.firestore
-  .document('users/{uid}/puzzles/{puzzle}/scores/{key}').onDelete(event => {
-    const uid = event.params.uid;
-    const puzzle = event.params.puzzle;
-    const key = event.params.key;
+export const onDeleteScore = functions.firestore
+  .document('users/{uid}/puzzles/{puzzle}/scores/{key}')
+  .onDelete((snapshot: DocumentSnapshot, context: EventContext) => {
+    const params = context.params;
+    const uid = params.uid;
+    const puzzle = params.puzzle;
+    const key = params.key;
     const now = new Date();
     const data = {
       lastActive: now.getTime(),
@@ -146,10 +161,12 @@ exports.onDeleteScore = functions.firestore
   });
 
 // On store user puzzle
-exports.onCreateUserPuzzle = functions.firestore
-  .document('users/{uid}/puzzles/{puzzle}').onCreate(event => {
-    const uid = event.params.uid;
-    const puzzle = event.params.puzzle;
+export const onCreateUserPuzzle = functions.firestore
+  .document('users/{uid}/puzzles/{puzzle}')
+  .onCreate((snapshot: DocumentSnapshot, context: EventContext) => {
+    const params = context.params;
+    const uid = params.uid;
+    const puzzle = params.puzzle;
     const whenCreated = new Date().getTime();
     const whenCreatedText = new Date().toString();
     const data = {
@@ -157,7 +174,7 @@ exports.onCreateUserPuzzle = functions.firestore
       whenCreatedText: whenCreatedText
     };
     const puzzleData = {
-      name: firebaseKeyEncode.decode(puzzle)
+      name: keyEncode.decode(puzzle)
     };
 
     return Promise.all([
@@ -170,10 +187,12 @@ exports.onCreateUserPuzzle = functions.firestore
   });
 
 // On delete user puzzle
-exports.onDeleteUserPuzzle = functions.firestore
-  .document('users/{uid}/puzzles/{puzzle}').onDelete(event => {
-    const uid = event.params.uid;
-    const puzzle = event.params.puzzle;
+export const onDeleteUserPuzzle = functions.firestore
+  .document('users/{uid}/puzzles/{puzzle}')
+  .onDelete((snapshot: DocumentSnapshot, context: EventContext) => {
+    const params = context.params;
+    const uid = params.uid;
+    const puzzle = params.puzzle;
 
     return Promise.all([
       new Promise(function (resolve, reject) {
@@ -190,9 +209,10 @@ exports.onDeleteUserPuzzle = functions.firestore
   });
 
 // On store puzzle
-exports.onCreatePuzzle = functions.firestore
-  .document('puzzles/{puzzle}').onCreate(event => {
-    const puzzle = event.params.puzzle;
+export const onCreatePuzzle = functions.firestore
+  .document('puzzles/{puzzle}')
+  .onCreate((snapshot: DocumentSnapshot, context: EventContext) => {
+    const puzzle = context.params.puzzle;
     const now = new Date();
     const data = {
       whenCreated: now.getTime(),

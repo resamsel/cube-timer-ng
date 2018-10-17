@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const functions = require("firebase-functions");
 const admin = require("firebase-admin");
-const firebaseKeyEncode = require("firebase-key-encode");
+const functions = require("firebase-functions");
+const keyEncode = require("firebase-key-encode");
 // // Start writing Firebase Functions
 // // https://firebase.google.com/docs/functions/typescript
 //
@@ -16,25 +16,24 @@ function deleteQueryBatch(db, query, batchSize, resolve, reject) {
     query.get()
         .then((snapshot) => {
         // When there are no documents left, we are done
-        if (snapshot.size == 0) {
+        if (snapshot.size === 0) {
             return 0;
         }
         // Delete documents in a batch
-        var batch = db.batch();
-        snapshot.docs.forEach(function (doc) {
+        const batch = db.batch();
+        snapshot.docs.forEach((doc) => {
             batch.delete(doc.ref);
         });
-        return batch.commit().then(function () {
-            return snapshot.size;
-        });
-    }).then(function (numDeleted) {
+        return batch.commit().then(() => snapshot.size);
+    })
+        .then((numDeleted) => {
         if (numDeleted <= batchSize) {
             resolve();
             return;
         }
         // Recurse on the next process tick, to avoid
         // exploding the stack.
-        process.nextTick(function () {
+        process.nextTick(() => {
             deleteQueryBatch(db, query, batchSize, resolve, reject);
         });
     })
@@ -67,21 +66,25 @@ exports.onCreateUser = functions.auth.user().onCreate((event) => {
             .catch(error => {
             console.error('Error while creating user', error);
         }),
-        firestore.doc(`users/${{ uid }}/puzzles/3x3x3`).set({ name: '3x3x3' }, MERGE)
+        firestore.doc(`users/${uid}/puzzles/3x3x3`).set({ name: '3x3x3' }, MERGE)
     ]);
 });
-exports.onDeleteUser = functions.auth
-    .user()
+exports.onDeleteUser = functions.auth.user()
     .onDelete((event) => {
     return firestore.doc(`users/${event.uid}`).set({ deleted: true }, MERGE);
 });
 // On store score
 exports.onCreateScore = functions.firestore
     .document('users/{uid}/puzzles/{puzzle}/scores/{key}')
-    .onCreate((snapshot) => {
-    const uid = snapshot.data().uid;
-    const puzzle = snapshot.data().puzzle;
-    const key = snapshot.data().key;
+    .onCreate((snapshot, context) => {
+    const document = snapshot.data();
+    if (!document) {
+        return Promise.resolve();
+    }
+    const params = context.params;
+    const uid = params.uid;
+    const puzzle = params.puzzle;
+    const key = params.key;
     const now = new Date();
     const lastActive = now.getTime();
     const lastActiveText = now.toString();
@@ -91,7 +94,7 @@ exports.onCreateScore = functions.firestore
         lastActiveText: lastActiveText
     };
     const puzzleData = {
-        name: firebaseKeyEncode.decode(puzzle),
+        name: keyEncode.decode(puzzle),
         latest: firestore.doc(`users/${uid}/puzzles/${puzzle}/scores/${key}`),
         lastActive: lastActive,
         lastActiveText: lastActiveText
@@ -99,7 +102,7 @@ exports.onCreateScore = functions.firestore
     return Promise.all([
         // Add score to the global puzzle scores
         firestore.doc(`puzzles/${puzzle}/scores/${key}-${uid}`)
-            .set(snapshot.data()),
+            .set(document),
         // Add puzzle to the global puzzles
         firestore.doc(`puzzles/${puzzle}`).set(puzzleData, MERGE),
         // Add puzzle to the user puzzles
@@ -111,10 +114,12 @@ exports.onCreateScore = functions.firestore
 });
 // On remove score
 exports.onDeleteScore = functions.firestore
-    .document('users/{uid}/puzzles/{puzzle}/scores/{key}').onDelete(event => {
-    const uid = event.params.uid;
-    const puzzle = event.params.puzzle;
-    const key = event.params.key;
+    .document('users/{uid}/puzzles/{puzzle}/scores/{key}')
+    .onDelete((snapshot, context) => {
+    const params = context.params;
+    const uid = params.uid;
+    const puzzle = params.puzzle;
+    const key = params.key;
     const now = new Date();
     const data = {
         lastActive: now.getTime(),
@@ -130,9 +135,11 @@ exports.onDeleteScore = functions.firestore
 });
 // On store user puzzle
 exports.onCreateUserPuzzle = functions.firestore
-    .document('users/{uid}/puzzles/{puzzle}').onCreate(event => {
-    const uid = event.params.uid;
-    const puzzle = event.params.puzzle;
+    .document('users/{uid}/puzzles/{puzzle}')
+    .onCreate((snapshot, context) => {
+    const params = context.params;
+    const uid = params.uid;
+    const puzzle = params.puzzle;
     const whenCreated = new Date().getTime();
     const whenCreatedText = new Date().toString();
     const data = {
@@ -140,7 +147,7 @@ exports.onCreateUserPuzzle = functions.firestore
         whenCreatedText: whenCreatedText
     };
     const puzzleData = {
-        name: firebaseKeyEncode.decode(puzzle)
+        name: keyEncode.decode(puzzle)
     };
     return Promise.all([
         // Add puzzle to the global puzzles
@@ -152,9 +159,11 @@ exports.onCreateUserPuzzle = functions.firestore
 });
 // On delete user puzzle
 exports.onDeleteUserPuzzle = functions.firestore
-    .document('users/{uid}/puzzles/{puzzle}').onDelete(event => {
-    const uid = event.params.uid;
-    const puzzle = event.params.puzzle;
+    .document('users/{uid}/puzzles/{puzzle}')
+    .onDelete((snapshot, context) => {
+    const params = context.params;
+    const uid = params.uid;
+    const puzzle = params.puzzle;
     return Promise.all([
         new Promise(function (resolve, reject) {
             deleteQueryBatch(firestore, firestore.collection(`users/${uid}/puzzles/${puzzle}/scores`), 100, resolve, reject);
@@ -164,8 +173,9 @@ exports.onDeleteUserPuzzle = functions.firestore
 });
 // On store puzzle
 exports.onCreatePuzzle = functions.firestore
-    .document('puzzles/{puzzle}').onCreate(event => {
-    const puzzle = event.params.puzzle;
+    .document('puzzles/{puzzle}')
+    .onCreate((snapshot, context) => {
+    const puzzle = context.params.puzzle;
     const now = new Date();
     const data = {
         whenCreated: now.getTime(),
