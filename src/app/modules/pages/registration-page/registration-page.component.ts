@@ -16,15 +16,15 @@ export class RegistrationPageComponent {
     passwordRepeat: new FormControl(null, Validators.required)
   });
 
-  get email(): AbstractControl {
+  get email(): AbstractControl | null {
     return this.formGroup.get('email');
   }
 
-  get password(): AbstractControl {
+  get password(): AbstractControl | null {
     return this.formGroup.get('password');
   }
 
-  get passwordRepeat(): AbstractControl {
+  get passwordRepeat(): AbstractControl | null {
     return this.formGroup.get('passwordRepeat');
   }
 
@@ -40,15 +40,21 @@ export class RegistrationPageComponent {
   }
 
   register(): void {
-    this.userService.register(this.email.value, this.password.value)
+    this.userService.register(
+      this.email !== null ? this.email.value : '',
+      this.password !== null ? this.password.value : '')
       .catch((reason: { code: string, message: string }) => {
         console.error('Register', reason);
         switch (reason.code) {
           case 'auth/invalid-email':
-            this.email.setErrors({provider: reason.message});
+            if (this.email !== null) {
+              this.email.setErrors({provider: reason.message});
+            }
             break;
           case 'auth/email-already-in-use':
-            this.email.setErrors({provider: reason.message});
+            if (this.email !== null) {
+              this.email.setErrors({provider: reason.message});
+            }
             break;
           default:
             this.formGroup.setErrors({provider: reason.message});

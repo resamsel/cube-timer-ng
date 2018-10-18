@@ -15,11 +15,11 @@ export class LoginPageComponent {
     password: new FormControl(null, Validators.required)
   });
 
-  get email(): AbstractControl {
+  get email(): AbstractControl | null {
     return this.formGroup.get('email');
   }
 
-  get password(): AbstractControl {
+  get password(): AbstractControl | null {
     return this.formGroup.get('password');
   }
 
@@ -40,14 +40,20 @@ export class LoginPageComponent {
 
   signInWithEmailAndPassword(): void {
     console.log('credentials', this.email, this.password);
-    this.userService.signInWithEmailAndPassword(this.email.value, this.password.value)
+    this.userService.signInWithEmailAndPassword(
+      this.email !== null ? this.email.value : '',
+      this.password !== null ? this.password.value : '')
       .catch((reason: { code: string, message: string }) => {
         switch (reason.code) {
           case 'auth/invalid-email':
-            this.email.setErrors({provider: reason.message});
+            if (this.email !== null) {
+              this.email.setErrors({provider: reason.message});
+            }
             break;
           case 'auth/wrong-password':
-            this.password.setErrors({provider: reason.message});
+            if (this.password !== null) {
+              this.password.setErrors({provider: reason.message});
+            }
             break;
           default:
             this.formGroup.setErrors({provider: reason.message});

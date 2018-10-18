@@ -1,9 +1,10 @@
 import { NgModule } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { Route, RouterModule } from '@angular/router';
 import { TimerPageComponent } from './timer-page.component';
+import { AuthGuard } from '../../../guards/auth.guard';
 
-const timerRoutes = [
-  {path: 'timer', component: TimerPageComponent}
+const timerRoutes: Route[] = [
+  {path: 'timer', component: TimerPageComponent, canActivate: [AuthGuard]}
 ];
 
 @NgModule({

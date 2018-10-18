@@ -6,7 +6,7 @@ import { AppState } from '../shared/app.state';
 import { User, UserService, UserState } from './user.service';
 
 export interface SettingsState {
-  uid: string;
+  uid?: string;
   language: string;
   inspectionTime: number;
   soundAfterInspection: boolean;
@@ -36,8 +36,7 @@ export class SettingsWriteAction implements SettingsAction {
   }
 }
 
-export const initialSettingsState = {
-  uid: undefined,
+export const initialSettingsState: SettingsState = {
   language: 'en',
   inspectionTime: 0,
   soundAfterInspection: false,
@@ -86,7 +85,11 @@ export class SettingsService {
     this._subscription = this.database
       .doc<User>(`/users/${uid}`)
       .valueChanges()
-      .subscribe(user => this.store.dispatch(new SettingsReadAction(user)));
+      .subscribe((user: User | undefined) => {
+        if(user !== undefined) {
+          this.store.dispatch(new SettingsReadAction(user));
+        }
+      });
   }
 
   public update(uid: string, settings: Partial<SettingsState>): Promise<void> {

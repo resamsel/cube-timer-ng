@@ -20,13 +20,15 @@ export class TimerService {
     store.pipe(
       select(state => state.timer),
       filter(state => state.state === States.STOPPED))
-      .subscribe(state => {
-        scoreService.create({
-          uid: state.uid,
-          timestamp: state.whenStarted.getTime(),
-          value: state.duration,
-          puzzle: state.puzzle
-        });
+      .subscribe((state: TimerState) => {
+        if (state.uid !== undefined && state.puzzle !== undefined && state.whenStarted !== undefined) {
+          scoreService.create({
+            uid: state.uid,
+            timestamp: state.whenStarted.getTime(),
+            value: state.duration,
+            puzzle: state.puzzle
+          });
+        }
       });
   }
 

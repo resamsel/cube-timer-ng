@@ -15,17 +15,26 @@ export interface User extends SettingsState {
   uid: string;
 }
 
+export interface UserInfo {
+  displayName: string | null;
+  email: string | null;
+  phoneNumber: string | null;
+  photoURL: string | null;
+  providerId: string;
+  uid: string;
+}
+
 export const USER_GET = '[User] Get';
 
 export class UserGetAction implements Action {
   readonly type = USER_GET;
 
-  constructor(public user: firebase.User) {
+  constructor(public user: UserInfo | null) {
   }
 }
 
 export class UserState {
-  user: firebase.User | null;
+  user: UserInfo | null;
 }
 
 export const initialUserState: UserState = {

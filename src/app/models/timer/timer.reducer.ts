@@ -1,4 +1,5 @@
 import { TimerActions, TimerActionTypes } from './timer.actions';
+import { DateTimeUtils } from '../../shared/date-time-utils';
 
 export enum States {
   INITIAL = 'Initial',
@@ -9,19 +10,15 @@ export enum States {
 
 export interface TimerState {
   state: States;
-  uid: string;
-  puzzle: string;
-  whenStarted: Date;
-  whenStopped: Date;
+  uid?: string;
+  puzzle?: string;
+  whenStarted?: Date;
+  whenStopped?: Date;
   duration: number;
 }
 
 export const initialState: TimerState = {
   state: States.INITIAL,
-  uid: null,
-  puzzle: null,
-  whenStarted: null,
-  whenStopped: null,
   duration: 0
 };
 
@@ -42,7 +39,7 @@ export function reducer(state = initialState, action: TimerActions): TimerState 
         ...state,
         state: States.STOPPED,
         whenStopped: action.whenStopped,
-        duration: action.whenStopped.getTime() - state.whenStarted.getTime()
+        duration: DateTimeUtils.durationInMillis(state.whenStarted, action.whenStopped)
       };
 
     case TimerActionTypes.ManualTimer:

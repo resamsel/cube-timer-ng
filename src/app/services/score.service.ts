@@ -48,7 +48,7 @@ export class ScoreService {
       .collection<Score>(
         `users/${uid}/puzzles/${puzzle}/scores`,
         ref => {
-          if (options.limit > 0) {
+          if (options.limit !== undefined && options.limit > 0) {
             return ref.orderBy('timestamp', 'desc')
               .limit(options.limit);
           }

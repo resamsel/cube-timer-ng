@@ -45,9 +45,11 @@ export class PuzzlesPageComponent implements OnInit {
     this.userService.user$()
       .pipe(take(1))
       .subscribe((userState: UserState) => {
-        this.puzzleService
-          .delete(userState.user.uid, puzzle)
-          .then(() => this.onDeleted(puzzle));
+        if (userState.user !== null) {
+          this.puzzleService
+            .delete(userState.user.uid, puzzle)
+            .then(() => this.onDeleted(puzzle));
+        }
       });
   }
 

@@ -9,7 +9,7 @@ const CATEGORIES: number[] = [
 ];
 
 export class Category {
-  public static fromDuration(durationInMillis: number): number {
+  public static fromDuration(durationInMillis: number): number | undefined {
     const durationInSeconds = durationInMillis / 1000;
 
     return CATEGORIES.find(c => durationInSeconds < c);
