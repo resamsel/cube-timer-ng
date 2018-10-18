@@ -86,7 +86,7 @@ export class SettingsService {
       .doc<User>(`/users/${uid}`)
       .valueChanges()
       .subscribe((user: User | undefined) => {
-        if(user !== undefined) {
+        if (user !== undefined) {
           this.store.dispatch(new SettingsReadAction(user));
         }
       });

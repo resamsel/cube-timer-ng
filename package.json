@@ -18,7 +18,7 @@
     "deploy": "npm run build && firebase deploy",
     "buildinfo": "node scripts/build-info.js",
     "postpull": "npm install && npm run buildinfo",
-    "precommit": "ng lint && ng test"
+    "precommit": "npm run lint && npm run test:headless"
   },
   "private": true,
   "dependencies": {

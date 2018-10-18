@@ -3,6 +3,8 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatIconModule } from '@angular/material';
 
 import { MainPageComponent } from './main-page.component';
+import { UserService } from '../../../services/user.service';
+import { instance, mock } from 'ts-mockito';
 
 @Component({selector: 'app-footer', template: ''})
 class FooterStubComponent {
@@ -15,7 +17,10 @@ describe('MainPageComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [MainPageComponent, FooterStubComponent],
-      imports: [MatIconModule]
+      imports: [MatIconModule],
+      providers: [
+        {provide: UserService, useValue: instance(mock(UserService))}
+      ]
     })
       .compileComponents();
   }));

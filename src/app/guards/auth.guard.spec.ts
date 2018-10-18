@@ -1,11 +1,20 @@
-import { TestBed, inject } from '@angular/core/testing';
+import { inject, TestBed } from '@angular/core/testing';
 
 import { AuthGuard } from './auth.guard';
+import { UserService } from '../services/user.service';
+import { instance, mock } from 'ts-mockito';
+import { RouterTestingModule } from '@angular/router/testing';
 
 describe('AuthGuard', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [AuthGuard]
+      imports: [
+        RouterTestingModule
+      ],
+      providers: [
+        AuthGuard,
+        {provide: UserService, useValue: instance(mock(UserService))}
+      ]
     });
   });
 
