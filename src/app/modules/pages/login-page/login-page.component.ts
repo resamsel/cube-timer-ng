@@ -31,7 +31,7 @@ export class LoginPageComponent {
         filter((state: UserState) => state.user != null),
         take(1)
       )
-      .subscribe(() => router.navigate(['/', 'timer']));
+      .subscribe(() => router.navigate(['/', 'puzzles']));
   }
 
   signInWithGoogle(): void {

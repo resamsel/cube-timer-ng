@@ -3,7 +3,7 @@ import { Puzzle } from './puzzle.model';
 import { PuzzleActions, PuzzleActionTypes } from './puzzle.actions';
 
 export interface PuzzleState extends EntityState<Puzzle> {
-  active: string;
+  active: Puzzle;
 }
 
 export const adapter: EntityAdapter<Puzzle> = createEntityAdapter<Puzzle>({
@@ -11,7 +11,7 @@ export const adapter: EntityAdapter<Puzzle> = createEntityAdapter<Puzzle>({
 });
 
 export const initialState: PuzzleState = adapter.getInitialState({
-  active: '3x3x3'
+  active: {name: '3x3x3'}
 });
 
 export function reducer(state = initialState, action: PuzzleActions): PuzzleState {

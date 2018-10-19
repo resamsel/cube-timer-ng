@@ -29,7 +29,7 @@ export class ScoreService {
       .subscribe(([state, puzzle]) => {
         if (state.user !== null) {
           this._subscription.unsubscribe();
-          this.retrieveScores(state.user.uid, puzzle);
+          this.retrieveScores(state.user.uid, puzzle.name);
         }
       });
   }

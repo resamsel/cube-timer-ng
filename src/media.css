@@ -1,14 +1,25 @@
 /*
  * Media query for medium screens
  */
-@media only screen and (min-width: 601px) {
+@media only screen and (min-width: 600px) {
   .container {
+    padding: 16px;
+    margin: 0 auto;
     width: 85%;
   }
 
   .container.narrow {
     width: 65%;
     max-width: 480px;
+  }
+
+  .mat-card {
+    margin-top: 16px;
+  }
+
+  .card-accented .mat-card-header {
+    margin: -24px -24px 0 -24px;
+    padding: 24px 24px 0 24px;
   }
 
   .mat-list.hoverable .actions {

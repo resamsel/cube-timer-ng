@@ -86,7 +86,7 @@ export class ClearPuzzles implements Action {
 export class ActivatePuzzle implements Action {
   readonly type = PuzzleActionTypes.ActivatePuzzle;
 
-  constructor(public payload: { puzzle: string }) {
+  constructor(public payload: { puzzle: Puzzle }) {
   }
 }
 

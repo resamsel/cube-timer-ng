@@ -21,6 +21,7 @@ class NavbarStubComponent {
 
 @Component({selector: 'app-puzzle-selector', template: ''})
 class PuzzleSelectorStubComponent {
+  @Input() puzzle: Puzzle;
   @Input() puzzles: Puzzle[];
 }
 

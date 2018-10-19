@@ -10,6 +10,7 @@ import {
   MatInputModule,
   MatSnackBarModule
 } from '@angular/material';
+import { ConnectFormModule } from '../../connect-form/connect-form.module';
 import { NavbarModule } from '../../nav/navbar/navbar.module';
 import { SidenavModule } from '../../nav/sidenav/sidenav.module';
 import { PuzzleSelectorModule } from '../../puzzles/puzzle-selector/puzzle-selector.module';
@@ -38,7 +39,8 @@ import { TimerComponent } from './timer/timer.component';
     MatDividerModule,
     MatFormFieldModule,
     MatInputModule,
-    TimerRoutingModule
+    TimerRoutingModule,
+    ConnectFormModule
   ]
 })
 export class TimerPageModule {

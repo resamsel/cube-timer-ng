@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
+import { ParamMap } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
+import { take } from 'rxjs/operators';
 import { ActivatePuzzle, AddPuzzle, DeletePuzzle, LoadPuzzles } from '../models/puzzle/puzzle.actions';
 import { Puzzle } from '../models/puzzle/puzzle.model';
 import { reducer, selectAll } from '../models/puzzle/puzzle.reducer';
@@ -28,10 +30,10 @@ export class PuzzleService {
   }
 
   public activatePuzzle(puzzle: string) {
-    this.store.dispatch(new ActivatePuzzle({puzzle}));
+    this.store.dispatch(new ActivatePuzzle({puzzle: {name: puzzle}}));
   }
 
-  public puzzle$(): Observable<string> {
+  public puzzle$(): Observable<Puzzle> {
     return this.store.pipe(select(state => state.puzzles.active));
   }
 
@@ -71,5 +73,20 @@ export class PuzzleService {
         console.error('Error while deleting Firestore puzzle', reason);
         this.store.dispatch(new AddPuzzle({puzzle}));
       });
+  }
+
+  get(puzzle: string): Observable<Puzzle> {
+    return this.store.pipe(
+      take(1),
+      select(state => state.puzzles.entities[puzzle])
+    );
+  }
+
+  from(params: ParamMap): Observable<Puzzle | undefined> {
+    const puzzle = params.get('puzzle');
+    if (puzzle !== null) {
+      return this.get(puzzle);
+    }
+    return Observable.create(undefined);
   }
 }

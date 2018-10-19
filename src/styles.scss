@@ -12,8 +12,7 @@ a {
 }
 
 .container {
-  padding: 16px;
-  margin: 0 auto;
+  padding: 0 8px;
 }
 
 .mat-drawer {
@@ -30,14 +29,18 @@ a {
 }
 
 .mat-card {
-  margin-top: 16px;
+  margin-top: 8px;
+}
+
+.mat-card.card-accented {
+  padding-top: 0;
 }
 
 .card-accented .mat-card-header {
   background-color: mat-color($app-primary, 700);
   border-radius: 2px 2px 0 0;
-  margin: -24px -24px 0 -24px !important;
-  padding: 24px 24px 0 24px;
+  margin: -24px -16px 0 -16px;
+  padding: 16px 16px 0 16px;
 }
 
 .card-accented .mat-card-title {

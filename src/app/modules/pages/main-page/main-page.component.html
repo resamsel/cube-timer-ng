@@ -1,14 +1,14 @@
 <header>
   <h1 class="mat-display-4">Cube Timer</h1>
   <h2>Make timing fun</h2>
-  <button
+  <a
     mat-raised-button
     *ngIf="(user$() | async)?.user"
-    routerLink="/timer">Get started</button>
-  <button
+    routerLink="/puzzles">Get started</a>
+  <a
     mat-raised-button
     *ngIf="!(user$() | async)?.user"
-    routerLink="/login">Get started</button>
+    routerLink="/login">Get started</a>
 </header>
 
 <div class="container">

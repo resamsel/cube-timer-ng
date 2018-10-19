@@ -1,5 +1,5 @@
 <app-navbar [sidenav]="sidenav" page="Scores">
-  <app-puzzle-selector [puzzles]="puzzles$ | async"></app-puzzle-selector>
+  <app-puzzle-selector [puzzle]="puzzle$ | async" [puzzles]="puzzles$ | async"></app-puzzle-selector>
 </app-navbar>
 
 <app-sidenav #sidenav activePage="scores">

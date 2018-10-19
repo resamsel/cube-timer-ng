@@ -1,14 +1,19 @@
-import {NgModule} from '@angular/core';
-import {RouterModule} from '@angular/router';
-import {ScoresPageComponent} from './scores-page.component';
+import { NgModule } from '@angular/core';
+import { RouterModule } from '@angular/router';
+import { AuthGuard } from '../../../guards/auth.guard';
+import { ScoresPageComponent } from './scores-page.component';
 
-const scoresRoutes = [
-  {path: 'scores', component: ScoresPageComponent}
+const routes = [
+  {
+    path: 'puzzles/:puzzle/scores',
+    component: ScoresPageComponent,
+    canActivate: [AuthGuard]
+  }
 ];
 
 @NgModule({
   imports: [
-    RouterModule.forChild(scoresRoutes)
+    RouterModule.forChild(routes)
   ],
   exports: [
     RouterModule

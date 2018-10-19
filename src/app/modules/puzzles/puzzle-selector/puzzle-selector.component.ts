@@ -1,5 +1,4 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
 import { Puzzle } from '../../../models/puzzle/puzzle.model';
 import { PuzzleService } from '../../../services/puzzle.service';
 
@@ -9,19 +8,13 @@ import { PuzzleService } from '../../../services/puzzle.service';
   styleUrls: ['./puzzle-selector.component.scss']
 })
 export class PuzzleSelectorComponent implements OnInit {
+  @Input() puzzle: Puzzle;
   @Input() puzzles: Puzzle[];
-
-  private _activePuzzle$: Observable<string>;
-
-  get activePuzzle$(): Observable<string> {
-    return this._activePuzzle$;
-  }
 
   constructor(private readonly puzzleService: PuzzleService) {
   }
 
   ngOnInit() {
-    this._activePuzzle$ = this.puzzleService.puzzle$();
   }
 
   onActivate(puzzle: Puzzle): void {

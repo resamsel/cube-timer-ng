@@ -1,13 +1,13 @@
 <button mat-button [matMenuTriggerFor]="menu">
-  {{activePuzzle$ | async}}
+  {{puzzle?.name}}
   <mat-icon>arrow_drop_down</mat-icon>
 </button>
 <mat-menu #menu="matMenu">
   <button
     mat-menu-item
-    *ngFor="let puzzle of puzzles"
-    (click)="onActivate(puzzle)">
+    *ngFor="let p of puzzles"
+    (click)="onActivate(p)">
     <mat-icon color="primary">games</mat-icon>
-    {{puzzle.name}}
+    {{p.name}}
   </button>
 </mat-menu>

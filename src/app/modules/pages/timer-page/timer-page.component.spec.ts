@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { MatCardModule } from '@angular/material';
+import { RouterTestingModule } from '@angular/router/testing';
 import { instance, mock } from 'ts-mockito';
 import { Puzzle } from '../../../models/puzzle/puzzle.model';
 import { PuzzleService } from '../../../services/puzzle.service';
@@ -21,11 +21,13 @@ class NavbarStubComponent {
 
 @Component({selector: 'app-puzzle-selector', template: ''})
 class PuzzleSelectorStubComponent {
+  @Input() puzzle: Puzzle;
   @Input() puzzles: Puzzle[];
 }
 
 @Component({selector: 'app-timer', template: ''})
 class TimerStubComponent {
+  @Input() puzzle: Puzzle;
 }
 
 @Component({selector: 'app-timer-stats', template: ''})
@@ -45,6 +47,9 @@ describe('TimerPageComponent', () => {
         PuzzleSelectorStubComponent,
         TimerStubComponent,
         TimerStatsStubComponent
+      ],
+      imports: [
+        RouterTestingModule
       ],
       providers: [
         {provide: PuzzleService, useValue: instance(mock(PuzzleService))}

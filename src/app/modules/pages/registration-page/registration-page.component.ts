@@ -36,7 +36,7 @@ export class RegistrationPageComponent {
         filter((state: UserState) => state.user != null),
         take(1)
       )
-      .subscribe(() => router.navigate(['/', 'timer']));
+      .subscribe(() => router.navigate(['/', 'puzzles']));
   }
 
   register(): void {

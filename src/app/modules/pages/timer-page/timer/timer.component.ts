@@ -1,14 +1,15 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material';
 import * as moment from 'moment';
 import { combineLatest, Observable, Subscription } from 'rxjs';
 import { filter, take } from 'rxjs/operators';
+import { Puzzle } from '../../../../models/puzzle/puzzle.model';
 import { States, TimerState } from '../../../../models/timer/timer.reducer';
 import { PuzzleService } from '../../../../services/puzzle.service';
 import { ScoreService } from '../../../../services/score.service';
 import { TimerService } from '../../../../services/timer.service';
-import { UserService } from '../../../../services/user.service';
+import { UserService, UserState } from '../../../../services/user.service';
 import { DateTimeUtils } from '../../../../shared/date-time-utils';
 
 export function formatDuration(duration: number): string {
@@ -26,14 +27,16 @@ export function parseDuration(duration: string): number {
   styleUrls: ['./timer.component.scss']
 })
 export class TimerComponent implements OnInit, OnDestroy {
-  private _activePuzzle$: Observable<string>;
+  @Input() puzzle: Puzzle;
   private _state$: Observable<TimerState>;
 
-  private _model: { duration: number } = {
-    duration: 0
+  private _model: Readonly<{ duration: string }> = {
+    duration: formatDuration(0)
   };
 
   private _subscription: Subscription = Subscription.EMPTY;
+  private _manualSubscription: Subscription = Subscription.EMPTY;
+
   private _interval: number;
   private _whenStarted: Date | undefined;
   private _whenStopped: Date | undefined;
@@ -45,10 +48,6 @@ export class TimerComponent implements OnInit, OnDestroy {
       Validators.pattern(/\d+:\d\d?(\.\d\d?\d?)/)
     ])
   });
-
-  get activePuzzle$(): Observable<string> {
-    return this._activePuzzle$;
-  }
 
   get state$(): Observable<TimerState> {
     return this._state$;
@@ -67,27 +66,23 @@ export class TimerComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this._activePuzzle$ = this.puzzleService.puzzle$();
+    console.log('puzzle', this.puzzle);
     this._state$ = this.timerService.state$();
     this._subscription = this._state$.subscribe(state => this.onStateChange(state));
-
-    if (this.duration !== null) {
-      this._subscription.add(
-        this.duration.valueChanges
-          .subscribe((value: string) => this._model.duration = parseDuration(value))
-      );
-    }
   }
 
   ngOnDestroy() {
     this._subscription.unsubscribe();
+    this._manualSubscription.unsubscribe();
     clearInterval(this._interval);
   }
 
   private async onStateChange(state: TimerState) {
+    this._manualSubscription.unsubscribe();
+
     switch (state.state) {
       case States.INITIAL: {
-        this._model.duration = 0;
+        this._model = {duration: formatDuration(0)};
         if (this.duration !== null) {
           this.duration.reset(formatDuration(0));
         }
@@ -97,11 +92,11 @@ export class TimerComponent implements OnInit, OnDestroy {
       }
       case States.STARTED: {
         this._whenStarted = state.whenStarted;
-        this._model.duration = DateTimeUtils.durationInMillis(state.whenStarted, new Date());
+        this._model = {duration: formatDuration(DateTimeUtils.durationInMillis(state.whenStarted, new Date()))};
 
         clearInterval(this._interval);
         this._interval = window.setInterval(
-          () => this._model.duration = DateTimeUtils.durationInMillis(state.whenStarted, new Date()),
+          () => this._model = {duration: formatDuration(DateTimeUtils.durationInMillis(state.whenStarted, new Date()))},
           31
         );
 
@@ -117,12 +112,12 @@ export class TimerComponent implements OnInit, OnDestroy {
       case States.STOPPED: {
         this._whenStarted = state.whenStarted;
         this._whenStopped = state.whenStopped;
-        this._model.duration = DateTimeUtils.durationInMillis(state.whenStarted, state.whenStopped);
+        this._model = {duration: formatDuration(DateTimeUtils.durationInMillis(state.whenStarted, state.whenStopped))};
 
         clearInterval(this._interval);
 
         this.snackBar.open(
-          `Stopped at ${formatDuration(this._model.duration)}`,
+          `Stopped at ${this._model.duration}`,
           'Dismiss',
           {
             duration: 3000
@@ -131,9 +126,15 @@ export class TimerComponent implements OnInit, OnDestroy {
         break;
       }
       case States.MANUAL: {
-        this._model.duration = state.duration;
+        this._model = {duration: formatDuration(state.duration)};
         this._whenStarted = state.whenStarted;
         this._whenStopped = state.whenStopped;
+
+        if (this.duration !== null) {
+          this._manualSubscription = this.duration.valueChanges
+            .subscribe((value: string) => this._model = {duration: value});
+        }
+
         break;
       }
     }
@@ -141,11 +142,11 @@ export class TimerComponent implements OnInit, OnDestroy {
 
   public async onStart() {
     this._whenStarted = new Date();
-    combineLatest(this.userService.user$(), this.puzzleService.puzzle$())
+    this.userService.user$()
       .pipe(take(1))
-      .subscribe(([state, puzzle]) => {
+      .subscribe((state: UserState) => {
         if (state.user !== null && this._whenStarted !== undefined) {
-          this.timerService.start(state.user.uid, puzzle, this._whenStarted);
+          this.timerService.start(state.user.uid, this.puzzle.name, this._whenStarted);
         }
       });
   }
@@ -153,7 +154,7 @@ export class TimerComponent implements OnInit, OnDestroy {
   public async onStop() {
     this._whenStopped = new Date();
     if (this._whenStarted) {
-      this._model.duration = this._whenStopped.getTime() - this._whenStarted.getTime();
+      this._model = {duration: formatDuration(this._whenStopped.getTime() - this._whenStarted.getTime())};
     }
 
     this.timerService.stop(this._whenStopped);
@@ -162,11 +163,10 @@ export class TimerComponent implements OnInit, OnDestroy {
   public async onManual() {
     combineLatest(
       this.userService.user$(),
-      this.puzzleService.puzzle$(),
       this.timerService.state$())
       .pipe(
         take(1),
-        filter(([userState, puzzle, state]) => {
+        filter(([userState, state]) => {
           switch (state.state) {
             case States.STARTED:
             case States.STOPPED:
@@ -176,22 +176,22 @@ export class TimerComponent implements OnInit, OnDestroy {
           }
         })
       )
-      .subscribe(([userState, puzzle]) => {
+      .subscribe(([userState]) => {
         if (userState.user !== null) {
-          this.timerService.manual(userState.user.uid, puzzle, new Date());
+          this.timerService.manual(userState.user.uid, this.puzzle.name, new Date());
         }
       });
   }
 
   public async onBlur() {
-    if (this._model.duration === 0) {
+    if (this._model.duration === formatDuration(0)) {
       this.onClear();
     }
   }
 
   public async onSave() {
     if (this.duration !== null) {
-      this._model.duration = parseDuration(this.duration.value);
+      this._model = {duration: this.duration.value};
     }
 
     combineLatest(this.userService.user$(), this.puzzleService.puzzle$())
@@ -199,14 +199,14 @@ export class TimerComponent implements OnInit, OnDestroy {
       .subscribe(([state, puzzle]) => {
         if (state.user !== null) {
           this.timerService.add({
-            value: this._model.duration,
+            value: parseDuration(this._model.duration),
             uid: state.user.uid,
             timestamp: new Date().getTime(),
-            puzzle: puzzle
+            puzzle: puzzle.name
           })
             .then(() => {
               this.snackBar.open(
-                `Saved ${formatDuration(this._model.duration)}`,
+                `Saved ${this._model.duration}`,
                 'Dismiss',
                 {
                   duration: 3000

@@ -1,6 +1,6 @@
 mat-toolbar-row {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   align-items: center;
 }
 
@@ -8,8 +8,9 @@ mat-toolbar-row {
   flex-grow: 1;
 }
 
-.burger {
-  margin: 0 12px;
+.logo {
+  font-size: 20px;
+  display: none;
 }
 
 a,
@@ -18,9 +19,23 @@ a,
 }
 
 .page {
-  margin-left: 12px;
   padding: 0 12px;
-  border-left: 1px solid rgba(255, 255, 255, 0.2);
   font-size: 18px;
   line-height: 24px;
+}
+
+@media screen and (min-width: 600px) {
+  .burger {
+    margin: 0 12px;
+  }
+
+  .logo,
+  .logo-text {
+    display: initial;
+  }
+
+  .page {
+    margin-left: 12px;
+    border-left: 1px solid rgba(255, 255, 255, 0.2);
+  }
 }

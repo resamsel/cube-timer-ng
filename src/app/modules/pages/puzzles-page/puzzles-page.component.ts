@@ -13,10 +13,10 @@ import { UserService, UserState } from '../../../services/user.service';
   styleUrls: ['./puzzles-page.component.scss']
 })
 export class PuzzlesPageComponent implements OnInit {
-  private _puzzle$: Observable<string>;
+  private _puzzle$: Observable<Puzzle>;
   private _puzzles$: Observable<Puzzle[]>;
 
-  get puzzle$(): Observable<string> {
+  get puzzle$(): Observable<Puzzle> {
     return this._puzzle$;
   }
 
