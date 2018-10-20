@@ -1,8 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { MatCardModule, MatProgressSpinnerModule } from '@angular/material';
+import { MatProgressSpinnerModule } from '@angular/material';
 import { RouterTestingModule } from '@angular/router/testing';
 import { Store } from '@ngrx/store';
 import { instance, mock } from 'ts-mockito';
@@ -22,6 +21,7 @@ class NavbarStubComponent {
 
 @Component({selector: 'app-puzzle-selector', template: ''})
 class PuzzleSelectorStubComponent {
+  @Input() puzzle: Puzzle;
   @Input() puzzles: Puzzle[];
 }
 

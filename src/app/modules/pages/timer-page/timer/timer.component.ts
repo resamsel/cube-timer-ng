@@ -49,6 +49,10 @@ export class TimerComponent implements OnInit, OnDestroy {
     ])
   });
 
+  get model(): Readonly<{ duration: string }> {
+    return this._model;
+  }
+
   get state$(): Observable<TimerState> {
     return this._state$;
   }
@@ -66,7 +70,6 @@ export class TimerComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    console.log('puzzle', this.puzzle);
     this._state$ = this.timerService.state$();
     this._subscription = this._state$.subscribe(state => this.onStateChange(state));
   }

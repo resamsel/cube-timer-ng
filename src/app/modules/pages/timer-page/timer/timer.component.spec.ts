@@ -11,10 +11,14 @@ import { TimerService } from '../../../../services/timer.service';
 import { UserService } from '../../../../services/user.service';
 
 import { TimerComponent } from './timer.component';
+import { ConnectFormModule } from '../../../connect-form/connect-form.module';
 
 describe('TimerComponent', () => {
   let component: TimerComponent;
   let fixture: ComponentFixture<TimerComponent>;
+  const puzzleService = mock(PuzzleService);
+
+  when(puzzleService.puzzle$()).thenReturn(of({name: '3x3x3'}));
 
   beforeEach(async(() => {
     const timerService = mock(TimerService);
@@ -30,11 +34,12 @@ describe('TimerComponent', () => {
         MatCardModule,
         MatDividerModule,
         MatInputModule,
-        MatSnackBarModule
+        MatSnackBarModule,
+        ConnectFormModule
       ],
       providers: [
         {provide: UserService, useValue: instance(mock(UserService))},
-        {provide: PuzzleService, useValue: instance(mock(PuzzleService))},
+        {provide: PuzzleService, useValue: instance(puzzleService)},
         {provide: ScoreService, useValue: instance(mock(ScoreService))},
         {provide: TimerService, useValue: instance(timerService)},
       ]
