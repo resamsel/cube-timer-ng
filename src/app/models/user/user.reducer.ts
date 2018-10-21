@@ -7,7 +7,7 @@ export class UserState {
 
 export const initialUserState: UserState = {};
 
-export const reducer = (state: UserState = initialUserState, action: UserActions): UserState => {
+export function reducer(state: UserState = initialUserState, action: UserActions): UserState {
   switch (action.type) {
     case UserActionTypes.UserGet:
       return {
@@ -17,5 +17,4 @@ export const reducer = (state: UserState = initialUserState, action: UserActions
     default:
       return state;
   }
-};
-
+}
