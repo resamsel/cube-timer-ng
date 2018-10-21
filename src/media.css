@@ -22,11 +22,13 @@
     margin-top: 16px;
   }
 
-  .mat-list.hoverable .actions {
+  .mat-list.hoverable .actions,
+  .mat-nav-list.hoverable .actions {
     display: none;
   }
 
-  .mat-list.hoverable .mat-list-item:hover .actions {
+  .mat-list.hoverable .mat-list-item:hover .actions,
+  .mat-nav-list.hoverable .mat-list-item:hover .actions {
     display: block;
   }
 }

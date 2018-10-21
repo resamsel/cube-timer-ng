@@ -17,11 +17,14 @@
               {{puzzle.lastActive | amTimeAgo}}
             </span>
             <span *ngIf="!puzzle.lastActive">Unchallenged</span>
-            <span *ngIf="(puzzle$ | async) === puzzle.name">, {{scoreCount$ | async}} scores</span>
+            <span *ngIf="(puzzle$ | async)?.name === puzzle.name">, {{scoreCount$ | async}} scores</span>
           </p>
           <div class="actions">
-            <button mat-icon-button (click)="onDelete(puzzle)">
-              <mat-icon color="warn">delete</mat-icon>
+            <button
+              mat-icon-button
+              *ngIf="(puzzle$ | async)?.name !== puzzle.name"
+              (click)="onDelete(puzzle)">
+              <mat-icon>delete</mat-icon>
             </button>
           </div>
         </a>

@@ -60,7 +60,8 @@ app-timer .mat-input-element {
   text-align: center;
 }
 
-.mat-list.hoverable .mat-list-item:hover {
+.mat-list.hoverable .mat-list-item:hover,
+.mat-nav-list.hoverable .mat-list-item:hover {
   background: mat-color($app-theme-background, hover);
 }
 

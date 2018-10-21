@@ -1,10 +1,10 @@
 @import '../../../../theme';
 
-.mat-list .mat-list-item.active:not(:hover) {
+.mat-nav-list .mat-list-item.active:not(:hover) {
   background: mat-color($app-primary);
   color: $light-primary-text;
 }
 
-.mat-list .mat-list-item.active:hover {
+.mat-nav-list .mat-list-item.active:hover {
   background: mat-color($app-theme-background, hover);
 }
