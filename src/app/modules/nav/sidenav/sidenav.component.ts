@@ -1,5 +1,5 @@
 import { MediaMatcher } from '@angular/cdk/layout';
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, ViewChild } from '@angular/core';
 import { MatSidenav } from '@angular/material';
 
 @Component({
@@ -7,17 +7,14 @@ import { MatSidenav } from '@angular/material';
   templateUrl: './sidenav.component.html',
   styleUrls: ['./sidenav.component.css']
 })
-export class SidenavComponent implements OnInit {
+export class SidenavComponent {
   @Input() activePage: string;
   @ViewChild('sidenav') sidenav: MatSidenav;
 
   public xLargeQuery: MediaQueryList;
 
-  constructor(private media: MediaMatcher) {
+  constructor(media: MediaMatcher) {
     this.xLargeQuery = media.matchMedia('(min-width: 1200px)');
-  }
-
-  ngOnInit() {
   }
 
   public toggle(): void {

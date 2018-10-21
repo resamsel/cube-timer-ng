@@ -1,13 +1,11 @@
-import { reducer, initialTimerState } from './timer.reducer';
+import { initialTimerState, reducer } from './timer.reducer';
 
 describe('Timer Reducer', () => {
-  describe('unknown action', () => {
-    it('should return the initial state', () => {
-      const action = {} as any;
+  it('should return the initial state', () => {
+    const action = {} as any;
 
-      const result = reducer(initialTimerState, action);
+    const result = reducer(initialTimerState, action);
 
-      expect(result).toBe(initialTimerState);
-    });
+    expect(result).toBe(initialTimerState);
   });
 });
