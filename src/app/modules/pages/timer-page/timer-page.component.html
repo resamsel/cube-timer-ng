@@ -1,10 +1,9 @@
 <app-navbar [sidenav]="sidenav" page="Timer">
-  <app-puzzle-selector [puzzle]="puzzle$ | async" [puzzles]="puzzles$ | async"></app-puzzle-selector>
+  <app-puzzle-selector></app-puzzle-selector>
 </app-navbar>
 
 <app-sidenav #sidenav activePage="timer">
   <div class="container">
-    <app-timer [puzzle]="puzzle$ | async"></app-timer>
-    <app-timer-stats></app-timer-stats>
+    <app-timer></app-timer>
   </div>
 </app-sidenav>

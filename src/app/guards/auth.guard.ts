@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
-import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
+import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from '@angular/router';
 import { Observable } from 'rxjs';
-import { UserService, UserState } from '../services/user.service';
-import { map } from 'rxjs/operators';
+import { UserService } from '../services/user.service';
+import { filter, map } from 'rxjs/operators';
+import { UserState } from '../models/user/user.reducer';
 
 @Injectable({
   providedIn: 'root'
@@ -18,6 +19,7 @@ export class AuthGuard implements CanActivate {
     routerState: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
     return this.userService.user$()
       .pipe(
+        filter((state: UserState) => state.user !== undefined),
         map((state: UserState) => {
           if (state.user === null) {
             this.router.navigate(['/']);

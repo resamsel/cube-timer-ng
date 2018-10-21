@@ -8,7 +8,8 @@ import { ActivatePuzzle, AddPuzzle, DeletePuzzle, LoadPuzzles } from '../models/
 import { Puzzle } from '../models/puzzle/puzzle.model';
 import { reducer, selectAll } from '../models/puzzle/puzzle.reducer';
 import { AppState } from '../shared/app.state';
-import { UserService, UserState } from './user.service';
+import { UserService } from './user.service';
+import { UserState } from '../models/user/user.reducer';
 
 @Injectable({providedIn: 'root'})
 export class PuzzleService {
@@ -22,7 +23,7 @@ export class PuzzleService {
     private store: Store<AppState>
   ) {
     userService.user$().subscribe((state: UserState) => {
-      if (state.user !== null) {
+      if (state.user) {
         this._subscription.unsubscribe();
         this.retrievePuzzles(state.user.uid);
       }

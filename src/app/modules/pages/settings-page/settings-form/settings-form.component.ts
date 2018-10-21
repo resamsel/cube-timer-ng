@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { SettingsState } from '../../../../services/settings.service';
 import { Language } from '../settings-page.component';
+import { SettingsState } from '../../../../models/settings/settings.reducer';
 
 @Component({
   selector: 'app-settings-form',

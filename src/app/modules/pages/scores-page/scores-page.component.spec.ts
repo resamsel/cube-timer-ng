@@ -1,10 +1,9 @@
 import { Component, Input } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { AngularFirestore } from '@angular/fire/firestore';
 import { MatProgressSpinnerModule } from '@angular/material';
 import { RouterTestingModule } from '@angular/router/testing';
 import { Store } from '@ngrx/store';
-import { instance, mock } from 'ts-mockito';
+import { instance, mock, when } from 'ts-mockito';
 import { Puzzle } from '../../../models/puzzle/puzzle.model';
 import { Score } from '../../../models/score/score.model';
 import { PuzzleService } from '../../../services/puzzle.service';
@@ -12,6 +11,9 @@ import { UserService } from '../../../services/user.service';
 import { SidenavComponent } from '../../nav/sidenav/sidenav.component';
 
 import { ScoresPageComponent } from './scores-page.component';
+import { ScoreService } from '../../../services/score.service';
+import { initialScoreState } from '../../../models/score/score.reducer';
+import { of } from 'rxjs';
 
 @Component({selector: 'app-navbar', template: ''})
 class NavbarStubComponent {
@@ -45,6 +47,10 @@ describe('ScoresPageComponent', () => {
   let fixture: ComponentFixture<ScoresPageComponent>;
 
   beforeEach(async(() => {
+    const scoreService = mock(ScoreService);
+
+    when(scoreService.loading$()).thenReturn(of(initialScoreState.loading));
+
     TestBed.configureTestingModule({
       declarations: [
         ScoresPageComponent,
@@ -59,8 +65,8 @@ describe('ScoresPageComponent', () => {
         MatProgressSpinnerModule
       ],
       providers: [
-        {provide: AngularFirestore, useValue: instance(mock(AngularFirestore))},
         {provide: Store, useValue: instance(mock(Store))},
+        {provide: ScoreService, useValue: instance(scoreService)},
         {provide: UserService, useValue: instance(mock(UserService))},
         {provide: PuzzleService, useValue: instance(mock(PuzzleService))}
       ]

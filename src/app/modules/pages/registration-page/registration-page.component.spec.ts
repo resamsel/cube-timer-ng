@@ -10,6 +10,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { UserService } from '../../../services/user.service';
 import { instance, mock, when } from 'ts-mockito';
 import { of } from 'rxjs';
+import { initialUserState } from '../../../models/user/user.reducer';
 
 @Component({selector: 'app-navbar', template: ''})
 class NavbarStubComponent {
@@ -23,7 +24,7 @@ describe('RegistrationPageComponent', () => {
   let fixture: ComponentFixture<RegistrationPageComponent>;
   const userService = mock(UserService);
 
-  when(userService.user$()).thenReturn(of({user: null}));
+  when(userService.user$()).thenReturn(of(initialUserState));
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({

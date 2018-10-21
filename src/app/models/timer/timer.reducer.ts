@@ -17,12 +17,12 @@ export interface TimerState {
   duration: number;
 }
 
-export const initialState: TimerState = {
+export const initialTimerState: TimerState = {
   state: States.INITIAL,
   duration: 0
 };
 
-export function reducer(state = initialState, action: TimerActions): TimerState {
+export function reducer(state = initialTimerState, action: TimerActions): TimerState {
   switch (action.type) {
     case TimerActionTypes.StartTimer:
       return {
@@ -61,7 +61,7 @@ export function reducer(state = initialState, action: TimerActions): TimerState 
     case TimerActionTypes.ClearTimer:
       return {
         ...state,
-        ...initialState
+        ...initialTimerState
       };
 
     default:

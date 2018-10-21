@@ -10,6 +10,7 @@ import { instance, mock, when } from 'ts-mockito';
 import { RouterTestingModule } from '@angular/router/testing';
 import { of } from 'rxjs';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { PuzzleService } from '../../../services/puzzle.service';
 
 @Component({selector: 'app-navbar', template: ''})
 class NavbarStubComponent {
@@ -22,8 +23,10 @@ describe('LoginPageComponent', () => {
   let component: LoginPageComponent;
   let fixture: ComponentFixture<LoginPageComponent>;
   const userService = mock(UserService);
+  const puzzleService = mock(PuzzleService);
 
   when(userService.user$()).thenReturn(of({user: null}));
+  when(puzzleService.puzzle$()).thenReturn(of({name: '3x3x3'}));
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -43,7 +46,8 @@ describe('LoginPageComponent', () => {
         RouterTestingModule
       ],
       providers: [
-        {provide: UserService, useValue: instance(userService)}
+        {provide: UserService, useValue: instance(userService)},
+        {provide: PuzzleService, useValue: instance(puzzleService)}
       ]
     })
       .compileComponents();

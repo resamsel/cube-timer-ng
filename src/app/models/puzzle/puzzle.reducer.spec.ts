@@ -1,13 +1,13 @@
-import { reducer, initialState } from './puzzle.reducer';
+import { reducer, initialPuzzleState } from './puzzle.reducer';
 
 describe('Puzzle Reducer', () => {
   describe('unknown action', () => {
     it('should return the initial state', () => {
       const action = {} as any;
 
-      const result = reducer(initialState, action);
+      const result = reducer(initialPuzzleState, action);
 
-      expect(result).toBe(initialState);
+      expect(result).toBe(initialPuzzleState);
     });
   });
 });

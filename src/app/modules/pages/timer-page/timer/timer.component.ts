@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material';
 import * as moment from 'moment';
@@ -9,7 +9,7 @@ import { States, TimerState } from '../../../../models/timer/timer.reducer';
 import { PuzzleService } from '../../../../services/puzzle.service';
 import { ScoreService } from '../../../../services/score.service';
 import { TimerService } from '../../../../services/timer.service';
-import { UserService, UserState } from '../../../../services/user.service';
+import { UserService } from '../../../../services/user.service';
 import { DateTimeUtils } from '../../../../shared/date-time-utils';
 
 export function formatDuration(duration: number): string {
@@ -27,9 +27,6 @@ export function parseDuration(duration: string): number {
   styleUrls: ['./timer.component.scss']
 })
 export class TimerComponent implements OnInit, OnDestroy {
-  @Input() puzzle: Puzzle;
-  private _state$: Observable<TimerState>;
-
   private _model: Readonly<{ duration: string }> = {
     duration: formatDuration(0)
   };
@@ -45,7 +42,8 @@ export class TimerComponent implements OnInit, OnDestroy {
 
   public formGroup = new FormGroup({
     'duration': new FormControl(formatDuration(0), [
-      Validators.pattern(/\d+:\d\d?(\.\d\d?\d?)/)
+      Validators.pattern(/\d+:\d\d?(\.\d\d?\d?)/),
+      Validators.required
     ])
   });
 
@@ -53,8 +51,12 @@ export class TimerComponent implements OnInit, OnDestroy {
     return this._model;
   }
 
-  get state$(): Observable<TimerState> {
-    return this._state$;
+  get timer$(): Observable<TimerState> {
+    return this.timerService.timer$();
+  }
+
+  get puzzle$(): Observable<Puzzle> {
+    return this.puzzleService.puzzle$();
   }
 
   get duration(): AbstractControl | null {
@@ -70,8 +72,7 @@ export class TimerComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this._state$ = this.timerService.state$();
-    this._subscription = this._state$.subscribe(state => this.onStateChange(state));
+    this._subscription = this.timer$.subscribe(state => this.onStateChange(state));
   }
 
   ngOnDestroy() {
@@ -145,11 +146,14 @@ export class TimerComponent implements OnInit, OnDestroy {
 
   public async onStart() {
     this._whenStarted = new Date();
-    this.userService.user$()
+
+    combineLatest(
+      this.userService.user$(),
+      this.puzzle$)
       .pipe(take(1))
-      .subscribe((state: UserState) => {
-        if (state.user !== null && this._whenStarted !== undefined) {
-          this.timerService.start(state.user.uid, this.puzzle.name, this._whenStarted);
+      .subscribe(([state, puzzle]) => {
+        if (state.user && this._whenStarted !== undefined) {
+          this.timerService.start(state.user.uid, puzzle.name, this._whenStarted);
         }
       });
   }
@@ -166,10 +170,11 @@ export class TimerComponent implements OnInit, OnDestroy {
   public async onManual() {
     combineLatest(
       this.userService.user$(),
-      this.timerService.state$())
+      this.timerService.timer$(),
+      this.puzzle$)
       .pipe(
         take(1),
-        filter(([userState, state]) => {
+        filter(([, state]) => {
           switch (state.state) {
             case States.STARTED:
             case States.STOPPED:
@@ -179,9 +184,9 @@ export class TimerComponent implements OnInit, OnDestroy {
           }
         })
       )
-      .subscribe(([userState]) => {
-        if (userState.user !== null) {
-          this.timerService.manual(userState.user.uid, this.puzzle.name, new Date());
+      .subscribe(([userState, , puzzle]) => {
+        if (userState.user) {
+          this.timerService.manual(userState.user.uid, puzzle.name, new Date());
         }
       });
   }
@@ -200,7 +205,7 @@ export class TimerComponent implements OnInit, OnDestroy {
     combineLatest(this.userService.user$(), this.puzzleService.puzzle$())
       .pipe(take(1))
       .subscribe(([state, puzzle]) => {
-        if (state.user !== null) {
+        if (state.user) {
           this.timerService.add({
             value: parseDuration(this._model.duration),
             uid: state.user.uid,

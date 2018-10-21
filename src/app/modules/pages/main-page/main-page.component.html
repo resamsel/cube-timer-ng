@@ -4,7 +4,7 @@
   <a
     mat-raised-button
     *ngIf="(user$() | async)?.user"
-    routerLink="/puzzles">Get started</a>
+    [routerLink]="getStartedLink$() | async">Get started</a>
   <a
     mat-raised-button
     *ngIf="!(user$() | async)?.user"

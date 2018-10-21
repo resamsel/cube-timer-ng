@@ -4,7 +4,7 @@ import { MatCardModule, MatDividerModule, MatInputModule, MatSnackBarModule } fr
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { of } from 'rxjs';
 import { instance, mock, when } from 'ts-mockito';
-import { initialState } from '../../../../models/timer/timer.reducer';
+import { initialTimerState } from '../../../../models/timer/timer.reducer';
 import { PuzzleService } from '../../../../services/puzzle.service';
 import { ScoreService } from '../../../../services/score.service';
 import { TimerService } from '../../../../services/timer.service';
@@ -12,18 +12,22 @@ import { UserService } from '../../../../services/user.service';
 
 import { TimerComponent } from './timer.component';
 import { ConnectFormModule } from '../../../connect-form/connect-form.module';
+import { initialUserState } from '../../../../models/user/user.reducer';
+import { initialPuzzleState } from '../../../../models/puzzle/puzzle.reducer';
 
 describe('TimerComponent', () => {
   let component: TimerComponent;
   let fixture: ComponentFixture<TimerComponent>;
-  const puzzleService = mock(PuzzleService);
-
-  when(puzzleService.puzzle$()).thenReturn(of({name: '3x3x3'}));
 
   beforeEach(async(() => {
+    const userService = mock(UserService);
+    const puzzleService = mock(PuzzleService);
     const timerService = mock(TimerService);
+    const scoreService = mock(ScoreService);
 
-    when(timerService.state$()).thenReturn(of(initialState));
+    when(userService.user$()).thenReturn(of(initialUserState));
+    when(puzzleService.puzzle$()).thenReturn(of(initialPuzzleState.active));
+    when(timerService.timer$()).thenReturn(of(initialTimerState));
 
     TestBed.configureTestingModule({
       declarations: [TimerComponent],
@@ -38,9 +42,9 @@ describe('TimerComponent', () => {
         ConnectFormModule
       ],
       providers: [
-        {provide: UserService, useValue: instance(mock(UserService))},
+        {provide: UserService, useValue: instance(userService)},
         {provide: PuzzleService, useValue: instance(puzzleService)},
-        {provide: ScoreService, useValue: instance(mock(ScoreService))},
+        {provide: ScoreService, useValue: instance(scoreService)},
         {provide: TimerService, useValue: instance(timerService)},
       ]
     })

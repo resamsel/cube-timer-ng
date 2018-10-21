@@ -1,13 +1,13 @@
-import { reducer, initialState } from './score.reducer';
+import { reducer, initialScoreState } from './score.reducer';
 
 describe('Score Reducer', () => {
   describe('unknown action', () => {
     it('should return the initial state', () => {
       const action = {} as any;
 
-      const result = reducer(initialState, action);
+      const result = reducer(initialScoreState, action);
 
-      expect(result).toBe(initialState);
+      expect(result).toBe(initialScoreState);
     });
   });
 });

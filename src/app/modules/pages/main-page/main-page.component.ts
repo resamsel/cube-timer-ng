@@ -1,6 +1,9 @@
 import { Component } from '@angular/core';
-import { Observable } from 'rxjs';
-import { UserService, UserState } from '../../../services/user.service';
+import { combineLatest, Observable } from 'rxjs';
+import { UserService } from '../../../services/user.service';
+import { PuzzleService } from '../../../services/puzzle.service';
+import { map } from 'rxjs/operators';
+import { UserState } from '../../../models/user/user.reducer';
 
 @Component({
   selector: 'app-main-page',
@@ -9,9 +12,22 @@ import { UserService, UserState } from '../../../services/user.service';
 })
 export class MainPageComponent {
 
-  constructor(private readonly userService: UserService) { }
+  constructor(
+    private readonly userService: UserService,
+    private readonly puzzleService: PuzzleService
+  ) {
+  }
 
   user$(): Observable<UserState> {
     return this.userService.user$();
+  }
+
+  getStartedLink$(): Observable<string[]> {
+    return combineLatest(
+      this.userService.user$(),
+      this.puzzleService.puzzle$())
+      .pipe(
+        map(([user, puzzle]) => ['/', 'puzzles', puzzle.name, 'timer'])
+      );
   }
 }

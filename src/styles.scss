@@ -22,7 +22,7 @@ a {
 .main-container,
 .mat-sidenav-container.main-container {
   position: absolute;
-  top: 64px;
+  top: 56px;
   bottom: 0;
   left: 0;
   right: 0;
@@ -38,7 +38,7 @@ a {
 
 .card-accented .mat-card-header {
   background-color: mat-color($app-primary, 700);
-  border-radius: 2px 2px 0 0;
+  border-radius: 4px 4px 0 0;
   margin: -24px -16px 0 -16px;
   padding: 16px 16px 0 16px;
 }

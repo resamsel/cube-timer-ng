@@ -2,10 +2,11 @@ import { Component, Input } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatCardModule } from '@angular/material';
 import { instance, mock } from 'ts-mockito';
-import { SettingsService, SettingsState } from '../../../services/settings.service';
+import { SettingsService } from '../../../services/settings.service';
 import { SidenavComponent } from '../../nav/sidenav/sidenav.component';
 
 import { SettingsPageComponent } from './settings-page.component';
+import { SettingsState } from '../../../models/settings/settings.reducer';
 
 @Component({selector: 'app-sidenav', template: ''})
 class SidenavStubComponent {

@@ -10,7 +10,6 @@ import { ScoreService } from './score.service';
 
 @Injectable({providedIn: 'root'})
 export class TimerService {
-
   public static reducer = reducer;
 
   constructor(
@@ -32,7 +31,7 @@ export class TimerService {
       });
   }
 
-  public state$(): Observable<TimerState> {
+  public timer$(): Observable<TimerState> {
     return this.store.pipe(select(state => state.timer));
   }
 

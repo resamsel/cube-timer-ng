@@ -9,12 +9,22 @@
           {{formGroup.getError('provider')}}
         </mat-error>
         <mat-form-field>
-          <input matInput formControlName="email" type="email" placeholder="Email address">
+          <input
+            matInput
+            formControlName="email"
+            type="email"
+            placeholder="Email address"
+            autocomplete="username email">
           <mat-error *ngIf="email?.hasError('email')">The email is badly formatted.</mat-error>
           <mat-error *ngIf="email?.hasError('provider')">{{email?.getError('provider')}}</mat-error>
         </mat-form-field>
         <mat-form-field>
-          <input matInput formControlName="password" type="password" placeholder="Password">
+          <input
+            matInput
+            formControlName="password"
+            type="password"
+            placeholder="Password"
+            autocomplete="current-password">
           <mat-error *ngIf="password?.hasError('provider')">{{password?.getError('provider')}}</mat-error>
         </mat-form-field>
 

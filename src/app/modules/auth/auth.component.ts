@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Observable } from 'rxjs';
-import { UserService, UserState } from '../../services/user.service';
+import { UserService } from '../../services/user.service';
+import { UserState } from '../../models/user/user.reducer';
 
 @Component({
   selector: 'app-auth',

@@ -2,7 +2,8 @@ import { Component } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { filter, take } from 'rxjs/operators';
-import { UserService, UserState } from '../../../services/user.service';
+import { UserService } from '../../../services/user.service';
+import { UserState } from '../../../models/user/user.reducer';
 
 @Component({
   selector: 'app-registration-page',

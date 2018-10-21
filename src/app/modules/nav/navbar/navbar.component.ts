@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { SidenavComponent } from '../sidenav/sidenav.component';
 
 @Component({
@@ -6,7 +6,7 @@ import { SidenavComponent } from '../sidenav/sidenav.component';
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.css']
 })
-export class NavbarComponent implements OnInit {
+export class NavbarComponent {
   @Input() public sidenav: SidenavComponent;
   @Input() public page: string;
   @Input() public auth = true;
@@ -14,7 +14,7 @@ export class NavbarComponent implements OnInit {
   constructor() {
   }
 
-  ngOnInit() {
+  async toggle() {
+    this.sidenav.toggle();
   }
-
 }

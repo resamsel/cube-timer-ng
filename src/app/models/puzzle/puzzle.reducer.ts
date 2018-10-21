@@ -10,11 +10,11 @@ export const adapter: EntityAdapter<Puzzle> = createEntityAdapter<Puzzle>({
   selectId: model => model.name
 });
 
-export const initialState: PuzzleState = adapter.getInitialState({
+export const initialPuzzleState: PuzzleState = adapter.getInitialState({
   active: {name: '3x3x3'}
 });
 
-export function reducer(state = initialState, action: PuzzleActions): PuzzleState {
+export function reducer(state = initialPuzzleState, action: PuzzleActions): PuzzleState {
   switch (action.type) {
     case PuzzleActionTypes.AddPuzzle: {
       return adapter.addOne(action.payload.puzzle, state);

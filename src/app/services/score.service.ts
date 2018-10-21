@@ -27,7 +27,7 @@ export class ScoreService {
   ) {
     combineLatest(userService.user$(), puzzleService.puzzle$())
       .subscribe(([state, puzzle]) => {
-        if (state.user !== null) {
+        if (state.user) {
           this._subscription.unsubscribe();
           this.retrieveScores(state.user.uid, puzzle.name);
         }

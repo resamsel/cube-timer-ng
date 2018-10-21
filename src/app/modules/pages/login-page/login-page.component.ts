@@ -2,7 +2,10 @@ import { Component } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { filter, take } from 'rxjs/operators';
-import { UserService, UserState } from '../../../services/user.service';
+import { UserService } from '../../../services/user.service';
+import { PuzzleService } from '../../../services/puzzle.service';
+import { UserState } from '../../../models/user/user.reducer';
+import { combineLatest } from 'rxjs';
 
 @Component({
   selector: 'app-login-page',
@@ -25,13 +28,15 @@ export class LoginPageComponent {
 
   constructor(
     private readonly userService: UserService,
+    private readonly puzzleService: PuzzleService,
     private readonly router: Router) {
-    userService.user$()
-      .pipe(
-        filter((state: UserState) => state.user != null),
-        take(1)
-      )
-      .subscribe(() => router.navigate(['/', 'puzzles']));
+    combineLatest(
+      userService.user$().pipe(filter((state: UserState) => {
+        return !!state.user;
+      })),
+      puzzleService.puzzle$())
+      .pipe(take(1))
+      .subscribe(([, puzzle]) => router.navigate(['/', 'puzzles', puzzle.name, 'timer']));
   }
 
   signInWithGoogle(): void {
@@ -39,11 +44,11 @@ export class LoginPageComponent {
   }
 
   signInWithEmailAndPassword(): void {
-    console.log('credentials', this.email, this.password);
     this.userService.signInWithEmailAndPassword(
       this.email !== null ? this.email.value : '',
       this.password !== null ? this.password.value : '')
       .catch((reason: { code: string, message: string }) => {
+        console.error('Error while signing in with email and password', reason);
         switch (reason.code) {
           case 'auth/invalid-email':
             if (this.email !== null) {

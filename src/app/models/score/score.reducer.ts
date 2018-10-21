@@ -1,4 +1,4 @@
-import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
+import { createEntityAdapter, EntityAdapter, EntityState } from '@ngrx/entity';
 import { Score } from './score.model';
 import { ScoreActions, ScoreActionTypes } from './score.actions';
 
@@ -10,14 +10,11 @@ export const adapter: EntityAdapter<Score> = createEntityAdapter<Score>({
   selectId: model => `${model.timestamp}-${model.value}`
 });
 
-export const initialState: ScoreState = adapter.getInitialState({
+export const initialScoreState: ScoreState = adapter.getInitialState({
   loading: true
 });
 
-export function reducer(
-  state = initialState,
-  action: ScoreActions
-): ScoreState {
+export function reducer(state = initialScoreState, action: ScoreActions): ScoreState {
   switch (action.type) {
     case ScoreActionTypes.AddScore: {
       return adapter.addOne(action.payload.score, state);

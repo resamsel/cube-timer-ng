@@ -2,7 +2,12 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Puzzle } from '../../../models/puzzle/puzzle.model';
 import { PuzzleService } from '../../../services/puzzle.service';
-import { Page } from '../../../shared/page.interface';
+
+interface Page {
+  id: string;
+  name: string;
+  icon: string;
+}
 
 interface Link {
   page: Page;
@@ -13,7 +18,8 @@ const LINKS: Link[] = [
   {page: {id: 'timer', name: 'Timer', icon: 'timer'}, link: '/puzzles/:puzzle/timer'},
   {page: {id: 'scores', name: 'Scores', icon: 'assessment'}, link: '/puzzles/:puzzle/scores'},
   {page: {id: 'puzzles', name: 'Puzzles', icon: 'games'}, link: '/puzzles'},
-  {page: {id: 'settings', name: 'Settings', icon: 'settings'}, link: '/settings'}
+  {page: {id: 'settings', name: 'Settings', icon: 'settings'}, link: '/settings'},
+  {page: {id: 'about', name: 'About', icon: 'info'}, link: '/'}
 ];
 
 @Component({

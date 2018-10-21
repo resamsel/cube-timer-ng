@@ -1,17 +1,19 @@
 import { Component, Input } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { AngularFirestore } from '@angular/fire/firestore';
 import { MatCardModule, MatIconModule, MatListModule, MatSnackBarModule } from '@angular/material';
 import { RouterTestingModule } from '@angular/router/testing';
 import { Store } from '@ngrx/store';
 import { MomentModule } from 'ngx-moment';
-import { instance, mock } from 'ts-mockito';
+import { instance, mock, when } from 'ts-mockito';
 import { Puzzle } from '../../../models/puzzle/puzzle.model';
 import { PuzzleService } from '../../../services/puzzle.service';
 import { UserService } from '../../../services/user.service';
 import { SidenavComponent } from '../../nav/sidenav/sidenav.component';
 
 import { PuzzlesPageComponent } from './puzzles-page.component';
+import { ScoreService } from '../../../services/score.service';
+import { of } from 'rxjs';
+import { initialPuzzleState, selectAll } from '../../../models/puzzle/puzzle.reducer';
 
 @Component({selector: 'app-navbar', template: ''})
 class NavbarStubComponent {
@@ -35,6 +37,10 @@ describe('PuzzlesPageComponent', () => {
   let fixture: ComponentFixture<PuzzlesPageComponent>;
 
   beforeEach(async(() => {
+    const puzzleService = mock(PuzzleService);
+
+    when(puzzleService.puzzles$()).thenReturn(of(selectAll(initialPuzzleState)));
+
     TestBed.configureTestingModule({
       declarations: [
         PuzzlesPageComponent,
@@ -51,10 +57,10 @@ describe('PuzzlesPageComponent', () => {
         MatSnackBarModule
       ],
       providers: [
-        {provide: AngularFirestore, useValue: instance(mock(AngularFirestore))},
         {provide: Store, useValue: instance(mock(Store))},
         {provide: UserService, useValue: instance(mock(UserService))},
-        {provide: PuzzleService, useValue: instance(mock(PuzzleService))}
+        {provide: PuzzleService, useValue: instance(puzzleService)},
+        {provide: ScoreService, useValue: instance(mock(ScoreService))}
       ]
     })
       .compileComponents();

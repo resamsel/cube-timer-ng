@@ -1,20 +1,23 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Puzzle } from '../../../models/puzzle/puzzle.model';
 import { PuzzleService } from '../../../services/puzzle.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-puzzle-selector',
   templateUrl: './puzzle-selector.component.html',
   styleUrls: ['./puzzle-selector.component.scss']
 })
-export class PuzzleSelectorComponent implements OnInit {
-  @Input() puzzle: Puzzle;
-  @Input() puzzles: Puzzle[];
-
+export class PuzzleSelectorComponent {
   constructor(private readonly puzzleService: PuzzleService) {
   }
 
-  ngOnInit() {
+  puzzle$(): Observable<Puzzle> {
+    return this.puzzleService.puzzle$();
+  }
+
+  puzzles$(): Observable<Puzzle[]> {
+    return this.puzzleService.puzzles$();
   }
 
   onActivate(puzzle: Puzzle): void {
