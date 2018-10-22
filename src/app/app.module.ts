@@ -19,6 +19,7 @@ import { RegistrationPageModule } from './modules/pages/registration-page/regist
 import { ScoresPageModule } from './modules/pages/scores-page/scores-page.module';
 import { SettingsPageModule } from './modules/pages/settings-page/settings-page.module';
 import { TimerPageModule } from './modules/pages/timer-page/timer-page.module';
+import { LogoutPageModule } from './modules/pages/logout-page/logout-page.module';
 
 @NgModule({
   declarations: [
@@ -28,6 +29,7 @@ import { TimerPageModule } from './modules/pages/timer-page/timer-page.module';
     BrowserModule,
     SidenavModule,
     LoginPageModule,
+    LogoutPageModule,
     RegistrationPageModule,
     MainPageModule,
     TimerPageModule,

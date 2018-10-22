@@ -15,6 +15,7 @@
     "test:headless": "ng test --watch false --progress false --code-coverage",
     "lint": "ng lint",
     "e2e": "ng e2e",
+    "e2e:headless": "ng e2e --config=protractor-ci.conf.js",
     "deploy": "npm run build && firebase deploy",
     "buildinfo": "node scripts/build-info.js",
     "postpull": "npm install && npm run buildinfo",
