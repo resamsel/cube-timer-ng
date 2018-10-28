@@ -12,6 +12,7 @@ describe('PuzzleGuard', () => {
     const puzzleService = mock(PuzzleService);
 
     when(puzzleService.from(anything())).thenReturn(of(initialPuzzleState.active));
+    when(puzzleService.puzzle$()).thenReturn(of(initialPuzzleState.active));
 
     TestBed.configureTestingModule({
       imports: [

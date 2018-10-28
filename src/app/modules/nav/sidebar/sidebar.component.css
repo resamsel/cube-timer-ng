@@ -1,9 +1,9 @@
-mat-nav-list {
+.mat-nav-list {
   width: 240px;
 }
 
 .mat-list-item {
-  border-radius: 2px;
+  border-radius: 4px;
 }
 
 .active {

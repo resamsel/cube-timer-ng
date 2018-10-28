@@ -20,7 +20,6 @@ export function parseDuration(duration: string): number {
   return moment(duration, 'mm:ss.SS').valueOf();
 }
 
-
 @Component({
   selector: 'app-timer',
   templateUrl: './timer.component.html',
@@ -46,6 +45,7 @@ export class TimerComponent implements OnInit, OnDestroy {
       Validators.required
     ])
   });
+  private _puzzle: Puzzle;
 
   get model(): Readonly<{ duration: string }> {
     return this._model;
@@ -73,15 +73,32 @@ export class TimerComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this._subscription = this.timer$.subscribe(state => this.onStateChange(state));
+    this._subscription.add(this.puzzleService.puzzle$()
+      .pipe(filter(puzzle => puzzle !== undefined))
+      .subscribe((puzzle: Puzzle) => {
+        if (this._puzzle !== undefined && this._puzzle.name !== puzzle.name) {
+          clearInterval(this._interval);
+
+          this.timerService.clear();
+        }
+        this._puzzle = puzzle;
+      }));
   }
 
   ngOnDestroy() {
+    clearInterval(this._interval);
+
     this._subscription.unsubscribe();
     this._manualSubscription.unsubscribe();
-    clearInterval(this._interval);
+    this.timer$
+      .pipe(
+        take(1),
+        filter(timer => timer.state === States.STOPPED)
+      )
+      .subscribe(() => this.timerService.clear());
   }
 
-  private async onStateChange(state: TimerState) {
+  private onStateChange(state: TimerState) {
     this._manualSubscription.unsubscribe();
 
     switch (state.state) {
@@ -104,12 +121,7 @@ export class TimerComponent implements OnInit, OnDestroy {
           31
         );
 
-        this.snackBar.open(
-          `Timer started`,
-          'Dismiss',
-          {
-            duration: 1000
-          });
+        this.notifyUser('Timer started');
 
         break;
       }
@@ -120,12 +132,7 @@ export class TimerComponent implements OnInit, OnDestroy {
 
         clearInterval(this._interval);
 
-        this.snackBar.open(
-          `Stopped at ${this._model.duration}`,
-          'Dismiss',
-          {
-            duration: 3000
-          });
+        this.notifyUser(`Stopped at ${this._model.duration}`);
 
         break;
       }
@@ -144,7 +151,7 @@ export class TimerComponent implements OnInit, OnDestroy {
     }
   }
 
-  public async onStart() {
+  public onStart() {
     this._whenStarted = new Date();
 
     combineLatest(
@@ -153,12 +160,13 @@ export class TimerComponent implements OnInit, OnDestroy {
       .pipe(take(1))
       .subscribe(([state, puzzle]) => {
         if (state.user && this._whenStarted !== undefined) {
+          this._puzzle = puzzle;
           this.timerService.start(state.user.uid, puzzle.name, this._whenStarted);
         }
       });
   }
 
-  public async onStop() {
+  public onStop() {
     this._whenStopped = new Date();
     if (this._whenStarted) {
       this._model = {duration: formatDuration(this._whenStopped.getTime() - this._whenStarted.getTime())};
@@ -167,7 +175,7 @@ export class TimerComponent implements OnInit, OnDestroy {
     this.timerService.stop(this._whenStopped);
   }
 
-  public async onManual() {
+  public onManual() {
     combineLatest(
       this.userService.user$(),
       this.timerService.timer$(),
@@ -191,13 +199,13 @@ export class TimerComponent implements OnInit, OnDestroy {
       });
   }
 
-  public async onBlur() {
+  public onBlur() {
     if (this._model.duration === formatDuration(0)) {
       this.onClear();
     }
   }
 
-  public async onSave() {
+  public onSave() {
     if (this.duration !== null) {
       this._model = {duration: this.duration.value};
     }
@@ -224,7 +232,16 @@ export class TimerComponent implements OnInit, OnDestroy {
       });
   }
 
-  public async onClear() {
+  public onClear() {
     this.timerService.clear();
+  }
+
+  private notifyUser(message: string) {
+    this.snackBar.open(
+      message,
+      'Dismiss',
+      {
+        duration: 1000
+      });
   }
 }

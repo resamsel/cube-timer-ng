@@ -1,0 +1,19 @@
+<h1 mat-dialog-title>Create a new Puzzle</h1>
+<div mat-dialog-content>
+  <form [formGroup]="formGroup">
+    <mat-form-field>
+      <input matInput formControlName="name" placeholder="Puzzle name" cdkFocusInitial>
+      <mat-error *ngIf="name.hasError('required')">Name is required</mat-error>
+      <mat-error *ngIf="name.hasError('nameExists')">Puzzle already exists</mat-error>
+    </mat-form-field>
+  </form>
+</div>
+<div mat-dialog-actions>
+  <button
+    mat-raised-button
+    color="primary"
+    [disabled]="formGroup.invalid"
+    [mat-dialog-close]="name?.value">OK
+  </button>
+  <button mat-button (click)="onCancel()">Cancel</button>
+</div>

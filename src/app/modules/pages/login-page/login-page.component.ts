@@ -6,6 +6,7 @@ import { UserService } from '../../../services/user.service';
 import { PuzzleService } from '../../../services/puzzle.service';
 import { UserState } from '../../../models/user/user.reducer';
 import { combineLatest } from 'rxjs';
+import { encode } from 'firebase-key';
 
 @Component({
   selector: 'app-login-page',
@@ -36,7 +37,7 @@ export class LoginPageComponent {
       })),
       puzzleService.puzzle$())
       .pipe(take(1))
-      .subscribe(([, puzzle]) => router.navigate(['/', 'puzzles', puzzle.name, 'timer']));
+      .subscribe(([, puzzle]) => router.navigate(['/', 'puzzles', encode(puzzle.name), 'timer']));
   }
 
   signInWithGoogle(): void {

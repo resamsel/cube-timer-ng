@@ -1,7 +1,13 @@
 import { Component } from '@angular/core';
 import { Puzzle } from '../../../models/puzzle/puzzle.model';
 import { PuzzleService } from '../../../services/puzzle.service';
-import { Observable } from 'rxjs';
+import { combineLatest, Observable } from 'rxjs';
+import { MatDialog } from '@angular/material';
+import { PuzzleCreatorDialogComponent } from '../puzzle-creator/puzzle-creator-dialog.component';
+import { UserService } from '../../../services/user.service';
+import { take } from 'rxjs/operators';
+import { TimerService } from '../../../services/timer.service';
+import { States, TimerState } from '../../../models/timer/timer.reducer';
 
 @Component({
   selector: 'app-puzzle-selector',
@@ -9,18 +15,46 @@ import { Observable } from 'rxjs';
   styleUrls: ['./puzzle-selector.component.scss']
 })
 export class PuzzleSelectorComponent {
-  constructor(private readonly puzzleService: PuzzleService) {
+  INITIAL: States = States.INITIAL;
+
+  constructor(
+    private readonly puzzleService: PuzzleService,
+    private readonly userService: UserService,
+    private readonly timerService: TimerService,
+    private readonly dialog: MatDialog) {
   }
 
-  puzzle$(): Observable<Puzzle> {
+  get puzzle$(): Observable<Puzzle> {
     return this.puzzleService.puzzle$();
   }
 
-  puzzles$(): Observable<Puzzle[]> {
+  get puzzles$(): Observable<Puzzle[]> {
     return this.puzzleService.puzzles$();
+  }
+
+  get timer$(): Observable<TimerState> {
+    return this.timerService.timer$();
   }
 
   onActivate(puzzle: Puzzle): void {
     this.puzzleService.activatePuzzle(puzzle.name);
+  }
+
+  onCreate(): void {
+    const dialogRef = this.dialog.open(PuzzleCreatorDialogComponent, {
+      width: '250px',
+      data: {}
+    });
+
+    combineLatest(
+      dialogRef.afterClosed(),
+      this.userService.user$())
+      .pipe(take(1))
+      .subscribe(([puzzle, state]) => {
+        if (state.user && puzzle !== undefined) {
+          this.puzzleService.create(state.user.uid, {name: puzzle})
+            .then(() => this.puzzleService.activatePuzzle(puzzle));
+        }
+      });
   }
 }

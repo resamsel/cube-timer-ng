@@ -8,6 +8,7 @@ import { Score } from '../models/score/score.model';
 import { AppState } from '../shared/app.state';
 import { PuzzleService } from './puzzle.service';
 import { UserService } from './user.service';
+import { encode } from 'firebase-key';
 
 export interface ScoreRetrievalOptions {
   limit?: number;
@@ -46,7 +47,7 @@ export class ScoreService {
     this.store.dispatch(new StartLoading());
     this._subscription = this.database
       .collection<Score>(
-        `users/${uid}/puzzles/${puzzle}/scores`,
+        `users/${uid}/puzzles/${encode(puzzle)}/scores`,
         ref => {
           if (options.limit !== undefined && options.limit > 0) {
             return ref.orderBy('timestamp', 'desc')
@@ -68,7 +69,7 @@ export class ScoreService {
     this.store.dispatch(new DeleteScore({id}));
 
     return this.database
-      .collection(`users/${score.uid}/puzzles/${score.puzzle}/scores`)
+      .collection(`users/${score.uid}/puzzles/${encode(score.puzzle)}/scores`)
       .doc(id)
       .delete()
       .catch((reason: any) => {
@@ -81,7 +82,7 @@ export class ScoreService {
     this.store.dispatch(new AddScore({score}));
 
     return this.database
-      .doc(`users/${score.uid}/puzzles/${score.puzzle}/scores/${score.timestamp}-${score.value}`)
+      .doc(`users/${score.uid}/puzzles/${encode(score.puzzle)}/scores/${score.timestamp}-${score.value}`)
       .set(score)
       .catch((reason: any) => {
         console.error('Error while creating Firestore score', reason);

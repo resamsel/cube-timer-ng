@@ -1,13 +1,22 @@
-<button mat-button [matMenuTriggerFor]="menu">
-  {{(puzzle$() | async)?.name}}
+<button mat-button
+        [matMenuTriggerFor]="menu"
+        [disabled]="(timer$ | async)?.state !== INITIAL">
+  {{(puzzle$ | async)?.name}}
   <mat-icon>arrow_drop_down</mat-icon>
 </button>
 <mat-menu #menu="matMenu">
   <button
     mat-menu-item
-    *ngFor="let p of puzzles$() | async"
+    *ngFor="let p of puzzles$ | async"
     (click)="onActivate(p)">
     <mat-icon color="primary">games</mat-icon>
     {{p.name}}
+  </button>
+  <mat-divider></mat-divider>
+  <button
+    mat-menu-item
+    (click)="onCreate()">
+    <mat-icon color="primary">games</mat-icon>
+    New puzzle
   </button>
 </mat-menu>

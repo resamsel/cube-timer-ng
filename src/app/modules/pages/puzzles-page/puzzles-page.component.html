@@ -8,7 +8,7 @@
       <div class="elevation">
         <a mat-list-item
            *ngFor="let puzzle of puzzles"
-           routerLink="/puzzles/{{puzzle.name}}/timer"
+           [routerLink]="timerLink(puzzle)"
            class="puzzle"
            [class.active]="(puzzle$ | async)?.name === puzzle.name">
           <mat-icon mat-list-icon>games</mat-icon>

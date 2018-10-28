@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const admin = require("firebase-admin");
 const functions = require("firebase-functions");
-const keyEncode = require("firebase-key-encode");
+const firebase_key_1 = require("firebase-key");
 // // Start writing Firebase Functions
 // // https://firebase.google.com/docs/functions/typescript
 //
@@ -60,12 +60,8 @@ exports.onCreateUser = functions.auth.user().onCreate((event) => {
     };
     return Promise.all([
         firestore.doc(`users/${uid}`).set(user, MERGE)
-            .then(docRef => {
-            console.log('User created', docRef);
-        })
-            .catch(error => {
-            console.error('Error while creating user', error);
-        }),
+            .then(docRef => console.log('User created', docRef))
+            .catch(error => console.error('Error while creating user', error)),
         firestore.doc(`users/${uid}/puzzles/3x3x3`).set({ name: '3x3x3' }, MERGE)
     ]);
 });
@@ -94,7 +90,7 @@ exports.onCreateScore = functions.firestore
         lastActiveText: lastActiveText
     };
     const puzzleData = {
-        name: keyEncode.decode(puzzle),
+        name: firebase_key_1.decode(puzzle),
         latest: firestore.doc(`users/${uid}/puzzles/${puzzle}/scores/${key}`),
         lastActive: lastActive,
         lastActiveText: lastActiveText
@@ -147,7 +143,7 @@ exports.onCreateUserPuzzle = functions.firestore
         whenCreatedText: whenCreatedText
     };
     const puzzleData = {
-        name: keyEncode.decode(puzzle)
+        name: firebase_key_1.decode(puzzle)
     };
     return Promise.all([
         // Add puzzle to the global puzzles

@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from '@angular/router';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { Puzzle } from '../models/puzzle/puzzle.model';
+import { combineLatest, Observable } from 'rxjs';
+import { map, take } from 'rxjs/operators';
 import { PuzzleService } from '../services/puzzle.service';
 
 @Injectable({
@@ -18,14 +17,22 @@ export class PuzzleGuard implements CanActivate {
   canActivate(
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
-    return this.puzzleService.from(next.paramMap)
+    return combineLatest(
+      this.puzzleService.from(next.paramMap),
+      this.puzzleService.puzzle$()
+    )
       .pipe(
-        map((puzzle: Puzzle | undefined) => {
-          console.log('Puzzle guard', puzzle);
+        take(1),
+        map(([puzzle, activatedPuzzle]) => {
           if (puzzle === undefined) {
             this.router.navigate(['/', 'puzzles']);
             return false;
           }
+
+          if (puzzle.name !== activatedPuzzle.name) {
+            this.puzzleService.activatePuzzle(puzzle.name);
+          }
+
           return true;
         })
       );

@@ -10,6 +10,7 @@ import { reducer, selectAll } from '../models/puzzle/puzzle.reducer';
 import { AppState } from '../shared/app.state';
 import { UserService } from './user.service';
 import { UserState } from '../models/user/user.reducer';
+import { decode, encode } from 'firebase-key';
 
 @Injectable({providedIn: 'root'})
 export class PuzzleService {
@@ -22,7 +23,8 @@ export class PuzzleService {
     private database: AngularFirestore,
     private store: Store<AppState>
   ) {
-    userService.user$().subscribe((state: UserState) => {
+    userService.user$()
+      .subscribe((state: UserState) => {
       if (state.user) {
         this._subscription.unsubscribe();
         this.retrievePuzzles(state.user.uid);
@@ -55,7 +57,7 @@ export class PuzzleService {
     this.store.dispatch(new AddPuzzle({puzzle}));
 
     return this.database
-      .doc(`users/${uid}/puzzles`)
+      .doc(`users/${uid}/puzzles/${encode(puzzle.name)}`)
       .set(puzzle)
       .catch((reason: any) => {
         console.error('Error while creating Firestore puzzle', reason);
@@ -67,8 +69,7 @@ export class PuzzleService {
     this.store.dispatch(new DeletePuzzle({id: puzzle.name}));
 
     return this.database
-      .collection(`users/${uid}/puzzles`)
-      .doc(encodeURI(puzzle.name))
+      .doc(`users/${uid}/puzzles/${encode(puzzle.name)}`)
       .delete()
       .catch((reason: any) => {
         console.error('Error while deleting Firestore puzzle', reason);
@@ -76,7 +77,7 @@ export class PuzzleService {
       });
   }
 
-  get(puzzle: string): Observable<Puzzle> {
+  get(puzzle: string): Observable<Puzzle | undefined> {
     return this.store.pipe(
       take(1),
       select(state => state.puzzles.entities[puzzle])
@@ -86,8 +87,8 @@ export class PuzzleService {
   from(params: ParamMap): Observable<Puzzle | undefined> {
     const puzzle = params.get('puzzle');
     if (puzzle !== null) {
-      return this.get(puzzle);
+      return this.get(decode(puzzle));
     }
-    return Observable.create(undefined);
+    return Observable.create();
   }
 }

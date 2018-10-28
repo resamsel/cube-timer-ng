@@ -35,6 +35,10 @@ export class TimerService {
     return this.store.pipe(select(state => state.timer));
   }
 
+  public async add(score: Score) {
+    this.scoreService.create(score);
+  }
+
   public async start(uid: string, puzzle: string, whenStarted: Date) {
     this.store.dispatch(new StartTimer(uid, puzzle, whenStarted));
   }
@@ -45,10 +49,6 @@ export class TimerService {
 
   public async manual(uid: string, puzzle: string, whenStarted: Date) {
     this.store.dispatch(new ManualTimer(uid, puzzle, whenStarted));
-  }
-
-  public async add(score: Score) {
-    this.scoreService.create(score);
   }
 
   public clear(): void {

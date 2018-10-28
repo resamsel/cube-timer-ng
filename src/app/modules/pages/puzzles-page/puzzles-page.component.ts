@@ -7,6 +7,7 @@ import { PuzzleService } from '../../../services/puzzle.service';
 import { ScoreService } from '../../../services/score.service';
 import { UserService } from '../../../services/user.service';
 import { UserState } from '../../../models/user/user.reducer';
+import { encode } from 'firebase-key';
 
 @Component({
   selector: 'app-puzzles-page',
@@ -32,6 +33,11 @@ export class PuzzlesPageComponent {
     private readonly scoreService: ScoreService,
     private readonly snackBar: MatSnackBar
   ) {
+  }
+
+  // noinspection JSMethodCanBeStatic
+  timerLink(puzzle: Puzzle): string[] {
+    return ['/', 'puzzles', encode(puzzle.name), 'timer'];
   }
 
   public async onDelete(puzzle: Puzzle) {
