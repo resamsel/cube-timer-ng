@@ -1,6 +1,6 @@
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
-import * as keyEncode from 'firebase-key-encode';
+import { decode } from 'firebase-key';
 import UserRecord = admin.auth.UserRecord;
 import DocumentReference = admin.firestore.DocumentReference;
 import DocumentSnapshot = admin.firestore.DocumentSnapshot;
@@ -23,7 +23,7 @@ const firestore = admin.firestore();
 
 function deleteQueryBatch(
   db: Firestore,
-  query: {get: () => Promise<QuerySnapshot>},
+  query: { get: () => Promise<QuerySnapshot> },
   batchSize: number,
   resolve: () => void,
   reject: () => void) {
@@ -36,7 +36,7 @@ function deleteQueryBatch(
 
       // Delete documents in a batch
       const batch = db.batch();
-      snapshot.docs.forEach((doc: {ref: DocumentReference}) => {
+      snapshot.docs.forEach((doc: { ref: DocumentReference }) => {
         batch.delete(doc.ref);
       });
 
@@ -80,12 +80,8 @@ export const onCreateUser = functions.auth.user().onCreate((event: UserRecord) =
 
   return Promise.all([
     firestore.doc(`users/${uid}`).set(user, MERGE)
-      .then(docRef => {
-        console.log('User created', docRef);
-      })
-      .catch(error => {
-        console.error('Error while creating user', error);
-      }),
+      .then(docRef => console.log('User created', docRef))
+      .catch(error => console.error('Error while creating user', error)),
     firestore.doc(`users/${uid}/puzzles/3x3x3`).set({name: '3x3x3'}, MERGE)
   ]);
 });
@@ -117,7 +113,7 @@ export const onCreateScore = functions.firestore
       lastActiveText: lastActiveText
     };
     const puzzleData = {
-      name: keyEncode.decode(puzzle),
+      name: decode(puzzle),
       latest: firestore.doc(`users/${uid}/puzzles/${puzzle}/scores/${key}`),
       lastActive: lastActive,
       lastActiveText: lastActiveText
@@ -174,7 +170,7 @@ export const onCreateUserPuzzle = functions.firestore
       whenCreatedText: whenCreatedText
     };
     const puzzleData = {
-      name: keyEncode.decode(puzzle)
+      name: decode(puzzle)
     };
 
     return Promise.all([

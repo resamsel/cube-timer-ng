@@ -20,6 +20,10 @@ script:
 - cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js
 - npm run build
 - echo xvfb-run npm run e2e
+- cd functions
+- npm install
+- npm run lint
+- npm run build
 
 deploy:
   provider: firebase
