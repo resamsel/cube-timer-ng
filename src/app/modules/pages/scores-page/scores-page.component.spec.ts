@@ -3,7 +3,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatProgressSpinnerModule } from '@angular/material';
 import { RouterTestingModule } from '@angular/router/testing';
 import { Store } from '@ngrx/store';
-import { instance, mock, when } from 'ts-mockito';
+import { anything, instance, mock, when } from 'ts-mockito';
 import { Puzzle } from '../../../models/puzzle/puzzle.model';
 import { Score } from '../../../models/score/score.model';
 import { PuzzleService } from '../../../services/puzzle.service';
@@ -13,7 +13,8 @@ import { SidenavComponent } from '../../nav/sidenav/sidenav.component';
 import { ScoresPageComponent } from './scores-page.component';
 import { ScoreService } from '../../../services/score.service';
 import { initialScoreState } from '../../../models/score/score.reducer';
-import { of } from 'rxjs';
+import { of, Subscription } from 'rxjs';
+import { RouterUtils } from '../../../shared/router-utils';
 
 @Component({selector: 'app-navbar', template: ''})
 class NavbarStubComponent {
@@ -48,8 +49,10 @@ describe('ScoresPageComponent', () => {
 
   beforeEach(async(() => {
     const scoreService = mock(ScoreService);
+    const routerUtils = mock(RouterUtils);
 
     when(scoreService.loading$()).thenReturn(of(initialScoreState.loading));
+    when(routerUtils.onPuzzleChange(anything(), anything())).thenReturn(Subscription.EMPTY);
 
     TestBed.configureTestingModule({
       declarations: [
@@ -68,7 +71,8 @@ describe('ScoresPageComponent', () => {
         {provide: Store, useValue: instance(mock(Store))},
         {provide: ScoreService, useValue: instance(scoreService)},
         {provide: UserService, useValue: instance(mock(UserService))},
-        {provide: PuzzleService, useValue: instance(mock(PuzzleService))}
+        {provide: PuzzleService, useValue: instance(mock(PuzzleService))},
+        {provide: RouterUtils, useValue: instance(routerUtils)}
       ]
     })
       .compileComponents();

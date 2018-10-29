@@ -1,9 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Puzzle } from '../../../models/puzzle/puzzle.model';
 import { PuzzleService } from '../../../services/puzzle.service';
-import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { encode } from 'firebase-key';
+import { RouterUtils } from '../../../shared/router-utils';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-timer-page',
@@ -15,14 +16,15 @@ export class TimerPageComponent implements OnInit, OnDestroy {
 
   constructor(
     private readonly puzzleService: PuzzleService,
-    private readonly router: Router) {
+    private readonly routerUtils: RouterUtils,
+    private readonly route: ActivatedRoute) {
   }
 
   ngOnInit(): void {
-    this._subscription = this.puzzleService.puzzle$()
-      .subscribe((puzzle: Puzzle) => {
-        this.router.navigate(['/', 'puzzles', encode(puzzle.name), 'timer']);
-      });
+    this._subscription = this.routerUtils.onPuzzleChange(
+      this.route,
+      (puzzle: Puzzle) => ['/', 'puzzles', encode(puzzle.name), 'timer']
+    );
   }
 
   ngOnDestroy() {
