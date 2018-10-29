@@ -3,8 +3,8 @@
   <form [formGroup]="formGroup">
     <mat-form-field>
       <input matInput formControlName="name" placeholder="Puzzle name" cdkFocusInitial>
-      <mat-error *ngIf="name.hasError('required')">Name is required</mat-error>
-      <mat-error *ngIf="name.hasError('nameExists')">Puzzle already exists</mat-error>
+      <mat-error *ngIf="name?.hasError('required')">Name is required</mat-error>
+      <mat-error *ngIf="name?.hasError('nameExists')">Puzzle already exists</mat-error>
     </mat-form-field>
   </form>
 </div>

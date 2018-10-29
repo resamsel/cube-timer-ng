@@ -20,7 +20,7 @@
     "deploy:functions": "firebase deploy --only functions",
     "buildinfo": "node scripts/build-info.js",
     "postpull": "npm install && npm run buildinfo",
-    "precommit": "npm run lint && npm run test:headless"
+    "precommit": "npm run lint && npm run test:headless && npm run build"
   },
   "private": true,
   "dependencies": {
