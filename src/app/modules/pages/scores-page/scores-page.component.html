@@ -4,10 +4,13 @@
 
 <app-sidenav #sidenav activePage="scores">
   <div class="container">
-    <mat-spinner *ngIf="loading$ | async"></mat-spinner>
-    <ng-container *ngIf="scores$ | async as scores">
-      <app-scores-stats [scores]="scores"></app-scores-stats>
-      <app-scores [scores]="scores"></app-scores>
-    </ng-container>
+    <mat-spinner *ngIf="loading$ | async; else content"></mat-spinner>
+
+    <ng-template #content>
+      <div *ngIf="scores$ | async as scores">
+        <app-scores-stats [scores]="scores"></app-scores-stats>
+        <app-scores [scores]="scores"></app-scores>
+      </div>
+    </ng-template>
   </div>
 </app-sidenav>
