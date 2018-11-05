@@ -45,7 +45,7 @@ export class TimerComponent implements OnInit, OnDestroy {
       Validators.required
     ])
   });
-  private _puzzle: Puzzle;
+  private _puzzle: Puzzle | undefined;
 
   get model(): Readonly<{ duration: string }> {
     return this._model;
@@ -55,7 +55,7 @@ export class TimerComponent implements OnInit, OnDestroy {
     return this.timerService.timer$();
   }
 
-  get puzzle$(): Observable<Puzzle> {
+  get puzzle$(): Observable<Puzzle | undefined> {
     return this.puzzleService.puzzle$();
   }
 
@@ -159,7 +159,7 @@ export class TimerComponent implements OnInit, OnDestroy {
       this.puzzle$)
       .pipe(take(1))
       .subscribe(([state, puzzle]) => {
-        if (state.user && this._whenStarted !== undefined) {
+        if (state.user && this._whenStarted !== undefined && puzzle !== undefined) {
           this._puzzle = puzzle;
           this.timerService.start(state.user.uid, puzzle.name, this._whenStarted);
         }
@@ -193,7 +193,7 @@ export class TimerComponent implements OnInit, OnDestroy {
         })
       )
       .subscribe(([userState, , puzzle]) => {
-        if (userState.user) {
+        if (userState.user && puzzle !== undefined) {
           this.timerService.manual(userState.user.uid, puzzle.name, new Date());
         }
       });
@@ -213,7 +213,7 @@ export class TimerComponent implements OnInit, OnDestroy {
     combineLatest(this.userService.user$(), this.puzzleService.puzzle$())
       .pipe(take(1))
       .subscribe(([state, puzzle]) => {
-        if (state.user) {
+        if (state.user && puzzle !== undefined) {
           this.timerService.add({
             value: parseDuration(this._model.duration),
             uid: state.user.uid,

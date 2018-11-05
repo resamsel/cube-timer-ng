@@ -6,6 +6,11 @@
   border-radius: 4px;
 }
 
-.active {
+.active:not(.disabled) {
   background: rgba(0, 0, 0, .04);
+}
+
+.disabled:hover,
+.active.disabled {
+  background: transparent;
 }

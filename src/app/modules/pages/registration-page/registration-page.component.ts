@@ -43,7 +43,6 @@ export class RegistrationPageComponent implements OnInit {
       )
       .subscribe(() => {
         const redirectUri = this.route.snapshot.queryParamMap.get('redirect_uri');
-        console.log('RegistrationPageComponent - redirect_uri', redirectUri);
         if (redirectUri) {
           return this.router.navigate([redirectUri]);
         }

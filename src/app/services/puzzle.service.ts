@@ -4,7 +4,7 @@ import { ParamMap } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
 import { take } from 'rxjs/operators';
-import { ActivatePuzzle, AddPuzzle, DeletePuzzle, LoadPuzzles } from '../models/puzzle/puzzle.actions';
+import { ActivatePuzzle, AddPuzzle, DeletePuzzle, LoadPuzzles, StartLoading, StopLoading } from '../models/puzzle/puzzle.actions';
 import { Puzzle } from '../models/puzzle/puzzle.model';
 import { reducer, selectAll } from '../models/puzzle/puzzle.reducer';
 import { AppState } from '../shared/app.state';
@@ -25,18 +25,26 @@ export class PuzzleService {
   ) {
     userService.user$()
       .subscribe((state: UserState) => {
-      if (state.user) {
-        this._subscription.unsubscribe();
-        this.retrievePuzzles(state.user.uid);
-      }
-    });
+        if (state.user) {
+          this._subscription.unsubscribe();
+          this.loadPuzzles(state.user.uid);
+        }
+      });
+  }
+
+  get loaded$(): Observable<boolean> {
+    return this.store.pipe(select(state => state.puzzles.loaded));
+  }
+
+  get loading$(): Observable<boolean> {
+    return this.store.pipe(select(state => state.puzzles.loading));
   }
 
   public activatePuzzle(puzzle: string) {
     this.store.dispatch(new ActivatePuzzle({puzzle: {name: puzzle}}));
   }
 
-  public puzzle$(): Observable<Puzzle> {
+  public puzzle$(): Observable<Puzzle | undefined> {
     return this.store.pipe(select(state => state.puzzles.active));
   }
 
@@ -44,13 +52,18 @@ export class PuzzleService {
     return this.store.pipe(select(state => selectAll(state.puzzles)));
   }
 
-  private retrievePuzzles(uid: string): void {
+  public loadPuzzles(uid: string): void {
+    this.store.dispatch(new StartLoading());
+
     this._subscription = this.database
       .collection<Puzzle>(
         `users/${uid}/puzzles`,
         ref => ref.orderBy('name', 'asc'))
       .valueChanges()
-      .subscribe(puzzles => this.store.dispatch(new LoadPuzzles({puzzles})));
+      .subscribe(puzzles => {
+        this.store.dispatch(new StopLoading());
+        this.store.dispatch(new LoadPuzzles({puzzles}));
+      });
   }
 
   public create(uid: string, puzzle: Puzzle): Promise<void> {

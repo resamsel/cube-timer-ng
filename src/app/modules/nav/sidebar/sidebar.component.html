@@ -3,7 +3,9 @@
     mat-list-item
     *ngFor="let link of links"
     [routerLink]="link.link"
-    [ngClass]="{active: activePage === link.page.id}">
+    routerLinkActive="active"
+    [class.disabled]="!link.link"
+    [routerLinkActiveOptions]="{exact: true}">
     <mat-icon matListIcon>{{link.page.icon}}</mat-icon>
     <span>{{link.page.name}}</span>
   </a>

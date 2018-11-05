@@ -41,9 +41,12 @@ export class LoginPageComponent implements OnInit {
       .pipe(take(1))
       .subscribe(([, puzzle]) => {
         const redirectUri = this.route.snapshot.queryParamMap.get('redirect_uri');
-        console.log('LoginPageComponent - redirect_uri', redirectUri);
         if (redirectUri) {
           return this.router.navigate([redirectUri]);
+        }
+
+        if (puzzle === undefined) {
+          return this.router.navigate(['/', 'puzzles']);
         }
 
         return this.router.navigate(['/', 'puzzles', encode(puzzle.name), 'timer']);

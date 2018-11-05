@@ -27,7 +27,12 @@ export class MainPageComponent {
       this.userService.user$(),
       this.puzzleService.puzzle$())
       .pipe(
-        map(([user, puzzle]) => ['/', 'puzzles', puzzle.name, 'timer'])
+        map(([, puzzle]) => {
+          if (puzzle !== undefined) {
+            return ['/', 'puzzles', puzzle.name, 'timer'];
+          }
+          return ['/', 'puzzles'];
+        })
       );
   }
 }

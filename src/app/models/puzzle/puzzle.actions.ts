@@ -13,7 +13,9 @@ export enum PuzzleActionTypes {
   DeletePuzzle = '[Puzzle] Delete Puzzle',
   DeletePuzzles = '[Puzzle] Delete Puzzles',
   ClearPuzzles = '[Puzzle] Clear Puzzles',
-  ActivatePuzzle = '[Puzzle] Activate Puzzle'
+  ActivatePuzzle = '[Puzzle] Activate Puzzle',
+  StartLoading = '[Score] Start Loading',
+  StopLoading = '[Score] Stop Loading'
 }
 
 export class LoadPuzzles implements Action {
@@ -90,6 +92,14 @@ export class ActivatePuzzle implements Action {
   }
 }
 
+export class StartLoading implements Action {
+  readonly type = PuzzleActionTypes.StartLoading;
+}
+
+export class StopLoading implements Action {
+  readonly type = PuzzleActionTypes.StopLoading;
+}
+
 export type PuzzleActions =
   LoadPuzzles
   | AddPuzzle
@@ -101,4 +111,6 @@ export type PuzzleActions =
   | DeletePuzzle
   | DeletePuzzles
   | ClearPuzzles
-  | ActivatePuzzle;
+  | ActivatePuzzle
+  | StartLoading
+  | StopLoading;

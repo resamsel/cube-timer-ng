@@ -22,7 +22,7 @@ export class SettingsService {
     userService.user$().subscribe((state: UserState) => {
       if (state.user) {
         this._subscription.unsubscribe();
-        this.retrieveSettings(state.user.uid);
+        this.loadSettings(state.user.uid);
       }
     });
   }
@@ -31,7 +31,7 @@ export class SettingsService {
     return this.store.pipe(select(state => state.settings));
   }
 
-  private retrieveSettings(uid: string): void {
+  private loadSettings(uid: string): void {
     this._subscription = this.database
       .doc<User>(`/users/${uid}`)
       .valueChanges()

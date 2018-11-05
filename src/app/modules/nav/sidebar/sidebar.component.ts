@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Puzzle } from '../../../models/puzzle/puzzle.model';
 import { PuzzleService } from '../../../services/puzzle.service';
@@ -12,7 +12,7 @@ interface Page {
 
 interface Link {
   page: Page;
-  link: string;
+  link?: string;
 }
 
 const LINKS: Link[] = [
@@ -23,7 +23,6 @@ const LINKS: Link[] = [
 ];
 
 @Component({
-  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-sidebar',
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.css']
@@ -35,21 +34,30 @@ export class SidebarComponent implements OnInit, OnDestroy {
   private _subscription: Subscription = Subscription.EMPTY;
 
   constructor(
-    private readonly puzzleService: PuzzleService,
-    private readonly changeDetectorRef: ChangeDetectorRef
+    private readonly puzzleService: PuzzleService
   ) {
   }
 
   ngOnInit() {
     this._subscription = this.puzzleService.puzzle$()
-      .subscribe((puzzle: Puzzle) => {
+      .subscribe((puzzle: Puzzle | undefined) => {
         this.links = LINKS.map((link: Link) => {
-          return {
-            ...link,
-            link: link.link.replace('/:puzzle/', `/${encode(puzzle.name)}/`)
-          };
+          if (link.link !== undefined && link.link.includes('/:puzzle/')) {
+            if (puzzle !== undefined) {
+              return {
+                ...link,
+                link: link.link.replace('/:puzzle/', `/${encode(puzzle.name)}/`)
+              };
+            }
+
+            return {
+              ...link,
+              link: undefined
+            };
+          }
+
+          return link;
         });
-        this.changeDetectorRef.markForCheck();
       });
   }
 

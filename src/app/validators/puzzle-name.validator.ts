@@ -14,7 +14,6 @@ export class PuzzleNameValidator implements AsyncValidator {
       .pipe(
         take(1),
         map(puzzle => {
-          console.log('validate', control.value, puzzle);
           return (puzzle !== undefined ? {nameExists: true} : null);
         })
       );

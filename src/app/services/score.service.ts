@@ -28,9 +28,9 @@ export class ScoreService {
   ) {
     combineLatest(userService.user$(), puzzleService.puzzle$())
       .subscribe(([state, puzzle]) => {
-        if (state.user) {
+        if (state.user && puzzle !== undefined) {
           this._subscription.unsubscribe();
-          this.retrieveScores(state.user.uid, puzzle.name);
+          this.loadScores(state.user.uid, puzzle.name);
         }
       });
   }
@@ -43,8 +43,9 @@ export class ScoreService {
     return this.store.pipe(select(state => state.scores.loading));
   }
 
-  private retrieveScores(uid: string, puzzle: string, options: ScoreRetrievalOptions = {}): void {
+  private loadScores(uid: string, puzzle: string, options: ScoreRetrievalOptions = {}): void {
     this.store.dispatch(new StartLoading());
+
     this._subscription = this.database
       .collection<Score>(
         `users/${uid}/puzzles/${encode(puzzle)}/scores`,

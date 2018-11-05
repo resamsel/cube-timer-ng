@@ -24,7 +24,7 @@ export class PuzzleSelectorComponent {
     private readonly dialog: MatDialog) {
   }
 
-  get puzzle$(): Observable<Puzzle> {
+  get puzzle$(): Observable<Puzzle | undefined> {
     return this.puzzleService.puzzle$();
   }
 

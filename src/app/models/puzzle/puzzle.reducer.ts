@@ -3,7 +3,9 @@ import { Puzzle } from './puzzle.model';
 import { PuzzleActions, PuzzleActionTypes } from './puzzle.actions';
 
 export interface PuzzleState extends EntityState<Puzzle> {
-  active: Puzzle;
+  active?: Puzzle;
+  loaded: boolean;
+  loading: boolean;
 }
 
 export const adapter: EntityAdapter<Puzzle> = createEntityAdapter<Puzzle>({
@@ -11,7 +13,8 @@ export const adapter: EntityAdapter<Puzzle> = createEntityAdapter<Puzzle>({
 });
 
 export const initialPuzzleState: PuzzleState = adapter.getInitialState({
-  active: {name: '3x3x3'}
+  loaded: false,
+  loading: false
 });
 
 export function reducer(state = initialPuzzleState, action: PuzzleActions): PuzzleState {
@@ -49,7 +52,10 @@ export function reducer(state = initialPuzzleState, action: PuzzleActions): Puzz
     }
 
     case PuzzleActionTypes.LoadPuzzles: {
-      return adapter.addAll(action.payload.puzzles, state);
+      return {
+        ...adapter.addAll(action.payload.puzzles, state),
+        loaded: true
+      };
     }
 
     case PuzzleActionTypes.ClearPuzzles: {
@@ -61,6 +67,14 @@ export function reducer(state = initialPuzzleState, action: PuzzleActions): Puzz
         ...state,
         active: action.payload.puzzle
       };
+
+    case PuzzleActionTypes.StartLoading: {
+      return {...state, loading: true};
+    }
+
+    case PuzzleActionTypes.StopLoading: {
+      return {...state, loading: false};
+    }
 
     default: {
       return state;

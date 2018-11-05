@@ -15,7 +15,7 @@ import { encode } from 'firebase-key';
   styleUrls: ['./puzzles-page.component.scss']
 })
 export class PuzzlesPageComponent {
-  get puzzle$(): Observable<Puzzle> {
+  get puzzle$(): Observable<Puzzle | undefined> {
     return this.puzzleService.puzzle$();
   }
 

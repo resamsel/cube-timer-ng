@@ -20,7 +20,6 @@ export class RouterUtils {
         filter(puzzle => !!puzzle && route.snapshot.paramMap.get('puzzle') !== puzzle.name)
       )
       .subscribe((puzzle: Puzzle) => {
-        console.log('RouterUtils', puzzle, route.snapshot.paramMap);
         this.router.navigate(puzzleRoute(puzzle));
       });
   }

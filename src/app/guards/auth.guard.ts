@@ -18,10 +18,7 @@ export class AuthGuard implements CanActivate {
     return this.userService.user$()
       .pipe(
         map((state: UserState) => {
-          console.log('AuthGuard', state);
-
           if (!state.user) {
-            console.log('AuthGuard - navigate away');
             this.router.navigate(['/', 'login'], {queryParams: {redirect_uri: next.url.join('/')}});
             return false;
           }
