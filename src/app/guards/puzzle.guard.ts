@@ -1,14 +1,16 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from '@angular/router';
 import { combineLatest, Observable } from 'rxjs';
-import { map, take } from 'rxjs/operators';
+import { map, switchMap, take } from 'rxjs/operators';
 import { PuzzleService } from '../services/puzzle.service';
+import { AuthGuard } from './auth.guard';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PuzzleGuard implements CanActivate {
   constructor(
+    private readonly authGuard: AuthGuard,
     private readonly puzzleService: PuzzleService,
     private readonly router: Router
   ) {
@@ -16,24 +18,35 @@ export class PuzzleGuard implements CanActivate {
 
   canActivate(
     next: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
-    return combineLatest(
-      this.puzzleService.from(next.paramMap),
-      this.puzzleService.puzzle$()
-    )
+    state: RouterStateSnapshot): Observable<boolean> {
+    return this.authGuard.canActivate(next, state)
       .pipe(
-        take(1),
-        map(([puzzle, activatedPuzzle]) => {
-          if (puzzle === undefined) {
-            this.router.navigate(['/', 'puzzles']);
-            return false;
+        switchMap((auth: boolean) => {
+          console.log('PuzzleGuard - authGuard.canActivate', auth);
+          if (!auth) {
+            return Observable.create(false);
           }
 
-          if (puzzle.name !== activatedPuzzle.name) {
-            this.puzzleService.activatePuzzle(puzzle.name);
-          }
+          // TODO: make sure puzzles are loaded
+          return combineLatest(
+            this.puzzleService.from(next.paramMap),
+            this.puzzleService.puzzle$()
+          )
+            .pipe(
+              take(1),
+              map(([puzzle, activatedPuzzle]) => {
+                if (puzzle === undefined) {
+                  this.router.navigate(['/', 'puzzles']);
+                  return false;
+                }
 
-          return true;
+                if (puzzle.name !== activatedPuzzle.name) {
+                  this.puzzleService.activatePuzzle(puzzle.name);
+                }
+
+                return true;
+              })
+            );
         })
       );
   }

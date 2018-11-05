@@ -8,7 +8,7 @@ const routes = [
   {
     path: 'puzzles/:puzzle/scores',
     component: ScoresPageComponent,
-    canActivate: [AuthGuard, PuzzleGuard]
+    canActivate: [PuzzleGuard]
   }
 ];
 

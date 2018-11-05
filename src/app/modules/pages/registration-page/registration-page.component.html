@@ -30,12 +30,13 @@
             (click)="register()">Register
           </button>
 
-          <button
+          <a
             mat-button
             color="secondary"
             class="sign-in"
-            routerLink="/login">Sign in
-          </button>
+            routerLink="/login"
+            queryParamsHandling="merge">Sign in
+          </a>
         </div>
       </form>
     </mat-card-content>

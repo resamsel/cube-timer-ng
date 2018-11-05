@@ -1,9 +1,10 @@
 import { NgModule } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { Route, RouterModule } from '@angular/router';
+import { AuthGuard } from '../../../guards/auth.guard';
 import { SettingsPageComponent } from './settings-page.component';
 
-const settingsRoutes = [
-  {path: 'settings', component: SettingsPageComponent}
+const settingsRoutes: Route[] = [
+  {path: 'settings', component: SettingsPageComponent, canActivate: [AuthGuard]}
 ];
 
 @NgModule({

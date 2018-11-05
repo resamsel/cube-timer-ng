@@ -39,12 +39,13 @@
             (click)="signInWithEmailAndPassword()">Sign in
           </button>
 
-          <button
+          <a
             mat-button
             color="secondary"
             class="sign-up"
-            routerLink="/register">Sign up
-          </button>
+            routerLink="/register"
+            queryParamsHandling="merge">Sign up
+          </a>
         </div>
       </form>
     </mat-card-content>

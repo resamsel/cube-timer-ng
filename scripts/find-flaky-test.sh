@@ -12,43 +12,40 @@ run_test() {
 }
 
 print_result() {
-  [ "$1" = "0" ] && echo "OK" || echo "FAILED"
+  [[ "$1" = "0" ]] && echo "OK" || echo "FAILED"
 }
 
 mkdir -p $(dirname "${LOG_FILE}")
 rm -f "${LOG_FILE}"
 touch "${LOG_FILE}"
 
+echo "Find flaky test by testing the project while disabling one test at a time"
+echo
+
 find "${SOURCE_DIR}" -name "*.spec.ts" | while read line; do
-  echo
-  echo "*****************************************"
-  echo "* Trying ${line}..."
-  echo "*"
+  echo -n "Trying $(basename "${line}") ($(dirname "${line}")): "
 
   mv "${line}" "${line}.off"
 
   ITERATION=1
-  echo -n "* Iteration #${ITERATION}... "
+  echo -n "."
   run_test
   CODE=$?
-  print_result "${CODE}"
 
-  while [ "$CODE" = "0" -a "$ITERATION" -lt "$MAX_ITERATIONS" ]; do
+  while [[ "$CODE" = "0" && "$ITERATION" -lt "$MAX_ITERATIONS" ]]; do
     (( ITERATION++ ))
-    echo -n "* Iteration #${ITERATION}... "
+    echo -n "."
     run_test
     CODE=$?
-    print_result "${CODE}"
   done
 
   mv "${line}.off" "${line}"
 
-  echo "*"
-  if [ "$ITERATION" = "$MAX_ITERATIONS" ]; then
-    echo "* Most probably FLAKY (disabling led to $MAX_ITERATIONS successful test runs)"
-  else
-    echo "* Most probably OK (disabling still fails the tests)"
-  fi
+  echo
+  if [[ "$ITERATION" = "$MAX_ITERATIONS" ]]; then
+    echo -e "\tFLAKY (tests did not fail in $MAX_ITERATIONS iterations)"
 
-  echo "*****************************************"
+  else
+    echo -e "\tNOT FLAKY (tests failed on iteration $ITERATION)"
+  fi
 done

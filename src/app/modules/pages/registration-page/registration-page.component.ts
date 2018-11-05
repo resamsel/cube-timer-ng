@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
-import { filter, take } from 'rxjs/operators';
+import { ActivatedRoute, Router } from '@angular/router';
+import { filter, first, take } from 'rxjs/operators';
 import { UserService } from '../../../services/user.service';
 import { UserState } from '../../../models/user/user.reducer';
 
@@ -31,13 +31,22 @@ export class RegistrationPageComponent {
 
   constructor(
     private readonly userService: UserService,
+    private readonly route: ActivatedRoute,
     private readonly router: Router) {
     userService.user$()
       .pipe(
         filter((state: UserState) => state.user != null),
-        take(1)
+        first()
       )
-      .subscribe(() => router.navigate(['/', 'puzzles']));
+      .subscribe(() => {
+        const redirectUri = route.snapshot.queryParamMap.get('redirect_uri');
+        console.log('RegistrationPageComponent - redirect_uri', redirectUri);
+        if (redirectUri) {
+          return router.navigate([redirectUri]);
+        }
+
+        return router.navigate(['/', 'puzzles']);
+      });
   }
 
   register(): void {

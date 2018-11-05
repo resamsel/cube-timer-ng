@@ -8,7 +8,7 @@ const timerRoutes: Route[] = [
   {
     path: 'puzzles/:puzzle/timer',
     component: TimerPageComponent,
-    canActivate: [AuthGuard, PuzzleGuard]
+    canActivate: [PuzzleGuard]
   }
 ];
 

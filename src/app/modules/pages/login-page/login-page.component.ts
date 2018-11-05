@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
-import { filter, take } from 'rxjs/operators';
+import { ActivatedRoute, Router } from '@angular/router';
+import { filter, first, take } from 'rxjs/operators';
 import { UserService } from '../../../services/user.service';
 import { PuzzleService } from '../../../services/puzzle.service';
 import { UserState } from '../../../models/user/user.reducer';
@@ -30,14 +30,23 @@ export class LoginPageComponent {
   constructor(
     private readonly userService: UserService,
     private readonly puzzleService: PuzzleService,
+    private readonly route: ActivatedRoute,
     private readonly router: Router) {
     combineLatest(
       userService.user$().pipe(filter((state: UserState) => {
         return !!state.user;
       })),
       puzzleService.puzzle$())
-      .pipe(take(1))
-      .subscribe(([, puzzle]) => router.navigate(['/', 'puzzles', encode(puzzle.name), 'timer']));
+      .pipe(first())
+      .subscribe(([, puzzle]) => {
+        const redirectUri = route.snapshot.queryParamMap.get('redirect_uri');
+        console.log('LoginPageComponent - redirect_uri', redirectUri);
+        if (redirectUri) {
+          return router.navigate([redirectUri]);
+        }
+
+        return router.navigate(['/', 'puzzles', encode(puzzle.name), 'timer']);
+      });
   }
 
   signInWithGoogle(): void {
