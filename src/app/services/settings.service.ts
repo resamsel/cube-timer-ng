@@ -16,7 +16,7 @@ export class SettingsService {
   private _subscription: Subscription = Subscription.EMPTY;
 
   constructor(
-    private readonly userService: UserService,
+    readonly userService: UserService,
     private readonly database: AngularFirestore,
     private readonly store: Store<AppState>) {
     userService.user$().subscribe((state: UserState) => {

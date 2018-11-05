@@ -19,7 +19,7 @@ export class PuzzleService {
   private _subscription: Subscription = Subscription.EMPTY;
 
   constructor(
-    private readonly userService: UserService,
+    readonly userService: UserService,
     private database: AngularFirestore,
     private store: Store<AppState>
   ) {

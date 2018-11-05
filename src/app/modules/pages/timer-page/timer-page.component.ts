@@ -1,6 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Puzzle } from '../../../models/puzzle/puzzle.model';
-import { PuzzleService } from '../../../services/puzzle.service';
 import { Subscription } from 'rxjs';
 import { encode } from 'firebase-key';
 import { RouterUtils } from '../../../shared/router-utils';
@@ -15,7 +14,6 @@ export class TimerPageComponent implements OnInit, OnDestroy {
   private _subscription: Subscription = Subscription.EMPTY;
 
   constructor(
-    private readonly puzzleService: PuzzleService,
     private readonly routerUtils: RouterUtils,
     private readonly route: ActivatedRoute) {
   }

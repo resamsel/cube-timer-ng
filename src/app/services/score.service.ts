@@ -21,8 +21,8 @@ export class ScoreService {
   private _subscription: Subscription = Subscription.EMPTY;
 
   constructor(
-    private readonly userService: UserService,
-    private readonly puzzleService: PuzzleService,
+    readonly userService: UserService,
+    readonly puzzleService: PuzzleService,
     private readonly database: AngularFirestore,
     private readonly store: Store<AppState>
   ) {

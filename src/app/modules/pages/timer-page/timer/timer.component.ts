@@ -7,7 +7,6 @@ import { filter, take } from 'rxjs/operators';
 import { Puzzle } from '../../../../models/puzzle/puzzle.model';
 import { States, TimerState } from '../../../../models/timer/timer.reducer';
 import { PuzzleService } from '../../../../services/puzzle.service';
-import { ScoreService } from '../../../../services/score.service';
 import { TimerService } from '../../../../services/timer.service';
 import { UserService } from '../../../../services/user.service';
 import { DateTimeUtils } from '../../../../shared/date-time-utils';
@@ -66,7 +65,6 @@ export class TimerComponent implements OnInit, OnDestroy {
   constructor(
     private readonly userService: UserService,
     private readonly puzzleService: PuzzleService,
-    private readonly scoreService: ScoreService,
     private readonly timerService: TimerService,
     private readonly snackBar: MatSnackBar) {
   }

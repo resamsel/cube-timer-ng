@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { Route, RouterModule } from '@angular/router';
-import { AuthGuard } from '../../../guards/auth.guard';
 import { TimerPageComponent } from './timer-page.component';
 import { PuzzleGuard } from '../../../guards/puzzle.guard';
 
