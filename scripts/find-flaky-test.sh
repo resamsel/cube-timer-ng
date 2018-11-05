@@ -5,7 +5,7 @@ LOG_FILE=../tmp/flaky-test.log
 MAX_ITERATIONS=8
 
 run_test() {
-  npm run test:headless > /dev/null 2>&1
+  ng test --watch false --progress false > /dev/null 2>&1
   CODE=$?
   echo "$line,$CODE" >> "${LOG_FILE}"
   return ${CODE}

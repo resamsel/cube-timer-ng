@@ -1,19 +1,19 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { filter, first, take } from 'rxjs/operators';
-import { UserService } from '../../../services/user.service';
-import { PuzzleService } from '../../../services/puzzle.service';
-import { UserState } from '../../../models/user/user.reducer';
-import { combineLatest } from 'rxjs';
 import { encode } from 'firebase-key';
+import { combineLatest } from 'rxjs';
+import { filter, take } from 'rxjs/operators';
+import { UserState } from '../../../models/user/user.reducer';
+import { PuzzleService } from '../../../services/puzzle.service';
+import { UserService } from '../../../services/user.service';
 
 @Component({
   selector: 'app-login-page',
   templateUrl: './login-page.component.html',
   styleUrls: ['./login-page.component.css']
 })
-export class LoginPageComponent {
+export class LoginPageComponent implements OnInit {
   formGroup = new FormGroup({
     email: new FormControl(null, [Validators.required, Validators.email]),
     password: new FormControl(null, Validators.required)
@@ -32,20 +32,21 @@ export class LoginPageComponent {
     private readonly puzzleService: PuzzleService,
     private readonly route: ActivatedRoute,
     private readonly router: Router) {
+  }
+
+  ngOnInit() {
     combineLatest(
-      userService.user$().pipe(filter((state: UserState) => {
-        return !!state.user;
-      })),
-      puzzleService.puzzle$())
-      .pipe(first())
+      this.userService.user$().pipe(filter((state: UserState) => !!state.user)),
+      this.puzzleService.puzzle$())
+      .pipe(take(1))
       .subscribe(([, puzzle]) => {
-        const redirectUri = route.snapshot.queryParamMap.get('redirect_uri');
+        const redirectUri = this.route.snapshot.queryParamMap.get('redirect_uri');
         console.log('LoginPageComponent - redirect_uri', redirectUri);
         if (redirectUri) {
-          return router.navigate([redirectUri]);
+          return this.router.navigate([redirectUri]);
         }
 
-        return router.navigate(['/', 'puzzles', encode(puzzle.name), 'timer']);
+        return this.router.navigate(['/', 'puzzles', encode(puzzle.name), 'timer']);
       });
   }
 

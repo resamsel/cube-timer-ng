@@ -1,16 +1,16 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { filter, first, take } from 'rxjs/operators';
-import { UserService } from '../../../services/user.service';
+import { filter, take } from 'rxjs/operators';
 import { UserState } from '../../../models/user/user.reducer';
+import { UserService } from '../../../services/user.service';
 
 @Component({
   selector: 'app-registration-page',
   templateUrl: './registration-page.component.html',
   styleUrls: ['./registration-page.component.css']
 })
-export class RegistrationPageComponent {
+export class RegistrationPageComponent implements OnInit {
   formGroup = new FormGroup({
     email: new FormControl(null, [Validators.required, Validators.email]),
     password: new FormControl(null, Validators.required),
@@ -33,19 +33,22 @@ export class RegistrationPageComponent {
     private readonly userService: UserService,
     private readonly route: ActivatedRoute,
     private readonly router: Router) {
-    userService.user$()
+  }
+
+  ngOnInit() {
+    this.userService.user$()
       .pipe(
         filter((state: UserState) => state.user != null),
-        first()
+        take(1)
       )
       .subscribe(() => {
-        const redirectUri = route.snapshot.queryParamMap.get('redirect_uri');
+        const redirectUri = this.route.snapshot.queryParamMap.get('redirect_uri');
         console.log('RegistrationPageComponent - redirect_uri', redirectUri);
         if (redirectUri) {
-          return router.navigate([redirectUri]);
+          return this.router.navigate([redirectUri]);
         }
 
-        return router.navigate(['/', 'puzzles']);
+        return this.router.navigate(['/', 'puzzles']);
       });
   }
 

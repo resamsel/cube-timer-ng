@@ -1,8 +1,8 @@
+import { Injectable } from '@angular/core';
 import { AbstractControl, AsyncValidator, ValidationErrors } from '@angular/forms';
 import { Observable } from 'rxjs';
-import { Injectable } from '@angular/core';
+import { map, take } from 'rxjs/operators';
 import { PuzzleService } from '../services/puzzle.service';
-import { first, map } from 'rxjs/operators';
 
 @Injectable({providedIn: 'root'})
 export class PuzzleNameValidator implements AsyncValidator {
@@ -12,7 +12,7 @@ export class PuzzleNameValidator implements AsyncValidator {
   validate(control: AbstractControl): Promise<ValidationErrors | null> | Observable<ValidationErrors | null> {
     return this.puzzleService.get(control.value)
       .pipe(
-        first(),
+        take(1),
         map(puzzle => {
           console.log('validate', control.value, puzzle);
           return (puzzle !== undefined ? {nameExists: true} : null);
