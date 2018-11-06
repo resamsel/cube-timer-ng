@@ -119,8 +119,6 @@ export class TimerComponent implements OnInit, OnDestroy {
           31
         );
 
-        this.notifyUser('Timer started');
-
         break;
       }
       case States.STOPPED: {
@@ -129,8 +127,6 @@ export class TimerComponent implements OnInit, OnDestroy {
         this._model = {duration: formatDuration(DateTimeUtils.durationInMillis(state.whenStarted, state.whenStopped))};
 
         clearInterval(this._interval);
-
-        this.notifyUser(`Stopped at ${this._model.duration}`);
 
         break;
       }
@@ -160,6 +156,8 @@ export class TimerComponent implements OnInit, OnDestroy {
         if (state.user && this._whenStarted !== undefined && puzzle !== undefined) {
           this._puzzle = puzzle;
           this.timerService.start(state.user.uid, puzzle.name, this._whenStarted);
+
+          this.notifyUser('Timer started');
         }
       });
   }
@@ -171,6 +169,8 @@ export class TimerComponent implements OnInit, OnDestroy {
     }
 
     this.timerService.stop(this._whenStopped);
+
+    this.notifyUser(`Stopped at ${this._model.duration}`);
   }
 
   public onManual() {

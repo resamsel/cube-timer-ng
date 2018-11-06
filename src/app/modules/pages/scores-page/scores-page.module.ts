@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { NgModule } from '@angular/core';
 import {
   MatButtonModule,
@@ -8,6 +8,7 @@ import {
   MatProgressSpinnerModule,
   MatSnackBarModule
 } from '@angular/material';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { MomentModule } from 'ngx-moment';
 import { NavbarModule } from '../../nav/navbar/navbar.module';
 import { SidenavModule } from '../../nav/sidenav/sidenav.module';
@@ -35,7 +36,11 @@ import { ScoresComponent } from './scores/scores.component';
     ScoresRoutingModule,
     PuzzleSelectorModule,
     MatProgressSpinnerModule,
-    MomentModule
+    MomentModule,
+    NgxChartsModule
+  ],
+  providers: [
+    DatePipe
   ]
 })
 export class ScoresPageModule {
