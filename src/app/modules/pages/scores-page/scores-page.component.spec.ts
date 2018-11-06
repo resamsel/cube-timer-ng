@@ -28,11 +28,6 @@ class PuzzleSelectorStubComponent {
   @Input() puzzles: Puzzle[];
 }
 
-@Component({selector: 'app-scores-stats', template: ''})
-class ScoresStatsStubComponent {
-  @Input() scores: Score[];
-}
-
 @Component({selector: 'app-scores', template: ''})
 class ScoresStubComponent {
   @Input() scores: Score[];
@@ -59,7 +54,6 @@ describe('ScoresPageComponent', () => {
         ScoresPageComponent,
         NavbarStubComponent,
         PuzzleSelectorStubComponent,
-        ScoresStatsStubComponent,
         ScoresStubComponent,
         SidenavStubComponent
       ],

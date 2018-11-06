@@ -8,7 +8,6 @@
 
     <ng-template #content>
       <div *ngIf="scores$ | async as scores">
-        <app-scores-stats [scores]="scores"></app-scores-stats>
         <app-scores [scores]="scores"></app-scores>
       </div>
     </ng-template>

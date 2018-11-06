@@ -1,0 +1,8 @@
+.chart-container {
+  background-color: #0074D9;
+  border-radius: 4px 4px 0 0;
+  padding: 16px;
+}
+.chart-container > div {
+  height: 150px;
+}

@@ -58,21 +58,21 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "cube-timer-ng:build"
+            "browserTarget": "app:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "cube-timer-ng:build:production"
+              "browserTarget": "app:build:production"
             },
             "dev": {
-              "browserTarget": "cube-timer-ng:build:dev"
+              "browserTarget": "app:build:dev"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "cube-timer-ng:build"
+            "browserTarget": "app:build"
           }
         },
         "test": {
@@ -122,7 +122,7 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "./protractor.conf.js",
-            "devServerTarget": "cube-timer-ng:serve"
+            "devServerTarget": "app:serve"
           }
         },
         "lint": {

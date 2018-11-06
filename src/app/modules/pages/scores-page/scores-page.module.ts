@@ -8,6 +8,7 @@ import {
   MatProgressSpinnerModule,
   MatSnackBarModule
 } from '@angular/material';
+import { ChartModule } from 'angular-highcharts';
 import { MomentModule } from 'ngx-moment';
 import { NavbarModule } from '../../nav/navbar/navbar.module';
 import { SidenavModule } from '../../nav/sidenav/sidenav.module';
@@ -35,7 +36,8 @@ import { ScoresComponent } from './scores/scores.component';
     ScoresRoutingModule,
     PuzzleSelectorModule,
     MatProgressSpinnerModule,
-    MomentModule
+    MomentModule,
+    ChartModule
   ]
 })
 export class ScoresPageModule {
