@@ -7,7 +7,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from '../environments/environment';
-import { reducers } from './app-reducers';
+import { metaReducers, reducers } from './app-reducers';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { SidenavModule } from './modules/nav/sidenav/sidenav.module';
@@ -42,7 +42,7 @@ import { LogoutPageModule } from './modules/pages/logout-page/logout-page.module
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireAuthModule,
     AngularFirestoreModule,
-    StoreModule.forRoot(reducers),
+    StoreModule.forRoot(reducers, {metaReducers}),
     StoreDevtoolsModule.instrument({
       maxAge: 25,
       logOnly: environment.production
