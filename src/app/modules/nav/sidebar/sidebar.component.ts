@@ -28,7 +28,7 @@ const LINKS: Link[] = [
   styleUrls: ['./sidebar.component.css']
 })
 export class SidebarComponent implements OnInit, OnDestroy {
-  public links: Link[] = LINKS;
+  public links: Link[];
 
   @Input() activePage: string;
   private _subscription: Subscription = Subscription.EMPTY;

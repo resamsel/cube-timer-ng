@@ -5,6 +5,11 @@ import { PuzzleGuard } from '../../../guards/puzzle.guard';
 
 const timerRoutes: Route[] = [
   {
+    path: 'puzzles/:puzzle',
+    redirectTo: 'puzzles/:puzzle/timer',
+    pathMatch: 'full'
+  },
+  {
     path: 'puzzles/:puzzle/timer',
     component: TimerPageComponent,
     canActivate: [PuzzleGuard]

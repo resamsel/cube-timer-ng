@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { select, Store } from '@ngrx/store';
-import { reducer, selectAll, selectTotal } from 'app/models/score/score.reducer';
+import { reducer, selectAll, selectTotal } from '../models/score/score.reducer';
 import { combineLatest, Observable, Subscription } from 'rxjs';
 import { AddScore, DeleteScore, LoadScores, StartLoading, StopLoading } from '../models/score/score.actions';
 import { Score } from '../models/score/score.model';

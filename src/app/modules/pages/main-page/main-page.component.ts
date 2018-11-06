@@ -29,7 +29,7 @@ export class MainPageComponent {
       .pipe(
         map(([, puzzle]) => {
           if (puzzle !== undefined) {
-            return ['/', 'puzzles', puzzle.name, 'timer'];
+            return ['/', 'puzzles', puzzle.name];
           }
           return ['/', 'puzzles'];
         })

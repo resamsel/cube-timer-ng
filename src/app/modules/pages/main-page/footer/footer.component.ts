@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {BUILD_INFO} from 'environments/build-info';
+import {BUILD_INFO} from '../../../../../environments/build-info';
 
 @Component({
   selector: 'app-footer',

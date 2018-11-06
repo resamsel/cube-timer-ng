@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "cube-timer-ng": {
+    "app": {
       "root": "",
       "sourceRoot": "src",
       "projectType": "application",
@@ -97,18 +97,23 @@
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": [
-              "src/tsconfig.app.json",
-              "src/tsconfig.spec.json"
-            ],
             "exclude": [
               "**/node_modules/**"
             ]
+          },
+          "configurations": {
+            "app": {
+              "tsConfig": [
+                "src/tsconfig.app.json",
+                "src/tsconfig.spec.json"
+              ],
+              "tslintConfig": "./tslint.json"
+            }
           }
         }
       }
     },
-    "cube-timer-ng-e2e": {
+    "e2e": {
       "root": "e2e",
       "sourceRoot": "e2e",
       "projectType": "application",
@@ -134,7 +139,7 @@
       }
     }
   },
-  "defaultProject": "cube-timer-ng",
+  "defaultProject": "app",
   "schematics": {
     "@schematics/angular:component": {
       "prefix": "app",

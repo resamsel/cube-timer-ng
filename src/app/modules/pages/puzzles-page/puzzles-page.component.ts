@@ -37,7 +37,7 @@ export class PuzzlesPageComponent {
 
   // noinspection JSMethodCanBeStatic
   timerLink(puzzle: Puzzle): string[] {
-    return ['/', 'puzzles', encode(puzzle.name), 'timer'];
+    return ['/', 'puzzles', encode(puzzle.name)];
   }
 
   public async onDelete(puzzle: Puzzle) {

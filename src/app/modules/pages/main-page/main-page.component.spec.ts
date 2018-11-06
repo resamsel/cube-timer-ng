@@ -70,6 +70,6 @@ describe('MainPageComponent', () => {
     // then
     expect(link$).toBeDefined();
     link$.pipe(take(1))
-      .subscribe((link: string[]) => expect(link).toEqual(['/', 'puzzles', '3x3x3', 'timer']));
+      .subscribe((link: string[]) => expect(link).toEqual(['/', 'puzzles', '3x3x3']));
   }));
 });

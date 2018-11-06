@@ -21,7 +21,7 @@ export class TimerPageComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this._subscription = this.routerUtils.onPuzzleChange(
       this.route,
-      (puzzle: Puzzle) => ['/', 'puzzles', encode(puzzle.name), 'timer']
+      (puzzle: Puzzle) => ['/', 'puzzles', encode(puzzle.name)]
     );
   }
 

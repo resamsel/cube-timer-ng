@@ -1,6 +1,7 @@
 {
   "rulesDirectory": [
-    "node_modules/codelyzer"
+    "node_modules/codelyzer",
+    "node_modules/rxjs-tslint"
   ],
   "rules": {
     "arrow-return-shorthand": true,
@@ -10,6 +11,7 @@
       true,
       "check-space"
     ],
+    "completed-docs": false,
     "curly": true,
     "deprecation": {
       "severity": "warn"
@@ -43,6 +45,7 @@
         ]
       }
     ],
+    "no-any": false,
     "no-arg": true,
     "no-bitwise": true,
     "no-console": [
@@ -63,11 +66,22 @@
       true,
       "ignore-params"
     ],
+    "no-magic-numbers": false,
     "no-misused-new": true,
     "no-non-null-assertion": true,
     "no-shadowed-variable": true,
     "no-string-literal": false,
     "no-string-throw": true,
+    "no-submodule-imports": [
+      true,
+      "rxjs/operators",
+      "@angular/cdk/layout",
+      "@angular/core/testing",
+      "@angular/router/testing",
+      "@angular/platform-browser/animations",
+      "@angular/fire/auth",
+      "@angular/fire/firestore"
+    ],
     "no-switch-case-fall-through": true,
     "no-trailing-whitespace": true,
     "no-unnecessary-initializer": true,

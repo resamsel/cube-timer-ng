@@ -49,7 +49,7 @@ export class LoginPageComponent implements OnInit {
           return this.router.navigate(['/', 'puzzles']);
         }
 
-        return this.router.navigate(['/', 'puzzles', encode(puzzle.name), 'timer']);
+        return this.router.navigate(['/', 'puzzles', encode(puzzle.name)]);
       });
   }
 

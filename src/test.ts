@@ -1,11 +1,13 @@
 // This file is required by karma.conf.js and loads recursively all the .spec and framework files
 
+// tslint:disable:no-submodule-imports
 import 'zone.js/dist/zone-testing';
 import { getTestBed } from '@angular/core/testing';
 import {
   BrowserDynamicTestingModule,
   platformBrowserDynamicTesting
 } from '@angular/platform-browser-dynamic/testing';
+// tslint:enable
 
 declare const require: any;
 
