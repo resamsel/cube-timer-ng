@@ -3,7 +3,7 @@
 <app-sidenav #sidenav activePage="puzzles">
   <div class="container">
     <mat-nav-list class="hoverable" *ngIf="puzzles$ | async as puzzles">
-      <div class="elevation">
+      <div class="elevation" *ngIf="puzzles.length > 0; else empty">
         <a mat-list-item
            *ngFor="let puzzle of puzzles"
            [routerLink]="timerLink(puzzle)"
@@ -28,6 +28,17 @@
           </div>
         </a>
       </div>
+      <ng-template #empty>
+        <mat-card style="text-align: center">
+          <mat-card-title>Get started</mat-card-title>
+          <mat-card-content>
+            It seems you don't have any puzzles yet. Add a new puzzle by using the add button or use this handy button here.
+          </mat-card-content>
+          <mat-card-actions>
+            <button mat-raised-button color="primary">Add puzzle</button>
+          </mat-card-actions>
+        </mat-card>
+      </ng-template>
     </mat-nav-list>
   </div>
 </app-sidenav>

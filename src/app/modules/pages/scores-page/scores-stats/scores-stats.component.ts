@@ -6,30 +6,48 @@ import { Score } from '../../../../models/score/score.model';
 // const PRIMARY_COLOR = 'white';
 // const SECONDARY_COLOR = 'rgba(255,255,255,0.4)';
 
+function generateSeries(scores: Score[]): [number, number][] {
+  if (scores.length === 0) {
+    return [];
+  }
+
+  const series: { [key: number]: number } = {};
+  const nBins = 30;
+  const firstTimestamp = scores[0].timestamp;
+  const lastTimestamp = scores[scores.length - 1].timestamp;
+  const binWidth = (lastTimestamp - firstTimestamp) / nBins;
+
+  scores.forEach((score: Score) => {
+    const index = score.timestamp - score.timestamp % binWidth;
+
+    if (series[index] === undefined) {
+      series[index] = 0;
+    }
+
+    series[index] = series[index] + 1;
+  });
+
+  return Object.entries(series)
+    .map(([key, value]) => ([parseInt(key, 10), value as number]))
+    .sort((a, b) => a[0] - b[0]) as [number, number][];
+}
+
 @Component({
   selector: 'app-scores-stats',
   templateUrl: './scores-stats.component.html',
   styleUrls: ['./scores-stats.component.scss']
 })
 export class ScoresStatsComponent implements OnInit {
-  private _scores: Score[];
-  private series: [number, number][];
-
   @Input()
   set scores(scores: Score[]) {
-    this._scores = scores;
-    this.series = ([] as Score[]).concat(scores).reverse().map((score: Score) => {
-      return [score.timestamp, score.value] as [number, number];
-    });
-    console.log('ScoresStatsComponent', this._scores, this.series);
     this.chart.removeSeries(0);
-    this.chart.addSeries({data: this.series}, true);
+    this.chart.addSeries({data: generateSeries(scores)}, true);
   }
 
   chart = new Chart({
     chart: {
       type: 'column',
-      spacing: [4, 0, 20, 0]
+      spacing: [4, 16, 4, 0]
     },
     title: {
       text: 'Scores'
@@ -52,11 +70,8 @@ export class ScoresStatsComponent implements OnInit {
       min: 0,
       labels: {
         x: 0,
-        y: 16,
-        align: 'left',
-        formatter: function () {
-          return `${this.value / 1000} s`;
-        }
+        y: 12,
+        align: 'left'
       },
       gridLineWidth: 1,
       title: {
@@ -67,8 +82,11 @@ export class ScoresStatsComponent implements OnInit {
       enabled: false
     },
     tooltip: {
+      borderWidth: 0,
+      borderRadius: 4,
+      shadow: false,
       formatter: function () {
-        return '<b>' + this.key + '</b><br/>' + (this.y / 1000) + 's';
+        return '<b>' + this.y + '</b>';
       }
     },
     plotOptions: {
