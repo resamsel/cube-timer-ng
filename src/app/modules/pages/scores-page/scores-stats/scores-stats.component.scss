@@ -1,0 +1,32 @@
+.chart-container {
+  background-color: #0074D9;
+  border-radius: 4px 4px 0 0;
+  padding: 16px;
+}
+
+.chart-container > div {
+  height: 180px;
+}
+
+::ng-deep {
+  .highcharts-color-0 {
+    fill: white;
+    stroke: white;
+  }
+
+  .highcharts-background {
+    fill: #0074D9;
+  }
+  .highcharts-title {
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+    font-weight: 400;
+    fill: white !important;
+  }
+  .highcharts-grid.highcharts-yaxis-grid.color-0 .highcharts-grid-line {
+    stroke: rgba(255, 255, 255, 0.4) !important;
+  }
+  .highcharts-axis-labels.color-0 > text,
+  .highcharts-axis-labels.highcharts-yaxis-labels.color-0 > text {
+    fill: rgba(255, 255, 255, 0.4) !important;
+  }
+}

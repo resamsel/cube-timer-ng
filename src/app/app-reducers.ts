@@ -15,7 +15,7 @@ export const reducers = {
 };
 
 export function localStorageSyncReducer(reducer: ActionReducer<any>): ActionReducer<any> {
-  return localStorageSync({keys: ['users']})(reducer);
+  return localStorageSync({keys: ['users'], rehydrate: true})(reducer);
 }
 
 export const metaReducers: Array<MetaReducer<any, any>> = [localStorageSyncReducer];
