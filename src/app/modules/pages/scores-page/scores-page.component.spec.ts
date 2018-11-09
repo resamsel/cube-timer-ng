@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { MatProgressSpinnerModule } from '@angular/material';
+import { MatCardModule, MatProgressSpinnerModule } from '@angular/material';
 import { RouterTestingModule } from '@angular/router/testing';
 import { Store } from '@ngrx/store';
 import { anything, instance, mock, when } from 'ts-mockito';
@@ -59,7 +59,8 @@ describe('ScoresPageComponent', () => {
       ],
       imports: [
         RouterTestingModule,
-        MatProgressSpinnerModule
+        MatProgressSpinnerModule,
+        MatCardModule
       ],
       providers: [
         {provide: Store, useValue: instance(mock(Store))},

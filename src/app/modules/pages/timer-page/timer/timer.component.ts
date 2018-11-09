@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material';
 import * as moment from 'moment';
@@ -45,6 +45,7 @@ export class TimerComponent implements OnInit, OnDestroy {
     ])
   });
   private _puzzle: Puzzle | undefined;
+  private _currentState: States;
 
   get model(): Readonly<{ duration: string }> {
     return this._model;
@@ -99,6 +100,8 @@ export class TimerComponent implements OnInit, OnDestroy {
   private onStateChange(state: TimerState) {
     this._manualSubscription.unsubscribe();
 
+    this._currentState = state.state;
+
     switch (state.state) {
       case States.INITIAL: {
         this._model = {duration: formatDuration(0)};
@@ -145,6 +148,23 @@ export class TimerComponent implements OnInit, OnDestroy {
         }
 
         break;
+      }
+    }
+  }
+
+  @HostListener('window:keyup', ['$event'])
+  public onHotkey(event: KeyboardEvent) {
+    if (event.key === ' ') {
+      switch (this._currentState) {
+        case States.INITIAL:
+          this.onStart();
+          break;
+        case States.STARTED:
+          this.onStop();
+          break;
+        case States.STOPPED:
+          this.onClear();
+          break;
       }
     }
   }
@@ -225,6 +245,7 @@ export class TimerComponent implements OnInit, OnDestroy {
                 {
                   duration: 3000
                 });
+              this.onManual();
             });
         }
       });

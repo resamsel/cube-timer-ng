@@ -9,12 +9,18 @@ import { UserService } from '../../../services/user.service';
 import { UserState } from '../../../models/user/user.reducer';
 import { encode } from 'firebase-key';
 
+function timerLink(puzzle: Puzzle): string[] {
+  return ['/', 'puzzles', encode(puzzle.name)];
+}
+
 @Component({
   selector: 'app-puzzles-page',
   templateUrl: './puzzles-page.component.html',
   styleUrls: ['./puzzles-page.component.scss']
 })
 export class PuzzlesPageComponent {
+  public timerLink = timerLink;
+
   get puzzle$(): Observable<Puzzle | undefined> {
     return this.puzzleService.puzzle$();
   }
@@ -33,11 +39,6 @@ export class PuzzlesPageComponent {
     private readonly scoreService: ScoreService,
     private readonly snackBar: MatSnackBar
   ) {
-  }
-
-  // noinspection JSMethodCanBeStatic
-  timerLink(puzzle: Puzzle): string[] {
-    return ['/', 'puzzles', encode(puzzle.name)];
   }
 
   public async onDelete(puzzle: Puzzle) {
