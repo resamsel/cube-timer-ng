@@ -2,10 +2,6 @@
 
 <app-sidenav #sidenav activePage="settings">
   <div class="container">
-    <mat-card>
-      <mat-card-content>
         <app-settings-form [settings]="settings$ | async" (save)="onSave($event)"></app-settings-form>
-      </mat-card-content>
-    </mat-card>
   </div>
 </app-sidenav>

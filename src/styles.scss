@@ -68,3 +68,10 @@ app-timer .mat-input-element {
 .elevation {
   @include elevation-2();
 }
+
+.vcenter {
+  position: absolute;
+  left: 50%;
+  top: 40%;
+  transform: translate(-50%, -50%);
+}

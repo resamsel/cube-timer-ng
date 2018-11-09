@@ -1,52 +1,57 @@
 <form [formGroup]="formGroup" [appConnectForm]="settings" (submit)="onSubmit()">
-  <mat-form-field floatLabel="never">
-    <mat-select
-      placeholder="Language"
-      formControlName="language">
-      <mat-option *ngFor="let language of languages" [value]="language.value">
-        {{language.name}}
-      </mat-option>
-    </mat-select>
-  </mat-form-field>
+  <mat-card>
+    <mat-card-content class="form-fields">
+      <mat-form-field floatLabel="never">
+        <mat-select
+          placeholder="Language"
+          formControlName="language">
+          <mat-option *ngFor="let language of languages" [value]="language.value">
+            {{language.name}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
 
-  <mat-form-field floatLabel="never">
-    <mat-select
-      placeholder="Inspection Time"
-      formControlName="inspectionTime">
-      <mat-option *ngFor="let inspectionTime of inspectionTimes" [value]="inspectionTime">
-        {inspectionTime, plural,
-        =0 {None}
-        other { {{inspectionTime}} seconds }}
-      </mat-option>
-    </mat-select>
-  </mat-form-field>
+      <mat-form-field floatLabel="never">
+        <mat-select
+          placeholder="Inspection Time"
+          formControlName="inspectionTime">
+          <mat-option *ngFor="let inspectionTime of inspectionTimes" [value]="inspectionTime">
+            {inspectionTime, plural,
+            =0 {None}
+            other { {{inspectionTime}} seconds }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
 
-  <div>
-    <mat-checkbox
-      formControlName="soundAfterInspection">Play sound after inspection
-    </mat-checkbox>
-  </div>
+      <div>
+        <mat-checkbox
+          formControlName="soundAfterInspection">Play sound after inspection
+        </mat-checkbox>
+      </div>
 
-  <mat-form-field floatLabel="never">
-    <input
-      matInput
-      placeholder="Chart entries"
-      type="number"
-      formControlName="windowSize">
-  </mat-form-field>
+      <mat-form-field floatLabel="never">
+        <input
+          matInput
+          placeholder="Chart entries"
+          type="number"
+          formControlName="windowSize">
+      </mat-form-field>
 
-  <mat-form-field floatLabel="never">
-    <input
-      matInput
-      placeholder="Page size"
-      type="number"
-      formControlName="pageSize">
-  </mat-form-field>
-
-  <button
-    mat-raised-button
-    color="primary"
-    type="submit"
-  >Save
-  </button>
+      <mat-form-field floatLabel="never">
+        <input
+          matInput
+          placeholder="Page size"
+          type="number"
+          formControlName="pageSize">
+      </mat-form-field>
+    </mat-card-content>
+    <mat-card-actions>
+      <button
+        mat-raised-button
+        color="primary"
+        type="submit"
+      >Save
+      </button>
+    </mat-card-actions>
+  </mat-card>
 </form>
