@@ -1,6 +1,5 @@
 import { Component, Input } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { MatCardModule } from '@angular/material';
 import { instance, mock } from 'ts-mockito';
 import { SettingsService } from '../../../services/settings.service';
 import { SidenavComponent } from '../../nav/sidenav/sidenav.component';
@@ -35,9 +34,6 @@ describe('SettingsPageComponent', () => {
         SidenavStubComponent,
         NavbarStubComponent,
         SettingsFormStubComponent
-      ],
-      imports: [
-        MatCardModule
       ],
       providers: [
         {provide: SettingsService, useValue: instance(mock(SettingsService))}

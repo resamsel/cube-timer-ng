@@ -1,7 +1,7 @@
 import { Directive, Input } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MatCheckboxModule, MatFormFieldModule, MatInputModule, MatSelectModule } from '@angular/material';
+import { MatCardModule, MatCheckboxModule, MatFormFieldModule, MatInputModule, MatSelectModule } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { SettingsFormComponent } from './settings-form.component';
@@ -25,7 +25,8 @@ describe('SettingsFormComponent', () => {
         MatSelectModule,
         MatCheckboxModule,
         MatFormFieldModule,
-        MatInputModule
+        MatInputModule,
+        MatCardModule
       ]
     })
       .compileComponents();
