@@ -6,6 +6,8 @@ import { SidenavComponent } from '../../nav/sidenav/sidenav.component';
 
 import { SettingsPageComponent } from './settings-page.component';
 import { SettingsState } from '../../../models/settings/settings.reducer';
+import { UserService } from '../../../services/user.service';
+import { MatSnackBarModule } from '@angular/material';
 
 @Component({selector: 'app-sidenav', template: ''})
 class SidenavStubComponent {
@@ -35,7 +37,11 @@ describe('SettingsPageComponent', () => {
         NavbarStubComponent,
         SettingsFormStubComponent
       ],
+      imports: [
+        MatSnackBarModule
+      ],
       providers: [
+        {provide: UserService, useValue: instance(mock(UserService))},
         {provide: SettingsService, useValue: instance(mock(SettingsService))}
       ]
     })

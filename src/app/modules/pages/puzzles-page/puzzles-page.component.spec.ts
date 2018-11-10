@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { MatCardModule, MatIconModule, MatListModule, MatSnackBarModule } from '@angular/material';
+import { MatCardModule, MatDialogModule, MatIconModule, MatListModule, MatSnackBarModule } from '@angular/material';
 import { RouterTestingModule } from '@angular/router/testing';
 import { Store } from '@ngrx/store';
 import { MomentModule } from 'ngx-moment';
@@ -54,7 +54,8 @@ describe('PuzzlesPageComponent', () => {
         MomentModule,
         MatListModule,
         RouterTestingModule,
-        MatSnackBarModule
+        MatSnackBarModule,
+        MatDialogModule
       ],
       providers: [
         {provide: Store, useValue: instance(mock(Store))},

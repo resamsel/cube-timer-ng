@@ -1,6 +1,7 @@
 <app-navbar [sidenav]="sidenav" page="Puzzles"></app-navbar>
 
 <app-sidenav #sidenav activePage="puzzles">
+  <button mat-fab (click)="onCreate()"><mat-icon>add</mat-icon></button>
   <div class="container">
     <mat-nav-list class="hoverable" *ngIf="puzzles$ | async as puzzles">
       <div class="elevation" *ngIf="puzzles.length > 0; else empty">
@@ -31,13 +32,13 @@
     </mat-nav-list>
 
     <ng-template #empty>
-      <mat-card style="text-align: center">
+      <mat-card>
         <mat-card-title>Get started</mat-card-title>
         <mat-card-content>
           It seems you don't have any puzzles yet. Add a new puzzle by using the add button or use this handy button here.
         </mat-card-content>
-        <mat-card-actions>
-          <button mat-raised-button color="primary">Add puzzle</button>
+        <mat-card-actions class="right">
+          <button mat-raised-button color="primary" (click)="onCreate()">Add puzzle</button>
         </mat-card-actions>
       </mat-card>
     </ng-template>

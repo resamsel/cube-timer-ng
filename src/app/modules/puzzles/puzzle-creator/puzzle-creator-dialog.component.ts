@@ -1,8 +1,12 @@
 import { Component, Inject } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material';
 import { Puzzle } from '../../../models/puzzle/puzzle.model';
 import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
 import { PuzzleNameValidator } from '../../../validators/puzzle-name.validator';
+import { UserService } from '../../../services/user.service';
+import { PuzzleService } from '../../../services/puzzle.service';
+import { combineLatest } from 'rxjs';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-puzzle-creator',
@@ -21,6 +25,24 @@ export class PuzzleCreatorDialogComponent {
 
   get name(): AbstractControl | null {
     return this.formGroup.get('name');
+  }
+
+  static openDialog(dialog: MatDialog, userService: UserService, puzzleService: PuzzleService) {
+    const dialogRef = dialog.open(PuzzleCreatorDialogComponent, {
+      width: '250px',
+      data: {}
+    });
+
+    combineLatest(
+      dialogRef.afterClosed(),
+      userService.user$())
+      .pipe(take(1))
+      .subscribe(([puzzle, state]) => {
+        if (state.user && puzzle !== undefined) {
+          puzzleService.create(state.user.uid, {name: puzzle})
+            .then(() => puzzleService.activatePuzzle(puzzle));
+        }
+      });
   }
 
   constructor(

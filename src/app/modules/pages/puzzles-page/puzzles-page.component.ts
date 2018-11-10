@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { MatSnackBar } from '@angular/material';
+import { MatDialog, MatSnackBar } from '@angular/material';
 import { Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { Puzzle } from '../../../models/puzzle/puzzle.model';
@@ -8,6 +8,7 @@ import { ScoreService } from '../../../services/score.service';
 import { UserService } from '../../../services/user.service';
 import { UserState } from '../../../models/user/user.reducer';
 import { encode } from 'firebase-key';
+import { PuzzleCreatorDialogComponent } from '../../puzzles/puzzle-creator/puzzle-creator-dialog.component';
 
 function timerLink(puzzle: Puzzle): string[] {
   return ['/', 'puzzles', encode(puzzle.name)];
@@ -37,8 +38,13 @@ export class PuzzlesPageComponent {
     private readonly userService: UserService,
     private readonly puzzleService: PuzzleService,
     private readonly scoreService: ScoreService,
+    private readonly dialog: MatDialog,
     private readonly snackBar: MatSnackBar
   ) {
+  }
+
+  onCreate(): void {
+    PuzzleCreatorDialogComponent.openDialog(this.dialog, this.userService, this.puzzleService);
   }
 
   public async onDelete(puzzle: Puzzle) {

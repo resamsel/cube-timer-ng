@@ -8,3 +8,9 @@
 .mat-nav-list .mat-list-item.active:hover {
   background: mat-color($app-theme-background, hover);
 }
+
+.mat-fab {
+  position: absolute;
+  right: 16px;
+  bottom: 16px;
+}

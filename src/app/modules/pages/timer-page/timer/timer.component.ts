@@ -67,7 +67,8 @@ export class TimerComponent implements OnInit, OnDestroy {
     private readonly userService: UserService,
     private readonly puzzleService: PuzzleService,
     private readonly timerService: TimerService,
-    private readonly snackBar: MatSnackBar) {
+    private readonly snackBar: MatSnackBar
+  ) {
   }
 
   ngOnInit() {
