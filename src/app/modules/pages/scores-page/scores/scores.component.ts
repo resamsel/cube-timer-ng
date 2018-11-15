@@ -28,10 +28,18 @@ export class ScoresComponent implements OnInit {
   }
 
   private onDeleted(score: Score): void {
-    this.snackBar.open(
+    const snackBarRef = this.snackBar.open(
       `Score from ${moment(score.timestamp).fromNow()} has been deleted`,
-      'Dismiss',
-      {duration: 3000}
+      'Undo',
+      {duration: 20000}
     );
+    snackBarRef.onAction().subscribe(() => {
+      this.scoreService.create(score)
+        .then(() => this.snackBar.open(
+          `Score from ${moment(score.timestamp).fromNow()} has been restored`,
+          'Dismiss',
+          {duration: 3000}
+        ));
+    });
   }
 }
