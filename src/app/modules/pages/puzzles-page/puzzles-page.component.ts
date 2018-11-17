@@ -47,23 +47,37 @@ export class PuzzlesPageComponent {
     PuzzleCreatorDialogComponent.openDialog(this.dialog, this.userService, this.puzzleService);
   }
 
-  public async onDelete(puzzle: Puzzle) {
+  public onDelete(puzzle: Puzzle, event: Event): boolean {
     this.userService.user$()
       .pipe(take(1))
       .subscribe((userState: UserState) => {
         if (userState.user) {
-          this.puzzleService
-            .delete(userState.user.uid, puzzle)
-            .then(() => this.onDeleted(puzzle));
+          const timer = this.puzzleService
+            .delayDelete(userState.user.uid, puzzle, 20000);
+          this.onDeleted(puzzle, timer);
         }
       });
+
+    event.stopPropagation();
+    event.preventDefault();
+    return false;
   }
 
-  private onDeleted(puzzle: Puzzle): void {
+  private async onDeleted(puzzle: Puzzle, timer: number) {
     this.snackBar.open(
       `Puzzle ${puzzle.name} has been deleted`,
-      'Dismiss',
-      {duration: 3000}
-    );
+      'Undo',
+      {duration: 8000}
+    )
+      .onAction()
+      .subscribe(() => {
+        this.puzzleService.undoDelete(puzzle, timer);
+
+        this.snackBar.open(
+          `Puzzle ${puzzle.name} has been restored`,
+          'Dismiss',
+          {duration: 3000}
+        );
+      });
   }
 }

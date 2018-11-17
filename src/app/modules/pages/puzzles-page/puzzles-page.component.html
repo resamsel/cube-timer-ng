@@ -1,7 +1,9 @@
 <app-navbar [sidenav]="sidenav" page="Puzzles"></app-navbar>
 
 <app-sidenav #sidenav activePage="puzzles">
-  <button mat-fab (click)="onCreate()"><mat-icon>add</mat-icon></button>
+  <button mat-fab (click)="onCreate()">
+    <mat-icon>add</mat-icon>
+  </button>
   <div class="container">
     <mat-nav-list class="hoverable" *ngIf="puzzles$ | async as puzzles">
       <div class="elevation" *ngIf="puzzles.length > 0; else empty">
@@ -17,13 +19,15 @@
               {{puzzle.lastActive | amTimeAgo}}
             </span>
             <span *ngIf="!puzzle.lastActive">Unchallenged</span>
-            <span *ngIf="(puzzle$ | async)?.name === puzzle.name">, {{scoreCount$ | async}} scores</span>
+            <span *ngIf="(puzzle$ | async)?.name === puzzle.name"><span *ngIf="scoreCount$ | async as scoreCount">,
+              {scoreCount, plural, =1 {one score} other { {{scoreCount}} scores }}
+            </span></span>
           </p>
           <div class="actions">
             <button
               mat-icon-button
               *ngIf="(puzzle$ | async)?.name !== puzzle.name"
-              (click)="onDelete(puzzle)">
+              (click)="onDelete(puzzle, $event)">
               <mat-icon>delete</mat-icon>
             </button>
           </div>
@@ -35,7 +39,8 @@
       <mat-card>
         <mat-card-title>Get started</mat-card-title>
         <mat-card-content>
-          It seems you don't have any puzzles yet. Add a new puzzle by using the add button or use this handy button here.
+          It seems you don't have any puzzles yet. Add a new puzzle by using the add button or use this handy button
+          here.
         </mat-card-content>
         <mat-card-actions class="right">
           <button mat-raised-button color="primary" (click)="onCreate()">Add puzzle</button>
