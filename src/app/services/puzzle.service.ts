@@ -78,6 +78,18 @@ export class PuzzleService {
       });
   }
 
+  public delayDelete(uid: string, puzzle: Puzzle, timeout: number): number {
+    this.store.dispatch(new DeletePuzzle({id: puzzle.name}));
+
+    return window.setTimeout(() => this.delete(uid, puzzle), timeout);
+  }
+
+  public undoDelete(puzzle: Puzzle, timer: number): void {
+    window.clearTimeout(timer);
+
+    this.store.dispatch(new AddPuzzle({puzzle}));
+  }
+
   public delete(uid: string, puzzle: Puzzle): Promise<void> {
     this.store.dispatch(new DeletePuzzle({id: puzzle.name}));
 
@@ -90,10 +102,10 @@ export class PuzzleService {
       });
   }
 
-  get(puzzle: string): Observable<Puzzle | undefined> {
+  get(puzzleName: string): Observable<Puzzle | undefined> {
     return this.store.pipe(
       take(1),
-      select(state => state.puzzles.entities[puzzle])
+      select(state => state.puzzles.entities[puzzleName])
     );
   }
 
