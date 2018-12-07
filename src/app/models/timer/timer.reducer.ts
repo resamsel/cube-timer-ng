@@ -1,5 +1,5 @@
 import { TimerActions, TimerActionTypes } from './timer.actions';
-import { DateTimeUtils } from '../../shared/date-time-utils';
+import { durationInMillis } from '../../shared/date-time-utils';
 
 export enum States {
   INITIAL = 'Initial',
@@ -39,7 +39,7 @@ export function reducer(state = initialTimerState, action: TimerActions): TimerS
         ...state,
         state: States.STOPPED,
         whenStopped: action.whenStopped,
-        duration: DateTimeUtils.durationInMillis(state.whenStarted, action.whenStopped)
+        duration: durationInMillis(state.whenStarted, action.whenStopped)
       };
 
     case TimerActionTypes.ManualTimer:

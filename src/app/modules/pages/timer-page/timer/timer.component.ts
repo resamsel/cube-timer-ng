@@ -9,7 +9,7 @@ import { States, TimerState } from '../../../../models/timer/timer.reducer';
 import { PuzzleService } from '../../../../services/puzzle.service';
 import { TimerService } from '../../../../services/timer.service';
 import { UserService } from '../../../../services/user.service';
-import { DateTimeUtils } from '../../../../shared/date-time-utils';
+import { durationInMillis } from '../../../../shared/date-time-utils';
 
 export function formatDuration(duration: number): string {
   return moment(duration).format('mm:ss.SS');
@@ -115,11 +115,11 @@ export class TimerComponent implements OnInit, OnDestroy {
       }
       case States.STARTED: {
         this._whenStarted = state.whenStarted;
-        this._model = {duration: formatDuration(DateTimeUtils.durationInMillis(state.whenStarted, new Date()))};
+        this._model = {duration: formatDuration(durationInMillis(state.whenStarted, new Date()))};
 
         clearInterval(this._interval);
         this._interval = window.setInterval(
-          () => this._model = {duration: formatDuration(DateTimeUtils.durationInMillis(state.whenStarted, new Date()))},
+          () => this._model = {duration: formatDuration(durationInMillis(state.whenStarted, new Date()))},
           31
         );
 
@@ -130,7 +130,7 @@ export class TimerComponent implements OnInit, OnDestroy {
       case States.STOPPED: {
         this._whenStarted = state.whenStarted;
         this._whenStopped = state.whenStopped;
-        this._model = {duration: formatDuration(DateTimeUtils.durationInMillis(state.whenStarted, state.whenStopped))};
+        this._model = {duration: formatDuration(durationInMillis(state.whenStarted, state.whenStopped))};
 
         clearInterval(this._interval);
 

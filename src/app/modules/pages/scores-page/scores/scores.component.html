@@ -1,15 +1,26 @@
-<mat-list class="hoverable">
-  <div class="elevation">
-    <app-scores-stats [scores]="scores"></app-scores-stats>
-    <mat-list-item *ngFor="let score of scores">
-      <mat-icon mat-list-icon>assessment</mat-icon>
-      <h4 mat-line>{{score.value | date: 'mm:ss.SS'}}s</h4>
-      <p mat-line title="{{score.timestamp | date:'full'}}">{{score.timestamp | amTimeAgo}}</p>
-      <div class="actions">
-        <button mat-icon-button (click)="onDelete(score)">
-          <mat-icon>delete</mat-icon>
-        </button>
-      </div>
-    </mat-list-item>
-  </div>
-</mat-list>
+<div class="elevation">
+  <app-scores-stats [scores]="scores"></app-scores-stats>
+  <mat-list class="hoverable">
+    <ng-container *ngFor="let score of scoresGrouped">
+      <h4 matSubheader *ngIf="score.key" [ngSwitch]="score.key">
+        <span *ngSwitchCase="'today'" i18n>Today</span>
+        <span *ngSwitchCase="'yesterday'" i18n>Yesterday</span>
+        <span *ngSwitchCase="'this week'" i18n>This week</span>
+        <span *ngSwitchCase="'last week'" i18n>Last week</span>
+        <span *ngSwitchCase="'this month'" i18n>This month</span>
+        <span *ngSwitchCase="'last month'" i18n>Last month</span>
+        <span *ngSwitchDefault>{{score.key | date:'MMMM dd, yyyy'}}</span>
+      </h4>
+      <mat-list-item>
+        <mat-icon mat-list-icon>assessment</mat-icon>
+        <h4 mat-line>{{score.value | date:'mm:ss.SS'}}s</h4>
+        <p mat-line title="{{score.timestamp | date:'full'}}">{{score.timestamp | amTimeAgo}}</p>
+        <div class="actions">
+          <button mat-icon-button (click)="onDelete(score)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+      </mat-list-item>
+    </ng-container>
+  </mat-list>
+</div>

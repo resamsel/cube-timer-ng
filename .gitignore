@@ -47,3 +47,4 @@ Thumbs.db
 build-info.ts
 environment.prod.ts
 /functions/lib
+/scripts/lib
